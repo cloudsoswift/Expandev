@@ -1,6 +1,7 @@
-from .models import Node, Track, RecommendContent, Interview
+from .models import Node, Track, RecommendContent, Interview, Review
 
 from rest_framework import serializers
+
 
 class RecommendContentSerializer(serializers.ModelSerializer):
 
@@ -16,14 +17,22 @@ class InterviewSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ReviewSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source='user.username', read_only=True)
+
+    class Meta:
+        model = Review
+        fields = '__all__'
+
+
 class NodeDetailSerializer(serializers.ModelSerializer):
     recommend_content = RecommendContentSerializer(many=True)
     interview = InterviewSerializer(many=True)
+    review = ReviewSerializer(many=True)
 
     class Meta:
         model = Node
-        fields = '__all__'
-        read_only_fields = ('recommend_content', 'interview')
+        fields = ('id', 'isEssential', 'isComplete', 'title', 'content', 'purpose', 'recommend_content', 'interview', 'review')
 
 
 class Nodeserializer(serializers.ModelSerializer):
