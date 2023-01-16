@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import ArticleSerializer, CommentSerializer, TagSerializer
 from .models import Article, Comment, Tag
+from django.shortcuts import get_object_or_404, get_list_or_404
 
 ############ 태그
 
@@ -52,66 +53,41 @@ def article_list(request): #전체게시판 조회
     #좋아요, 조회수, 최신
 
 
-# 게시글 작성, 수정, 조회, 삭제
 @api_view(['POST','GET','PUT','DELETE'])
 def article(request, article_id=None): #게시글 디테일
     if article_id:
-        article = Article.objects.get(pk=article_id)
-        if request.method == 'GET': #조회
-            article.hit += 1
-            article.save()
-            serializer = ArticleSerializer(article)
-            return Response(serializer.data)
+        article = get_object_or_404(Article, pk=article_id)
         
-        elif request.method == 'DELETE': #삭제
-            article.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+    if request.method == 'GET': #조회
+        article.hit+=1
+        article.save()
+        serializer = ArticleSerializer(article)
+        return Response(serializer.data)
+    
+    elif request.method == 'DELETE': #삭제
+        article.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
-        elif request.method == 'PUT': #수정
-            entered_tags = request.POST.getlist('tags')
-            data = {
-                'title' : request.POST.get('title'),
-                'content' : request.POST.get('content'),
-            }
-            if not entered_tags:
-                serializer = ArticleSerializer(article, data=data)
-                if serializer.is_valid(raise_exception=True):
-                    # serializer.save(user = request.user)  
-                    serializer.save(tags=[])  
-                    return Response(serializer.data, status=status.HTTP_201_CREATED)
-            else:
-                tags = []
-                for tag in entered_tags :
-                    temp, _ = Tag.objects.get_or_create(tag=tag)
-                    tags.append(temp)
-                serializer = ArticleSerializer(article,data=data)
-                if serializer.is_valid(raise_exception=True):
-                    # serializer.save(user = request.user)  
-                    serializer.save(tags = tags)  
-                    return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    else :     
-        if request.method == 'POST': #게시글 작성
-            entered_tags = request.POST.getlist("tags")
-            data = {
-                'title' : request.data['title'],
-                'content' : request.data['content'],
-            }
-            if not entered_tags:
-                serializer = ArticleSerializer(data=data)
-                if serializer.is_valid():
-                    # serializer.save(user = request.user)  
-                    serializer.save()  
-                    return Response(serializer.data, status=status.HTTP_201_CREATED)
-            tags = []
+    elif request.method == 'PUT' or 'POST': #수정, 작성
+        entered_tags = request.POST.getlist('tags')
+        data = {
+            'title' : request.data['title'],
+            'content' : request.data['content'],
+        }
+        tags = []
+        if entered_tags:
             for tag in entered_tags :
-                temp_tag, _ = Tag.objects.get_or_create(tag=tag)
-                tags.append(temp_tag)
+                temp, _ = Tag.objects.get_or_create(tag=tag)
+                tags.append(temp)
+        if request.method == 'POST':
             serializer = ArticleSerializer(data=data)
-            if serializer.is_valid(raise_exception=True):
-                # serializer.save(user = request.user)  
-                serializer.save(tags = tags)  
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        elif request.method == 'PUT':
+            serializer = ArticleSerializer(article,data=data)
+        if serializer.is_valid():
+            # serializer.save(user = request.user)  
+            serializer.save(tags = tags)  
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
     
 ############## 댓글
 
