@@ -29,15 +29,17 @@ def tag_articles(request): #태그 게시글 조회
         if tag_articles :
             for article in tag_articles:
                 temp_articles.append(article)
-    sort_article=[]
-    for article in temp_articles:
-        serializer = ArticleSerializer(article)
-        sort_article.append(serializer.data)
-    sort_article=sorted(sort_article , key= lambda x: -x['hit'])
-    if sort_article:
-        return Response(sort_article)
+    if not temp_articles :
+        return Response(status=status.HTTP_204_NO_CONTENT)
     else:
-        return Response(None) #204 같은거 넣던지.. 이까지내려오지 ㄴㄴ.. POST 혹은 토큰, 인증 고려하기!!!
+        sort_article=[]
+        for article in temp_articles:
+            serializer = ArticleSerializer(article)
+            sort_article.append(serializer.data)
+        sort_article=sorted(sort_article , key= lambda x: -x['hit'])
+        return Response(sort_article)
+
+
 
 ############### 게시글
 
@@ -62,7 +64,6 @@ def article(request, article_id=None): #게시글 디테일
             return Response(serializer.data)
         
         elif request.method == 'DELETE': #삭제
-            #put...
             article.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -104,7 +105,6 @@ def article(request, article_id=None): #게시글 디테일
                     return Response(serializer.data, status=status.HTTP_201_CREATED)
             tags = []
             for tag in entered_tags :
-
                 temp_tag, _ = Tag.objects.get_or_create(tag=tag)
                 tags.append(temp_tag)
             serializer = ArticleSerializer(data=data)
