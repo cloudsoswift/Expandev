@@ -37,15 +37,17 @@ def tag_articles(request): #태그 게시글 조회
     if sort_article:
         return Response(sort_article)
     else:
-        return Response(None)
+        return Response(None) #204 같은거 넣던지.. 이까지내려오지 ㄴㄴ.. POST 혹은 토큰, 인증 고려하기!!!
 
 ############### 게시글
 
 @api_view(['GET'])
 def article_list(request): #전체게시판 조회
     articles = Article.objects.all()
-    serializer = ArticleSerializer(articles, many = True)
-    return Response(serializer.data)
+    serializer = ArticleSerializer(articles, many=True)
+    return Response(serializer.data) 
+
+    #좋아요, 조회수, 최신
 
 
 # 게시글 작성, 수정, 조회, 삭제
@@ -54,20 +56,21 @@ def article(request, article_id=None): #게시글 디테일
     if article_id:
         article = Article.objects.get(pk=article_id)
         if request.method == 'GET': #조회
-            article.hit+=1
+            article.hit += 1
             article.save()
             serializer = ArticleSerializer(article)
             return Response(serializer.data)
         
         elif request.method == 'DELETE': #삭제
+            #put...
             article.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         elif request.method == 'PUT': #수정
             entered_tags = request.POST.getlist('tags')
             data = {
-                'title' : request.data['title'],
-                'content' : request.data['content'],
+                'title' : request.POST.get('title'),
+                'content' : request.POST.get('content'),
             }
             if not entered_tags:
                 serializer = ArticleSerializer(article, data=data)
@@ -78,10 +81,10 @@ def article(request, article_id=None): #게시글 디테일
             else:
                 tags = []
                 for tag in entered_tags :
-                    temp, already_tag = Tag.objects.get_or_create(tag=tag)
+                    temp, _ = Tag.objects.get_or_create(tag=tag)
                     tags.append(temp)
                 serializer = ArticleSerializer(article,data=data)
-                if serializer.is_valid():
+                if serializer.is_valid(raise_exception=True):
                     # serializer.save(user = request.user)  
                     serializer.save(tags = tags)  
                     return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -101,15 +104,17 @@ def article(request, article_id=None): #게시글 디테일
                     return Response(serializer.data, status=status.HTTP_201_CREATED)
             tags = []
             for tag in entered_tags :
-                temp, already_tag = Tag.objects.get_or_create(tag=tag)
-                tags.append(temp)
+
+                temp_tag, _ = Tag.objects.get_or_create(tag=tag)
+                tags.append(temp_tag)
             serializer = ArticleSerializer(data=data)
-            if serializer.is_valid():
+            if serializer.is_valid(raise_exception=True):
                 # serializer.save(user = request.user)  
                 serializer.save(tags = tags)  
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
-
+    
 ############## 댓글
+
 @api_view(['GET','POST'])
 def comment(request,article_id): #게시글의 모든 댓글 조회, 게시글에 댓글 작성
     article = Article.objects.get(pk = article_id)
@@ -129,3 +134,20 @@ def comment(request,article_id): #게시글의 모든 댓글 조회, 게시글�
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
             
+@api_view(['GET','POST'])
+def recomment(request,article_id,parent_id):  #대댓글
+    article = Article.objects.get(pk=article_id)
+    parent_comment = Comment.objects.get(pk=parent_id)
+    if request.method == 'GET': #대댓글 조회
+        comments = Comment.objects.filter(parent_comment=parent_id)
+        if comments :
+            comments = comments.order_by('-created_at')
+        serializer = CommentSerializer(comments, many= True)
+        return Response(serializer.data)
+    
+    elif request.method == 'POST': #대댓글 작성
+        serializer = CommentSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            # serializer.save(article=article, user=request.user, parent_comment = parent_comment)
+            serializer.save(article=article,  parent_comment = parent_comment)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
