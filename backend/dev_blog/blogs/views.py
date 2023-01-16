@@ -31,3 +31,9 @@ def tag_articles(request, search_tag): #태그 게시글 조회
         return Response(serializer.data)
     else:
         return Response(None)
+
+@api_view(['GET'])
+def article_list(request): #전체게시판 조회
+    articles = Article.objects.all()
+    serializer = ArticleSerializer(articles, many = True)
+    return Response(serializer.data)
