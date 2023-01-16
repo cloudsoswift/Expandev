@@ -61,3 +61,40 @@ def article_create(request): #글작성
         # serializer.save(user = request.user)  
         serializer.save(tags = tags)  
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+@api_view(['GET','PUT','DELETE'])
+def article(request, article_id): #게시글 디테일
+    article = Article.objects.get(pk=article_id)
+    if request.method == 'GET': #조회
+        article.hit+=1
+        article.save()
+        serializer = ArticleSerializer(article)
+        return Response(serializer.data)
+    
+    elif request.method == 'DELETE': #삭제
+        article.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    elif request.method == 'PUT': #수정
+        entered_tags = request.POST.getlist('tags')
+        data = {
+            'title' : request.data['title'],
+            'content' : request.data['content'],
+        }
+        if not entered_tags:
+            serializer = ArticleSerializer(article, data=data)
+            if serializer.is_valid(raise_exception=True):
+                # serializer.save(user = request.user)  
+                serializer.save(tags=[])  
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            tags = []
+            for tag in entered_tags :
+                temp, already_tag = Tag.objects.get_or_create(tag=tag)
+                tags.append(temp)
+            serializer = ArticleSerializer(article,data=data)
+            if serializer.is_valid():
+                # serializer.save(user = request.user)  
+                serializer.save(tags = tags)  
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
