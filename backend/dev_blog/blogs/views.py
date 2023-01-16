@@ -92,9 +92,12 @@ def article(request, article_id=None): #게시글 디테일
 ############## 댓글
 
 @api_view(['GET','POST'])
-def comment(request,article_id): #게시글의 모든 댓글 조회, 게시글에 댓글 작성
-    article = Article.objects.get(pk = article_id)
-    
+def comment(request,article_id, parent_id=None): #댓글 조회, 작성
+    article = get_object_or_404(Article, pk=article_id)
+    parent_comment=None
+    if parent_id :
+        parent_comment = Comment.objects.get(pk=parent_id)
+        
     if request.method == 'GET': #게시글에 달린 댓글 전체 조회
         comments = Comment.objects.filter(article = article)
         if comments :
@@ -106,24 +109,23 @@ def comment(request,article_id): #게시글의 모든 댓글 조회, 게시글�
         serializer = CommentSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             # serializer.save(article=article, user=request.user)
-            serializer.save(article=article)
+            serializer.save(article=article, parent_comment=parent_comment)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-            
-@api_view(['GET','POST'])
-def recomment(request,article_id,parent_id):  #대댓글
-    article = Article.objects.get(pk=article_id)
-    parent_comment = Comment.objects.get(pk=parent_id)
-    if request.method == 'GET': #대댓글 조회
-        comments = Comment.objects.filter(parent_comment=parent_id)
-        if comments :
-            comments = comments.order_by('-created_at')
-        serializer = CommentSerializer(comments, many= True)
+
+@api_view(['GET', 'DELETE', 'PUT'])
+def comment_detail(request, comment_id):
+    comment = get_object_or_404(Comment,pk=comment_id)
+    if request.method == 'GET': #댓글 상세 조회
+        serializer = CommentSerializer(comment)
         return Response(serializer.data)
-    
-    elif request.method == 'POST': #대댓글 작성
-        serializer = CommentSerializer(data=request.data)
+
+    elif request.method == 'DELETE': #댓글 삭제
+        comment.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    elif request.method == 'PUT': #댓글 수정
+        serializer = CommentSerializer(comment, data=request.data)
         if serializer.is_valid(raise_exception=True):
-            # serializer.save(article=article, user=request.user, parent_comment = parent_comment)
-            serializer.save(article=article,  parent_comment = parent_comment)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            serializer.save()
+            return Response(serializer.data)
