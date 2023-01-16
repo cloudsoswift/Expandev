@@ -4,6 +4,7 @@ from rest_framework import status
 from .serializers import ArticleSerializer, CommentSerializer, TagSerializer
 from .models import Article, Comment, Tag
 
+############ 태그
 
 @api_view(['GET']) #전체 태그 조회
 def tag_all(request):
@@ -31,6 +32,9 @@ def tag_articles(request, search_tag): #태그 게시글 조회
         return Response(serializer.data)
     else:
         return Response(None)
+
+
+############### 게시글
 
 @api_view(['GET'])
 def article_list(request): #전체게시판 조회
@@ -98,3 +102,24 @@ def article(request, article_id): #게시글 디테일
                 # serializer.save(user = request.user)  
                 serializer.save(tags = tags)  
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+############## 댓글
+@api_view(['GET','POST'])
+def comment(request,article_id): #게시글의 모든 댓글 조회, 게시글에 댓글 작성
+    article = Article.objects.get(pk = article_id)
+    
+    if request.method == 'GET': #게시글에 달린 댓글 전체 조회
+        comments = Comment.objects.filter(article = article)
+        if comments :
+            comments = comments.order_by('-created_at')
+        serializer = CommentSerializer(comments, many= True)
+        return Response(serializer.data)
+    
+    elif request.method == 'POST': #댓글 작성
+        serializer = CommentSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            # serializer.save(article=article, user=request.user)
+            serializer.save(article=article)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+            
