@@ -37,3 +37,27 @@ def article_list(request): #전체게시판 조회
     articles = Article.objects.all()
     serializer = ArticleSerializer(articles, many = True)
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+def article_create(request): #글작성
+    entered_tags = request.POST.getlist("tags")
+    data = {
+        'title' : request.data['title'],
+        'content' : request.data['content'],
+    }
+    if not entered_tags:
+        serializer = ArticleSerializer(data=data)
+        if serializer.is_valid():
+            # serializer.save(user = request.user)  
+            serializer.save()  
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+    tags = []
+    for tag in entered_tags :
+        temp, already_tag = Tag.objects.get_or_create(tag=tag)
+        tags.append(temp)
+    serializer = ArticleSerializer(data=data)
+    if serializer.is_valid():
+        # serializer.save(user = request.user)  
+        serializer.save(tags = tags)  
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
