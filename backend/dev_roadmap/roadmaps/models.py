@@ -17,7 +17,7 @@ class Node(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
     purpose = models.TextField()
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='child')
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='childs')
 
 
 class RecommendContent(models.Model):
