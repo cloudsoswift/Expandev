@@ -10,3 +10,9 @@ def tag_all(request):
     tags = Tag.objects.all()
     serializer = TagSerializer(tags, many=True)
     return Response(serializer.data)
+
+@api_view(['GET']) #태그 검색
+def tag_list(request, search_tag): 
+    tags = Tag.objects.filter(tag__contains=search_tag)
+    serializer = TagSerializer(tags, many=True)
+    return Response(serializer.data)
