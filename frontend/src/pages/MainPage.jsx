@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Modal from "../components/Modal";
 import WhatWhy from "../components/WhatWhy";
 import Links from "../components/Links";
+import Review from "../components/Review";
 
 const MainPage = () => {
   const [showModal, setShowModal] = useState(false);
@@ -17,6 +18,7 @@ const MainPage = () => {
         >
           Node
         </button>
+
         <Modal isVisible={showModal} onClose={() => setShowModal(false)}>
           <div className="p-6">
             <div className=" flex justify-between">
@@ -32,6 +34,7 @@ const MainPage = () => {
             </div>
             <WhatWhy />
             <Links />
+            <Review />
           </div>
         </Modal>
       </div>

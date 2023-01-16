@@ -1,6 +1,6 @@
 import React from "react";
 
-// modal 형태만
+// modal 형식만 나타내는 component
 const Modal = ({ isVisible, onClose, children }) => {
   if (!isVisible) return null;
 
@@ -19,7 +19,7 @@ const Modal = ({ isVisible, onClose, children }) => {
     >
       {/* modal bg */}
       {/* scroll을 지정할 땐 max값이 필수 */}
-      <div className="overflow-y-auto max-h-screen md:w-[600px] right-0 top-0">
+      <div className="overflow-y-auto scroll-smooth  max-h-screen sm:w-[600px] right-0 top-0">
         <div className=" bg-white p-2 ">{children}</div>
       </div>
     </div>
