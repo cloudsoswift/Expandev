@@ -62,6 +62,7 @@ class NodeDetailSerializer(serializers.ModelSerializer):
 
 class Nodeserializer(serializers.ModelSerializer):
     childs = serializers.SerializerMethodField()
+    completion_count = serializers.IntegerField(source='completion.count', read_only=True)
 
     class Meta:
         model = Node
@@ -75,6 +76,8 @@ class Nodeserializer(serializers.ModelSerializer):
 
 class MainNodeSerializer(serializers.ModelSerializer):
     childs = serializers.SerializerMethodField()
+    completion_count = serializers.IntegerField(source='completion.count', read_only=True)
+
 
     class Meta:
         model = Node
