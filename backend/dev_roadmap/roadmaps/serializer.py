@@ -29,12 +29,14 @@ class NodeDetailSerializer(serializers.ModelSerializer):
     recommend_content = RecommendContentSerializer(many=True)
     interview = InterviewSerializer(many=True)
     review = ReviewSerializer(many=True)
+    completion_count = serializers.IntegerField(source='completion.count', read_only=True)
 
     class Meta:
         model = Node
-        fields = ('id', 'isEssential', 'isComplete', 'title', 'content', 'purpose', 'recommend_content', 'interview', 'review')
-
-
+        fields = ('id', 'isEssential', 'isComplete', 'title', 'content', 'purpose', 'recommend_content', 'interview', 'review', 'completion_count')
+        read_only_fields = ('completion',)
+    
+    
 class Nodeserializer(serializers.ModelSerializer):
     childs = serializers.SerializerMethodField()
 
