@@ -36,7 +36,7 @@ class Interview(models.Model):
 
 class Completion(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='completion')
-    node = models.ForeignKey(Node, on_delete=models.CASCADE, related_name='completion', null=True, blank=True)
+    node = models.ForeignKey(Node, on_delete=models.CASCADE, null=True, blank=True, related_name='completion')
 
 
 class Review(models.Model):

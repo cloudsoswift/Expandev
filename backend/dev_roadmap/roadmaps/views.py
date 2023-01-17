@@ -33,4 +33,6 @@ def clear_node(request, node_id):
         serializer = CompletionSerializer(data={'node': node_id})
         if serializer.is_valid():
             serializer.save(user=user)
+        else:
+            print(serializer.errors)
     return Response(status=status.HTTP_201_CREATED)
