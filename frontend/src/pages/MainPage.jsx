@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Modal from "../components/Modal";
 import WhatWhy from "../components/WhatWhy";
@@ -8,9 +8,20 @@ import Review from "../components/Review";
 
 
 
-
 const MainPage = () => {
   const [showModal, setShowModal] = useState(false);
+  const [data, setData] = useState([])
+
+  const getData = async()=> {
+    const res = await fetch('https://ssekerapi.site/roadmaps/3/node').then((res)=> res.json())
+    const initData = res
+    console.log(initData)
+    setData(initData)
+  }
+
+  useEffect(()=>{
+    getData()
+  },[])
 
 
   return (
@@ -25,18 +36,19 @@ const MainPage = () => {
           Node1
         </button>
         <button
-          id={2}
+          id={3}
           className="cursor-pointer bg-blue-600 hover:bg-blue-800 focus:outline-none px-5 py-2 rounded-md font-medium text-sm text-white mr-5"
           onClick={() => setShowModal(true)}
         >
           Node2
         </button>
-
-        <Modal isVisible={showModal} onClose={() => setShowModal(false)}>
+        <div>
+        </div>
+        <Modal id={data.id} data={data} isVisible={showModal} onClose={() => setShowModal(false)}>
           <div className="p-6">
             <div className=" flex justify-between">
               <h3 className="text-xl font-semibold text-gray-900 mb-5">
-                modal title
+                {data.title}
               </h3>
               <input className="w-5 h-5 ml-2" type="checkbox" />
             </div>
@@ -45,8 +57,8 @@ const MainPage = () => {
                 POST
               </button>
             </div>
-            <WhatWhy />
-            <Links />
+            <WhatWhy data={data}/>
+            <Links data={data}/>
             <Review />
           </div>
         </Modal>

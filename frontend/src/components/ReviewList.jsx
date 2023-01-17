@@ -2,6 +2,7 @@ import React from "react";
 import ReviewListItem from "./ReviewListItem";
 
 const ReviewList = ({ reviewList, onDelete, onEdit }) => {
+  
   const getAvgImp = (reviewList) => {
     if (reviewList.length === 0) return 0;
     let sum = 0;
@@ -11,6 +12,7 @@ const ReviewList = ({ reviewList, onDelete, onEdit }) => {
     console.log(sum)
     return Math.round(sum / reviewList.length);
   };
+
   const getAvgDif = (reviewList) => {
     if (reviewList.length === 0) return 0;
     let sum = 0;
