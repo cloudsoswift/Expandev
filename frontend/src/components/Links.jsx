@@ -1,7 +1,11 @@
 import React from "react";
 import Carousel from "./Carousel";
 
-const Links = () => {
+const Links = ({ reqData }) => {
+  const openLink = (link) => {
+    // window.open(`${link}`, "_blank");
+  };
+
   return (
     <div>
       <div>
@@ -19,14 +23,21 @@ const Links = () => {
       </div>
       <div>
         <h2>Interview</h2>
-        <Carousel />
+        <Carousel reqData={reqData}/>
       </div>
       <div>
         <h2>R Contents</h2>
         <div className="grid grid-cols-3 gap-3 justify-items-center text-center p-3">
-          <div className="bg-blue-100 w-36 h-36">01</div>
-          <div className="bg-blue-100 w-36 h-36">02</div>
-          <div className="bg-blue-100 w-36 h-36">03</div>
+          {reqData.recommend_content.map((item) => (
+            <div key={item.id} className="bg-blue-100 w-36 h-36">
+              <div onClick={openLink(item.url)}>{item.title}</div>
+              <img
+                src={item.img_url}
+                alt="img"
+                
+              />
+            </div>
+          ))}
         </div>
       </div>
     </div>

@@ -3,23 +3,26 @@ import ReviewListItem from "./ReviewListItem";
 
 const ReviewList = ({ reviewList, onDelete, onEdit }) => {
   
-  const getAvgImp = (reviewList) => {
-    if (reviewList.length === 0) return 0;
+  const getAvgImp = (list) => {
+    if (list.length === 0) return 0;
     let sum = 0;
-    reviewList.forEach((item) => {
+    list.forEach((item) => {
       sum += item.importance;
     });
-    console.log(sum)
-    return Math.round(sum / reviewList.length);
+    // console.log(sum)
+    // console.log(Math.round(sum / list.length))
+    return Math.round(sum / list.length);
   };
 
-  const getAvgDif = (reviewList) => {
-    if (reviewList.length === 0) return 0;
+  const getAvgDif = (list) => {
+    if (list.length === 0) return 0;
     let sum = 0;
-    reviewList.forEach((item) => {
+    list.forEach((item) => {
       sum += item.difficulty;
     });
-    return Math.round(sum / reviewList.length);
+    // console.log(sum)
+    // console.log(Math.round(sum / list.length))
+    return Math.round(sum / list.length);
   };
 
   return (

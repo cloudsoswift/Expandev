@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { data } from "./mockData";
 
-const Carousel = () => {
+const Carousel = ({ reqData }) => {
   // const [currentIdx, setCurrentIdx] = useState(0);
 
   const slideLeft = () => {
@@ -34,14 +34,15 @@ const Carousel = () => {
           id="slider"
           className="w-full h-full overflow-x-scroll scrollbar-hide whitespace-nowrap scroll-smooth"
         >
-          {data.map((item, slideIdx) => (
-            <img
+          {reqData.interview.map((item, slideIdx) => (
+            <div
               id="slide"
               key={slideIdx}
-              className="w-[165px] inline-block p-2 cursor-pointer hover:scale-105 ease-in-out duration-300"
-              src={item.img}
-              alt="/"
-            />
+              className="w-[165px] inline-block p-2 cursor-pointer hover:scale-105 ease-in-out duration-300 bg-yellow-200 border-2"
+            >
+              <div>{item.interviewee}</div>
+              <div>{item.content}</div>
+            </div>
           ))}
         </div>
         <div onClick={slideRight} className="text-lg">
