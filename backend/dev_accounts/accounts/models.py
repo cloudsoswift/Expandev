@@ -14,7 +14,7 @@ class User(AbstractUser):
     nickname = models.CharField(max_length=50)
     login_type = models.CharField(null=True, max_length=10)
     stat = models.CharField(null=True, max_length=50)
-    phone_number = models.CharField(max_length=13, null=True)
+    phone_number = models.CharField(null=True, max_length=13)
     svc_use_pcy_agmt_yn = models.BooleanField(default=False, null=True)
     ps_info_proc_agmt_yn = models.BooleanField(default=False, null=True)
     mkt_info_recv_agmt_yn = models.BooleanField(default=False, null=True)

@@ -11,7 +11,7 @@ class CustomAccountAdapter(DefaultAccountAdapter):
         user.phone_number = data.get('phone_number')
         user.svc_use_pcy_agmt_yn = data.get('svc_use_pcy_agmt_yn')
         user.ps_info_proc_agmt_yn = data.get('ps_info_proc_agmt_yn')
-        user.mkt_info_proc_agmt_yn = data.get('mkt_info_proc_agmt_yn')
+        user.mkt_info_recv_agmt_yn = data.get('mkt_info_recv_agmt_yn')
         user.news_feed_push_yn = data.get('news_feed_push_yn')
         user.noti_push_yn = data.get('noti_push_yn')
         user.position = data.get('position')

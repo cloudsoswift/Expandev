@@ -49,7 +49,9 @@ class CustomRegisterSerializer(RegisterSerializer):
         data['position'] = self.validated_data.get('position')
         return data
         
-
-
-    
-
+# 유저 디테일 시리얼라이저
+class CustomUserDetailSerializer(UserDetailsSerializer):
+    pw = serializers.CharField(source="password")
+    class Meta(UserDetailsSerializer.Meta):
+        fields = ('email', 'pw', 'nickname', 'login_type', 'stat', 'phone_number', 'svc_use_pcy_agmt_yn', 'ps_info_proc_agmt_yn', 'mkt_info_recv_agmt_yn', 'news_feed_push_yn', 'noti_push_yn', 'position')
+        read_only_fields = ('email', 'password',)

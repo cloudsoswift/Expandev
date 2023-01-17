@@ -79,6 +79,10 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 ACCOUNT_ADAPTER = 'accounts.adapter.CustomAccountAdapter'
 
+# 토큰 시리얼라이저 추가
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'accounts.serializers.CustomUserDetailSerializer',
+}
 ##############################################################
 #
 # django user custom model 설정
