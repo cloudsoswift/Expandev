@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 import { data } from "./mockData";
 
-
 const Carousel = () => {
   // const [currentIdx, setCurrentIdx] = useState(0);
 
   const slideLeft = () => {
     let slider = document.getElementById("slider");
-    slider.scrollLeft = slider.scrollLeft - 495;
+    let slide = document.getElementById("slide");
+    let slideWidth = slide.clientWidth;
+    slider.scrollLeft -= slideWidth * 3;
   };
   const slideRight = () => {
     let slider = document.getElementById("slider");
-    slider.scrollLeft = slider.scrollLeft + 495;
+    let slide = document.getElementById("slide");
+    let slideWidth = slide.clientWidth;
+    slider.scrollLeft += slideWidth * 3;
   };
 
   // const gotoSlide = (slideIdx) => {
@@ -33,6 +36,7 @@ const Carousel = () => {
         >
           {data.map((item, slideIdx) => (
             <img
+              id="slide"
               key={slideIdx}
               className="w-[165px] inline-block p-2 cursor-pointer hover:scale-105 ease-in-out duration-300"
               src={item.img}

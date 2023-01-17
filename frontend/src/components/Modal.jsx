@@ -1,9 +1,12 @@
 import React from "react";
+import detailData from "../data/detailData.json"
 
 // modal 형식만 나타내는 component
 const Modal = ({ isVisible, onClose, children }) => {
-  if (!isVisible) return null;
 
+  console.log(detailData)
+
+  if (!isVisible) return null;
   const handleClose = (e) => {
     if (e.target.id === "wrapper") {
       onClose();

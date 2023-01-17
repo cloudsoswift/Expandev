@@ -8,7 +8,7 @@ const Links = () => {
         <div className=" flex justify-between">
           <h2>Blog</h2>
           <button className="bg-blue-200 px-3 py-1 rounded text-xs">
-            POST
+            more..
           </button>
         </div>
         <div className="grid grid-cols-3 gap-3 justify-items-center text-center p-3">
