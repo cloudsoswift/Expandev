@@ -23,7 +23,7 @@ class RecommendContentSerializer(serializers.ModelSerializer):
     class Meta:
         model = RecommendContent
         exclude = ('node',)
-        
+
 
 class InterviewSerializer(serializers.ModelSerializer):
 
@@ -60,7 +60,6 @@ class NodeDetailSerializer(serializers.ModelSerializer):
         return serializer.data
 
 
-
 class Nodeserializer(serializers.ModelSerializer):
     childs = serializers.SerializerMethodField()
 
@@ -91,7 +90,7 @@ class TrackSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Track
-        fields = ('__all__')
+        fields = '__all__'
         read_only_fields = ('nodes', )
 
     def get_nodesData(self, object):
@@ -101,3 +100,11 @@ class TrackSerializer(serializers.ModelSerializer):
                 temp_node.append(node)
         serializer = MainNodeSerializer(temp_node, many=True)
         return serializer.data
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Review
+        fields = '__all__'
+        read_only_fields = ('user',)
