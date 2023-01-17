@@ -7,25 +7,16 @@ from django.shortcuts import get_object_or_404, get_list_or_404
 
 ############ 태그
 
-@api_view(['GET']) #태그 검색
-def tag_list(request, search_tag=None): 
-    products = products.annotate(review_count=Count('productreview')).order_by('-review_count')
-
-    if search_tag: #태그 검색 조회
-        tags = Tag.objects.filter(tag__contains=search_tag).order_by('articles.count')
-    else: #태그 전체 조회
-        tags = Tag.objects.all().order_by('articles.count')
-    serializer = TagSerializer(tags, many=True)
-    return Response(serializer.data)
-
 @api_view(['GET'])
-def tag_list(request, search_tag=None):
+def tag_list(request, search_tag=None): #articles_count 수로 정렬
     if search_tag:  # 태그 검색 조회
         tags = Tag.objects.filter(tag__contains=search_tag)
     else:  # 태그 전체 조회
         tags = Tag.objects.all()
     serializer = TagSerializer(tags, many=True)
-    return Response(serializer.data)
+    print(serializer.data)
+    data = sorted(serializer.data, key=lambda x : -x['articles_count'])
+    return Response(data)
 
 
 @api_view(['GET'])

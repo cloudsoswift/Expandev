@@ -19,6 +19,6 @@ urlpatterns = [
     #tag
     path('tag', views.tag_list), #전체 태그 조회
     path('tag/<str:search_tag>', views.tag_list), #태그 목록 조회
-    path('tag_articles', views.tag_articles), #태그의 게시글 조회
+    path('tag/articles', views.tag_articles), #태그의 게시글 조회
 
 ]
