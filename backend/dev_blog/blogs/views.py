@@ -84,8 +84,7 @@ def article(request, article_id=None): #게시글 디테일
         elif request.method == 'PUT':
             serializer = ArticleSerializer(article,data=data)
         if serializer.is_valid():
-            # serializer.save(user = request.user)  
-            serializer.save(tags = tags)  
+            serializer.save(tags=tags, user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     
@@ -108,8 +107,8 @@ def comment(request, article_id, parent_id=None): #댓글 조회, 작성
     elif request.method == 'POST': #댓글 작성
         serializer = CommentSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            # serializer.save(article=article, user=request.user)
-            serializer.save(article=article, parent_comment=parent_comment)
+            serializer.save(user=request.user, article=article,
+                            parent_comment=parent_comment)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
@@ -131,33 +130,34 @@ def comment_detail(request, comment_id):
             return Response(serializer.data)
         
         
-# @api_view(['POST'])
-# def like_article(request, article_id): #게시글 좋아요
-#     article = Article.objects.get(pk=article_id)
-#     if article.like_users.filter(pk=request.user.pk).exists():
-#         article.like_users.remove(request.user)
-#         liked = False
-#     else:
-#         article.like_users.add(request.user)
-#         liked = True
-#     context = {
-#         'liked': liked,
-#         'like_count' : article.like_users.count()
-#     }
-#     return Response(context)
+@api_view(['POST'])
+def like_article(request, article_id):  # 게시글 좋아요
+    article = Article.objects.get(pk=article_id)
+    if article.like_users.filter(pk=request.user.pk).exists():
+        article.like_users.remove(request.user)
+        liked = False
+    else:
+        article.like_users.add(request.user)
+        liked = True
+    context = {
+        'liked': liked,
+        'like_count': article.like_users.count()
+    }
+    return Response(context)
 
-# @api_view(['POST'])
-# def like_comment(request, comment_id): #댓글 좋아요 
-#     comment = Comment.objects.get(pk=comment_id)
-#     if comment.like_users.filter(pk=request.user.pk).exists():
-#         comment.like_users.remove(request.user)
-#         liked = False
-#     else:
-#         comment.like_users.add(request.user)
-#         liked = True
-#     context = {
-#         'liked': liked,
-#         'like_count' : comment.like_users.count()
-#     }
-#     return Response(context)
+
+@api_view(['POST'])
+def like_comment(request, comment_id):  # 댓글 좋아요
+    comment = Comment.objects.get(pk=comment_id)
+    if comment.like_users.filter(pk=request.user.pk).exists():
+        comment.like_users.remove(request.user)
+        liked = False
+    else:
+        comment.like_users.add(request.user)
+        liked = True
+    context = {
+        'liked': liked,
+        'like_count': comment.like_users.count()
+    }
+    return Response(context)
 
