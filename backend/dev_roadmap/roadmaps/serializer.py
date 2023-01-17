@@ -1,4 +1,4 @@
-from .models import Node, Track, RecommendContent, Interview, Review
+from .models import Node, Track, RecommendContent, Interview, Review, Completion
 
 from rest_framework import serializers
 
@@ -75,3 +75,11 @@ class TrackSerializer(serializers.ModelSerializer):
                 temp_node.append(node)
         serializer = MainNodeSerializer(temp_node, many=True)
         return serializer.data
+
+
+class CompletionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Completion
+        fields = '__all__'
+        read_only_fields = ('user',)

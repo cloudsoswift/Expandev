@@ -1,7 +1,8 @@
-from .models import Node, Track
-from .serializer import TrackSerializer, NodeDetailSerializer
+from .models import Node, Track, Completion
+from .serializer import TrackSerializer, NodeDetailSerializer, CompletionSerializer
 
-from django.shortcuts import render
+from django.db.models import Q
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
@@ -18,3 +19,18 @@ def get_node(request, node_id):
     node = Node.objects.get(id=node_id)
     serializer = NodeDetailSerializer(node)
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+def clear_node(request, node_id):
+    node = Node.objects.get(id=node_id)
+    user = request.user
+    completion = Completion.objects.filter(Q(node=node) & Q(user=user))
+    if completion:
+        completion.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    else:
+        serializer = CompletionSerializer(data={'node': node_id})
+        if serializer.is_valid():
+            serializer.save(user=user)
+    return Response(status=status.HTTP_201_CREATED)
