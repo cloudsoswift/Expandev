@@ -9,35 +9,47 @@ from django.shortcuts import get_object_or_404, get_list_or_404
 
 @api_view(['GET']) #태그 검색
 def tag_list(request, search_tag=None): 
+    products = products.annotate(review_count=Count('productreview')).order_by('-review_count')
+
     if search_tag: #태그 검색 조회
-        tags = Tag.objects.filter(tag__contains=search_tag)
+        tags = Tag.objects.filter(tag__contains=search_tag).order_by('articles.count')
     else: #태그 전체 조회
+        tags = Tag.objects.all().order_by('articles.count')
+    serializer = TagSerializer(tags, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def tag_list(request, search_tag=None):
+    if search_tag:  # 태그 검색 조회
+        tags = Tag.objects.filter(tag__contains=search_tag)
+    else:  # 태그 전체 조회
         tags = Tag.objects.all()
     serializer = TagSerializer(tags, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
-def tag_articles(request): #태그 게시글 조회
-    select_tags = request.GET.getlist('tags')
-    temp_articles=[]
-    for search_tag in select_tags: 
-        try: #태그 없으면 넘어가도록 함
+def tag_articles(request):  # 태그 게시글 조회
+    sort_type=request.data.get('sort_type') # sort_type에 들어오는 값 : like_users_count / hit 
+    select_tags = request.data.getlist('tags')
+    temp_articles = []
+    for search_tag in select_tags:
+        try:  # 태그 없으면 넘어가도록 함
             tag = Tag.objects.get(tag=search_tag)
         except:
             continue
         tag_articles = Article.objects.filter(tags=tag)
-        if tag_articles :
+        if tag_articles:
             for article in tag_articles:
                 temp_articles.append(article)
-    if not temp_articles :
+    if not temp_articles:
         return Response(status=status.HTTP_204_NO_CONTENT)
     else:
-        sort_article=[]
+        sort_article = []
         for article in temp_articles:
             serializer = ArticleSerializer(article)
             sort_article.append(serializer.data)
-        sort_article=sorted(sort_article , key= lambda x: -x['hit'])
+        sort_article = sorted(sort_article, key=lambda x: -x[sort_type])
         return Response(sort_article)
 
 
