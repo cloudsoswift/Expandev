@@ -1,10 +1,6 @@
 from rest_framework import serializers
 from .models import Article, Comment, Tag
 
-class TagSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tag
-        fields = '__all__'
 
 
 class ArticleSerializer(serializers.ModelSerializer):
@@ -27,5 +23,11 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ('user', 'article','parent_comment','like_users', 'like_users_count')
 
+class TagSerializer(serializers.ModelSerializer):
+    articles_count = serializers.IntegerField(source = 'articles.count', read_only=True)
+    
+    class Meta:
+        model = Tag
+        fields = '__all__'
 
 
