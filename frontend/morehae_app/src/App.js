@@ -1,10 +1,8 @@
-import Roadmap from "./RoadMap/Roadmap";
-import nodesDataJSON from "./nodesDataJSON.json"
+import RoadmapPage from "./pages/RoadmapPage.jsx";
+import "./index.css"
 
-function App() {
+export default function App() {
   return (
-    <Roadmap nodesDataJSON={nodesDataJSON}/>
+    <RoadmapPage />
   );
 }
-
-export default App;
