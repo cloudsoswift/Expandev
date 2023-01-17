@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Track(models.Model):
@@ -36,3 +37,11 @@ class Interview(models.Model):
 class Completion(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='completion')
     node= models.ForeignKey(Node, on_delete=models.CASCADE, related_name='completion', null=True, blank=True)
+
+
+class Review(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='review')
+    node = models.ForeignKey(Node, on_delete=models.CASCADE, related_name='review')
+    content = models.CharField(max_length=100)
+    importance = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)], default=3)
+    difficulty = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)], default=3)

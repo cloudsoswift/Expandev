@@ -1,53 +1,77 @@
-from .models import Node, Track
+from .models import Node, Track, RecommendContent, Interview, Review
 
 from rest_framework import serializers
 
 
-class Test(serializers.ModelSerializer):
+class RecommendContentSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Node
+        model = RecommendContent
         fields = '__all__'
 
 
-class NodeSerializer(serializers.ModelSerializer):
-    nodes = serializers.SerializerMethodField()
+class InterviewSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Interview
+        fields = '__all__'
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source='user.username', read_only=True)
+
+    class Meta:
+        model = Review
+        fields = '__all__'
+
+
+class NodeDetailSerializer(serializers.ModelSerializer):
+    recommend_content = RecommendContentSerializer(many=True)
+    interview = InterviewSerializer(many=True)
+    review = ReviewSerializer(many=True)
 
     class Meta:
         model = Node
-        fields = '__all__'
+        fields = ('id', 'isEssential', 'isComplete', 'title', 'content', 'purpose', 'recommend_content', 'interview', 'review')
 
-    def get_nodes(self, object):
-            temp = []
-            if not object.parent:
-                print(object)
-                temp.append(object)
-            serialzier = Test(temp, many=True)
-            print(serialzier.data)
-            return serialzier.data
+
+class Nodeserializer(serializers.ModelSerializer):
+    childs = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Node
+        exclude = ('parent', )
+
+    def get_childs(self, object):
+        serializer = Nodeserializer(object.childs.all(), many=True)
+        data = serializer.data
+        return data if data else None
+
+
+class MainNodeSerializer(serializers.ModelSerializer):
+    childs = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Node
+        exclude = ('parent', )
+
+    def get_childs(self, object):
+        serializer = Nodeserializer(object.childs.all(), many=True)
+        return serializer.data
+
 
 class TrackSerializer(serializers.ModelSerializer):
-    # nodes = NodeSerializer(many=True)
-    # print(nodes)
-
-    nodes = serializers.SerializerMethodField()
-    print(nodes)  
+    nodesData = serializers.SerializerMethodField()
+    
     class Meta:
         model = Track
         fields = ('__all__')
         read_only_fields = ('nodes', )
 
-    def get_nodes(self, object):
-        print(object.nodes.all())
+    def get_nodesData(self, object):
         temp_node = []
         for node in object.nodes.all():
             if not node.parent:
                 temp_node.append(node)
-        return None
-        # temp = []
-        # if not object.parent:
-        #     print(object)
-        #     temp.append(object)
-        # serialzier = Test(temp, many=True)
-        # print(serialzier.data)
-        # return serialzier.data
+        serializer = MainNodeSerializer(temp_node, many=True)
+        return serializer.data
