@@ -52,3 +52,23 @@ def node_review(request, review_id=None):
                 serializer.save(user=user)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+def like_node_review(request, review_id):
+    comment = Review.objects.get(id=review_id)
+    user = request.user
+    if comment.like_users.filter(id=user.id).exists():
+        comment.like_users.remove(user)
+    else:
+        comment.like_users.add(user)
+    return Response(status=status.HTTP_200_OK)
+
+   roadmaps/urls.py
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        roadmaps/migrations/0012_review_like_users.py
+        roadmaps/migrations/0013_role.py
+
+
