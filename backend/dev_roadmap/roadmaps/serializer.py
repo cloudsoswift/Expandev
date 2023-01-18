@@ -5,7 +5,6 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 
-
 class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -41,31 +40,25 @@ class NodeDetailSerializer(serializers.ModelSerializer):
     review = ReviewSerializer(many=True)
     completion_count = serializers.IntegerField(source='completion.count', read_only=True)
     isComplete = serializers.SerializerMethodField()
-    user = serializers.SerializerMethodField()
 
     class Meta:
         model = Node
-        fields = ('id', 'isEssential', 'isComplete', 'title', 'content', 'purpose', 'recommend_content', 'interview', 'review', 'completion_count', 'completion', 'user')
+        fields = ('id', 'isEssential', 'isComplete', 'title', 'content', 'purpose', 'recommend_content', 'interview', 'review', 'completion_count', 'completion',)
 
-
-    def get_isComplete(self, objects):
-        # 1. 유저를 어떻게 구분할지 ~ 
-        # 1-1. user 가 익명이면 False 주고
-        # 1-2. 유저가 유저면 유저가 클리어한 노드중에 해당 노드가 포함되어있으면 True 를 반환해라~
-
-        # print(self)
-        # print(objects)
-        return True
-
-    def get_user(self, obj):
-        # print(self)
-        # print(obj)
-        return "test"
+    def get_isComplete(self, data):
+        user = self.context['user']
+        if user.is_authenticated():
+            node_id = data.id
+            is_clear_node = user.clear_nodes.all().filter(id=node_id).exists()
+            return True if is_clear_node else False
+        else:
+            return False
 
 
 class Nodeserializer(serializers.ModelSerializer):
     childs = serializers.SerializerMethodField()
     completion_count = serializers.IntegerField(source='completion.count', read_only=True)
+    isComplete = serializers.SerializerMethodField()
 
     class Meta:
         model = Node
@@ -76,20 +69,39 @@ class Nodeserializer(serializers.ModelSerializer):
         data = serializer.data  
         return data if data else None
 
+    def get_isComplete(self, data):
+        user = self.context['user']
+        if user.is_authenticated():
+            node_id = data.id
+            is_clear_node = user.clear_nodes.all().filter(id=node_id).exists()
+            return True if is_clear_node else False
+        else:
+            return False
+
 
 class MainNodeSerializer(serializers.ModelSerializer):
     childs = serializers.SerializerMethodField()
     completion_count = serializers.IntegerField(source='completion.count', read_only=True)
-
+    isComplete = serializers.SerializerMethodField()
 
     class Meta:
         model = Node
         exclude = ('parent', )
 
     def get_childs(self, object):
-        serializer = Nodeserializer(object.childs.all(), many=True)
+        user = self.context['user']
+        serializer = Nodeserializer(object.childs.all(), many=True, context={'user': user})
         return serializer.data
 
+    def get_isComplete(self, data):
+        user = self.context['user']
+        if user.is_authenticated():
+            node_id = data.id
+            is_clear_node = user.clear_nodes.all().filter(id=node_id).exists()
+            return True if is_clear_node else False
+        else:
+            return False
+            
 
 class TrackSerializer(serializers.ModelSerializer):
     nodesData = serializers.SerializerMethodField()
@@ -100,11 +112,12 @@ class TrackSerializer(serializers.ModelSerializer):
         read_only_fields = ('nodes', )
 
     def get_nodesData(self, object):
+        user = self.context['user']
         temp_node = []
         for node in object.nodes.all():
             if not node.parent:
                 temp_node.append(node)
-        serializer = MainNodeSerializer(temp_node, many=True)
+        serializer = MainNodeSerializer(temp_node, many=True, context={'user': user})
         return serializer.data
 
 
