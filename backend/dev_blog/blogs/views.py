@@ -65,7 +65,7 @@ def article(request, article_id=None):  # 게시글 디테일
     if request.method == 'GET':  # 조회
         article.hit += 1
         article.save()
-        serializer = ArticleSerializer(article)
+        serializer = ArticleSerializer(article, context = {'user': request.user })
         return Response(serializer.data)
 
     elif request.method == 'DELETE':  # 삭제
