@@ -1,5 +1,5 @@
-from .models import Node, Track, Completion, Review
-from .serializer import TrackSerializer, NodeDetailSerializer, CompletionSerializer, ReviewSerializer
+from .models import Node, Track,  Review, Role
+from .serializer import TrackSerializer, NodeDetailSerializer, ReviewSerializer, RoleSerializer
 
 from django.db.models import Q
 from rest_framework import status
@@ -25,17 +25,11 @@ def get_node(request, node_id):
 def clear_node(request, node_id):
     node = Node.objects.get(id=node_id)
     user = request.user
-    completion = Completion.objects.filter(Q(node=node) & Q(user=user))
-    if completion:
-        completion.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    if user.clear_nodes.filter(id=node_id).exists():
+        user.clear_nodes.remove(node)
     else:
-        serializer = CompletionSerializer(data={'node': node_id})
-        if serializer.is_valid():
-            serializer.save(user=user)
-        else:
-            print(serializer.errors)
-    return Response(status=status.HTTP_201_CREATED)
+        user.clear_nodes.add(node)
+    return Response(status=status.HTTP_200_OK)
 
 
 @api_view(['POST', 'PUT', 'DELETE'])
@@ -52,7 +46,7 @@ def node_review(request, review_id=None):
             review.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
     else:
-        if request.method == 'POST':
+        if request.method == 'POST':    
             serializer = ReviewSerializer(data=data)
             if serializer.is_valid():
                 serializer.save(user=user)
