@@ -1,40 +1,33 @@
 import {BsChevronDown} from 'react-icons/bs'
-import {useState} from 'react'
+import { useEffect } from 'react'
 
-const roleListDummy = [
-  {id: 1, content: "프론트엔드"},
-  {id: 2, content: "백엔드"},
-  {id: 3, content: "모바일"},
-  {id: 4, content: "Dev-ops"},
-  {id: 5, content: "풀스택"}
-]
-
-const Dropdown = () => {
-  const [isShowing, setIsShowing] = useState(false);
-  const [selectedID, setSelectedID] = useState(0);
-  const obj = {
-    name: "tico",
-    age: 13
-  }
-
+const Dropdown = ({isOpenRole, setIsOpenRole, selectedRole, setSelectedRole, roleList}) => {
+  const msg = "희망 직군을 선택해주세요";
+  useEffect(() => {
+    // console.log("드롭다운 렌더링됨", isOpenRole);
+    console.log("렌더", roleList);
+  })
+  
   function clickHandler() {
-    setIsShowing(!isShowing);
+    setIsOpenRole(!isOpenRole);
   }
 
   function selected(e) {
-    console.log(roleListDummy[e.target?.value-1]);
-    setIsShowing(!isShowing);
+    // console.log(roleListDummy[e.target?.value]);
+    setIsOpenRole(!isOpenRole);
+    setSelectedRole(e.target?.value)
   }
+
   return (
-    <div>
-      <button onClick={clickHandler} className="cursor-default w-full h-12 bg-red-100 rounded-md flex items-center justify-between p-4">
-        희망 직군을 선택해주세요
+    <div className="relative w-full">
+      <button onClick={clickHandler} className="cursor-default h-12 bg-red-100 flex items-center w-full justify-between p-4">
+        {msg}
         <BsChevronDown />
       </button>
-      {isShowing && 
-      <ul className="bg-blue-300 max-h-60 overflow-y-auto">
-        {roleListDummy.map((role)=>(
-          <li key={role.id} value={role.id} onClick={selected} className="p-2 hover:bg-yellow-300">{role.content}</li>
+      {isOpenRole && 
+      <ul className="absolute w-full bg-blue-300 max-h-60 overflow-y-auto">
+        {roleList.map((role, index)=>(
+          <li key={role.id} value={index} onClick={selected} className="p-2 hover:bg-yellow-300">{role.content}</li>
         ))}
       </ul>
       }

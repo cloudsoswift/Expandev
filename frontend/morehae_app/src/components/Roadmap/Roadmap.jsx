@@ -1,5 +1,6 @@
 import RoadmapSection from "./RoadmapSection";
 import Julgi from "./components/Julgi"
+import { useEffect } from 'react'
 
 const Roadmap = ({nodesDataJSON}) => {
   // 노드들 데이터 프로퍼티
@@ -14,6 +15,10 @@ const Roadmap = ({nodesDataJSON}) => {
   const roadmapHeight = 110 * (nodesData.length+1)-30;
   const viewBoxArgs = "0 0 300 " + roadmapHeight
   
+  useEffect(() => {
+    // console.log("Roadmap 렌더링됨");
+  })
+
   return (
     <svg viewBox={viewBoxArgs}>
       {nodesData.map(mainNodeData => <RoadmapSection key={mainNodeData.order} roadmapWidth={roadmapWidth} yposObj={yposObj} mainNodeData={mainNodeData}/>)}
