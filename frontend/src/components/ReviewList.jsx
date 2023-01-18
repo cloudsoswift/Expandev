@@ -7,10 +7,8 @@ const ReviewList = ({ reviewList, onDelete, onEdit }) => {
     if (list.length === 0) return 0;
     let sum = 0;
     list.forEach((item) => {
-      sum += item.importance;
+      sum += parseInt(item.importance);
     });
-    // console.log(sum)
-    // console.log(Math.round(sum / list.length))
     return Math.round(sum / list.length);
   };
 
@@ -18,10 +16,8 @@ const ReviewList = ({ reviewList, onDelete, onEdit }) => {
     if (list.length === 0) return 0;
     let sum = 0;
     list.forEach((item) => {
-      sum += item.difficulty;
+      sum += parseInt(item.difficulty);
     });
-    // console.log(sum)
-    // console.log(Math.round(sum / list.length))
     return Math.round(sum / list.length);
   };
 
