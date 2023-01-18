@@ -1,6 +1,12 @@
 from rest_framework import serializers
 from .models import Article, Comment, Tag
 
+class TagSerializer(serializers.ModelSerializer):
+    articles_count = serializers.IntegerField(source = 'articles.count', read_only=True)
+    
+    class Meta:
+        model = Tag
+        fields = '__all__'
 
 
 class ArticleSerializer(serializers.ModelSerializer):
@@ -8,6 +14,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     like_users_count = serializers.IntegerField(source = 'like_users.count', read_only=True)
     comments_count = serializers.IntegerField(source = 'comments.count', read_only=True)
     liked = serializers.SerializerMethodField(read_only=True)
+    tags = TagSerializer(many=True, read_only=True)
 
     class Meta:
         model = Article
@@ -39,11 +46,5 @@ class CommentSerializer(serializers.ModelSerializer):
             return user.like_comments.filter(pk=obj.pk).exists()
         return False
 
-class TagSerializer(serializers.ModelSerializer):
-    articles_count = serializers.IntegerField(source = 'articles.count', read_only=True)
-    
-    class Meta:
-        model = Tag
-        fields = '__all__'
 
 
