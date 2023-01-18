@@ -41,3 +41,8 @@ class Review(models.Model):
     content = models.CharField(max_length=100)
     importance = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)], default=3)
     difficulty = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)], default=3)
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="like_reviews") 
+
+
+class Role(models.Model):
+    content = models.CharField(max_length=255)

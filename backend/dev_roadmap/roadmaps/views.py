@@ -64,11 +64,16 @@ def like_node_review(request, review_id):
         comment.like_users.add(user)
     return Response(status=status.HTTP_200_OK)
 
-   roadmaps/urls.py
 
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-        roadmaps/migrations/0012_review_like_users.py
-        roadmaps/migrations/0013_role.py
+@api_view(['GET'])
+def get_roles(request):
+    roles = Role.objects.all()
+    serializer = RoleSerializer(roles, many=True)
+    return Response(serializer.data)
 
+
+from rest_framework.views import APIView
+
+class ExampleView(APIView):
+    pass
 

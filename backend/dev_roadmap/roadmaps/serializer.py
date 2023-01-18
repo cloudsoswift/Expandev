@@ -1,7 +1,9 @@
+from .models import Node, Track, RecommendContent, Interview, Review, Role
+
 from django.contrib.auth import get_user_model
-from .models import Node, Track, RecommendContent, Interview, Review, Completion
 
 from rest_framework import serializers
+
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -9,13 +11,6 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ('id', 'username')
-
-
-class CompletionSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = Completion
-        fields = ('user', )
 
 
 class RecommendContentSerializer(serializers.ModelSerializer):
@@ -45,19 +40,27 @@ class NodeDetailSerializer(serializers.ModelSerializer):
     interview = InterviewSerializer(many=True)
     review = ReviewSerializer(many=True)
     completion_count = serializers.IntegerField(source='completion.count', read_only=True)
-    completion_users = serializers.SerializerMethodField()
+    isComplete = serializers.SerializerMethodField()
+    user = serializers.SerializerMethodField()
 
     class Meta:
         model = Node
-        fields = ('id', 'isEssential', 'isComplete', 'title', 'content', 'purpose', 'recommend_content', 'interview', 'review', 'completion_count', 'completion_users')
+        fields = ('id', 'isEssential', 'isComplete', 'title', 'content', 'purpose', 'recommend_content', 'interview', 'review', 'completion_count', 'completion', 'user')
 
-    def get_completion_users(request, objects):
-        user_list = []
-        for completion in objects.completion.all():
-            user = completion.user
-            user_list.append(user)
-        serializer = UserSerializer(user_list, many=True)
-        return serializer.data
+
+    def get_isComplete(self, objects):
+        # 1. 유저를 어떻게 구분할지 ~ 
+        # 1-1. user 가 익명이면 False 주고
+        # 1-2. 유저가 유저면 유저가 클리어한 노드중에 해당 노드가 포함되어있으면 True 를 반환해라~
+
+        # print(self)
+        # print(objects)
+        return True
+
+    def get_user(self, obj):
+        # print(self)
+        # print(obj)
+        return "test"
 
 
 class Nodeserializer(serializers.ModelSerializer):
@@ -70,7 +73,7 @@ class Nodeserializer(serializers.ModelSerializer):
 
     def get_childs(self, object):
         serializer = Nodeserializer(object.childs.all(), many=True)
-        data = serializer.data
+        data = serializer.data  
         return data if data else None
 
 
@@ -93,7 +96,7 @@ class TrackSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Track
-        fields = '__all__'
+        fields = ('title', 'content', 'purpose', 'nodesData')
         read_only_fields = ('nodes', )
 
     def get_nodesData(self, object):
@@ -111,3 +114,10 @@ class ReviewSerializer(serializers.ModelSerializer):
         model = Review
         fields = '__all__'
         read_only_fields = ('user',)
+
+
+class RoleSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Role
+        fields = '__all__'
