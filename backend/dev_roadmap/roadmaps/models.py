@@ -19,6 +19,7 @@ class Node(models.Model):
     content = models.TextField()
     purpose = models.TextField()
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='childs')
+    completion = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='clear_nodes')
 
 
 class RecommendContent(models.Model):
@@ -32,11 +33,6 @@ class Interview(models.Model):
     node = models.ForeignKey(Node, on_delete=models.CASCADE, related_name='interview')
     interviewee = models.CharField(max_length=255)
     content = models.TextField()
-
-
-class Completion(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='completion')
-    node = models.ForeignKey(Node, on_delete=models.CASCADE, null=True, blank=True, related_name='completion')
 
 
 class Review(models.Model):
