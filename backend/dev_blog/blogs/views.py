@@ -107,7 +107,8 @@ def comment(request, article_id, parent_id=None, comment_id=None):  # 댓글 조
         comments = Comment.objects.filter(article=article)
         if comments:
             comments = comments.order_by('-created_at')
-        serializer = CommentSerializer(comments, many=True)
+        serializer = CommentSerializer(instance = comments, many = True, context = {'user': request.user })
+
         return Response(serializer.data)
 
     elif request.method == 'POST':  # 댓글 작성
