@@ -1,13 +1,17 @@
-import React from "react";
-import MainNavBar from "./components/MainNavBar";
-import TestPage from "./TestPage";
-
+import React, { Fragment } from "react";
+import MainNavBar from "./components/navbar/MainNavBar";
+import IndexPage from "./pages/IndexPage";
+import { Route, Routes } from "react-router-dom";
+import RoadMap from "./components/RoadMap";
 function App() {
   return (
-    <React.Fragment>
+    <Fragment>
       <MainNavBar />
-      <TestPage />
-    </React.Fragment>
+      <Routes>
+        <Route index element={<IndexPage />} />
+        <Route path="roadmap" element={<RoadMap />} />
+      </Routes>
+    </Fragment>
   );
 }
 
