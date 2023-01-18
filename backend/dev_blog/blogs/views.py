@@ -15,7 +15,6 @@ def tag_list(request, search_tag=None):  # articles_count 수로 정렬
     else:  # 태그 전체 조회
         tags = Tag.objects.all()
     serializer = TagSerializer(tags, many=True)
-    print(serializer.data)
     data = sorted(serializer.data, key=lambda x: -x['articles_count'])
     return Response(data)
 
@@ -40,7 +39,7 @@ def tag_articles(request):  # 태그 게시글 조회
     else:
         sort_article = []
         for article in temp_articles:
-            serializer = ArticleSerializer(article)
+            serializer = ArticleSerializer(instance = article, context = {'user': request.user })
             sort_article.append(serializer.data)
         sort_article = sorted(sort_article, key=lambda x: -x[sort_type])
         return Response(sort_article)
@@ -51,7 +50,7 @@ def tag_articles(request):  # 태그 게시글 조회
 @api_view(['GET'])
 def article_list(request):  # 전체게시판 조회
     articles = Article.objects.all()
-    serializer = ArticleSerializer(articles, many=True)
+    serializer = ArticleSerializer(articles, many=True, context = {'user': request.user })
     return Response(serializer.data)
 
     # 좋아요, 조회수, 최신
@@ -84,9 +83,9 @@ def article(request, article_id=None):  # 게시글 디테일
                 temp, _ = Tag.objects.get_or_create(tag=tag)
                 tags.append(temp)
         if request.method == 'POST':
-            serializer = ArticleSerializer(data=data)
+            serializer = ArticleSerializer(data=data, context = {'user': request.user })
         elif request.method == 'PUT':
-            serializer = ArticleSerializer(article, data=data)
+            serializer = ArticleSerializer(instance = article, data=data, context = {'user': request.user })
         if serializer.is_valid():
             serializer.save(tags=tags, user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -112,7 +111,7 @@ def comment(request, article_id, parent_id=None, comment_id=None):  # 댓글 조
         return Response(serializer.data)
 
     elif request.method == 'POST':  # 댓글 작성
-        serializer = CommentSerializer(data=request.data)
+        serializer = CommentSerializer(data=request.data, context = {'user': request.user })
         if serializer.is_valid(raise_exception=True):
             serializer.save(user=request.user, article=article,
                             parent_comment=parent_comment)
@@ -123,7 +122,7 @@ def comment(request, article_id, parent_id=None, comment_id=None):  # 댓글 조
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     elif request.method == 'PUT':  # 댓글 수정
-        serializer = CommentSerializer(comment, data=request.data)
+        serializer = CommentSerializer(instance = comment, data=request.data, context = {'user': request.user })
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
