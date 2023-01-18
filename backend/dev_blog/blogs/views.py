@@ -65,7 +65,7 @@ def article(request, article_id=None):  # 게시글 디테일
     if request.method == 'GET':  # 조회
         article.hit += 1
         article.save()
-        serializer = ArticleSerializer(article)
+        serializer = ArticleSerializer(article, context = {'user': request.user })
         return Response(serializer.data)
 
     elif request.method == 'DELETE':  # 삭제
@@ -107,7 +107,8 @@ def comment(request, article_id, parent_id=None, comment_id=None):  # 댓글 조
         comments = Comment.objects.filter(article=article)
         if comments:
             comments = comments.order_by('-created_at')
-        serializer = CommentSerializer(comments, many=True)
+        serializer = CommentSerializer(instance = comments, many = True, context = {'user': request.user })
+
         return Response(serializer.data)
 
     elif request.method == 'POST':  # 댓글 작성
