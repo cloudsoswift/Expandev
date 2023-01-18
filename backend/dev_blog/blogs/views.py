@@ -15,7 +15,6 @@ def tag_list(request, search_tag=None):  # articles_count 수로 정렬
     else:  # 태그 전체 조회
         tags = Tag.objects.all()
     serializer = TagSerializer(tags, many=True)
-    print(serializer.data)
     data = sorted(serializer.data, key=lambda x: -x['articles_count'])
     return Response(data)
 
@@ -112,7 +111,7 @@ def comment(request, article_id, parent_id=None, comment_id=None):  # 댓글 조
         return Response(serializer.data)
 
     elif request.method == 'POST':  # 댓글 작성
-        serializer = CommentSerializer(data=request.data)
+        serializer = CommentSerializer(data=request.data, context = {'user': request.user })
         if serializer.is_valid(raise_exception=True):
             serializer.save(user=request.user, article=article,
                             parent_comment=parent_comment)
