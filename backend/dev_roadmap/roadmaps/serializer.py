@@ -47,7 +47,7 @@ class NodeDetailSerializer(serializers.ModelSerializer):
 
     def get_isComplete(self, data):
         user = self.context['user']
-        if user.is_authenticated():
+        if user.is_authenticated:
             node_id = data.id
             is_clear_node = user.clear_nodes.all().filter(id=node_id).exists()
             return True if is_clear_node else False
@@ -71,7 +71,7 @@ class Nodeserializer(serializers.ModelSerializer):
 
     def get_isComplete(self, data):
         user = self.context['user']
-        if user.is_authenticated():
+        if user.is_authenticated:
             node_id = data.id
             is_clear_node = user.clear_nodes.all().filter(id=node_id).exists()
             return True if is_clear_node else False
@@ -95,7 +95,7 @@ class MainNodeSerializer(serializers.ModelSerializer):
 
     def get_isComplete(self, data):
         user = self.context['user']
-        if user.is_authenticated():
+        if user.is_authenticated:
             node_id = data.id
             is_clear_node = user.clear_nodes.all().filter(id=node_id).exists()
             return True if is_clear_node else False
