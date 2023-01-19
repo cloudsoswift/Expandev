@@ -1,13 +1,22 @@
 import React, { Fragment } from "react";
+import MainNavBar from "./components/navbar/MainNavBar";
 import IndexPage from "./pages/index/IndexPage";
 import { Route, Routes } from "react-router-dom";
 import MainPage from "./pages/Roadmap/MainPage";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
+
+import "./style/basic.css";
 
 function App() {
   return (
     <Fragment>
+      <MainNavBar />
       <Routes>
-        <Route index element={<MainPage />} />
+        <Route index element={<IndexPage />} />
+        <Route path="roadmap" element={<MainPage />} />
+        <Route path="login" element={<SignIn />} />
+        <Route path="signup" element={<SignUp />} />
       </Routes>
     </Fragment>
   );
