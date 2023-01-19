@@ -1,75 +1,222 @@
-import Julgi from './components/Julgi'
-import MainNode from './components/MainNode';
-import SubNode from './components/SubNode';
+import Julgi from "./components/Julgi";
+import MainNode from "./components/MainNode";
+import SubNode from "./components/SubNode";
 
-const RoadmapSection = ({roadmapWidth, yposObj, mainNodeData}) => {
+import { useEffect } from 'react'
+
+const RoadmapSection = ({
+  roadmapWidth,
+  yposObj,
+  mainNodeData,
+  handleClickButton,
+}) => {
+  useEffect(() => {
+    // console.log("Roadmap 렌더링됨");
+    console.log(typeof handleClickButton, "1111");
+  });
   switch (mainNodeData.childs.length) {
     case 1:
       return (
         <g>
           <Julgi roadmapWidth={roadmapWidth} yposObj={yposObj} />
-          <MainNode mainNodeData={mainNodeData} roadmapWidth={roadmapWidth} yposObj={yposObj} />
-          <SubNode subNodeData={mainNodeData.childs[0]} xpos={10} yposObj={yposObj} dy="30"/>
+          <MainNode
+            mainNodeData={mainNodeData}
+            roadmapWidth={roadmapWidth}
+            yposObj={yposObj}
+          />
+          <SubNode
+            subNodeData={mainNodeData.childs[0]}
+            xpos={10}
+            yposObj={yposObj}
+            dy="30"
+          />
         </g>
-      )
+      );
     case 2:
       return (
         <g>
           <Julgi roadmapWidth={roadmapWidth} yposObj={yposObj} />
-          <MainNode mainNodeData={mainNodeData} roadmapWidth={roadmapWidth} yposObj={yposObj} />
-          <SubNode subNodeData={mainNodeData.childs[0]} xpos={10} yposObj={yposObj} dy="30"/>
-          <SubNode subNodeData={mainNodeData.childs[1]} xpos={210} yposObj={yposObj} dy="30"/>
+          <MainNode
+            mainNodeData={mainNodeData}
+            roadmapWidth={roadmapWidth}
+            yposObj={yposObj}
+          />
+          <SubNode
+            subNodeData={mainNodeData.childs[0]}
+            xpos={10}
+            yposObj={yposObj}
+            dy="30"
+          />
+          <SubNode
+            subNodeData={mainNodeData.childs[1]}
+            xpos={210}
+            yposObj={yposObj}
+            dy="30"
+          />
         </g>
-      )
+      );
     case 3:
       return (
         <g>
           <Julgi roadmapWidth={roadmapWidth} yposObj={yposObj} />
-          <MainNode mainNodeData={mainNodeData} roadmapWidth={roadmapWidth} yposObj={yposObj} />
-          <SubNode subNodeData={mainNodeData.childs[0]} xpos={10} yposObj={yposObj} dy="42.5"/>
-          <SubNode subNodeData={mainNodeData.childs[1]} xpos={10} yposObj={yposObj} dy="17.5"/>
-          <SubNode subNodeData={mainNodeData.childs[2]} xpos={210} yposObj={yposObj} dy="30"/>
+          <MainNode
+            mainNodeData={mainNodeData}
+            roadmapWidth={roadmapWidth}
+            yposObj={yposObj}
+          />
+          <SubNode
+            subNodeData={mainNodeData.childs[0]}
+            xpos={10}
+            yposObj={yposObj}
+            dy="42.5"
+            handleClickButton={handleClickButton}
+          />
+          <SubNode
+            subNodeData={mainNodeData.childs[1]}
+            xpos={10}
+            yposObj={yposObj}
+            dy="17.5"
+            handleClickButton={handleClickButton}
+          />
+          <SubNode
+            subNodeData={mainNodeData.childs[2]}
+            xpos={210}
+            yposObj={yposObj}
+            dy="30"
+            handleClickButton={handleClickButton}
+          />
         </g>
-      )
+      );
     case 4:
       return (
         <g>
           <Julgi roadmapWidth={roadmapWidth} yposObj={yposObj} />
-          <MainNode mainNodeData={mainNodeData} roadmapWidth={roadmapWidth} yposObj={yposObj} />
-          <SubNode subNodeData={mainNodeData.childs[0]} xpos={10} yposObj={yposObj} dy="42.5"/>
-          <SubNode subNodeData={mainNodeData.childs[1]} xpos={10} yposObj={yposObj} dy="17.5"/>
-          <SubNode subNodeData={mainNodeData.childs[2]} xpos={210} yposObj={yposObj} dy="42.5"/>
-          <SubNode subNodeData={mainNodeData.childs[3]} xpos={210} yposObj={yposObj} dy="17.5"/>
+          <MainNode
+            mainNodeData={mainNodeData}
+            roadmapWidth={roadmapWidth}
+            yposObj={yposObj}
+          />
+          <SubNode
+            subNodeData={mainNodeData.childs[0]}
+            xpos={10}
+            yposObj={yposObj}
+            dy="42.5"
+          />
+          <SubNode
+            subNodeData={mainNodeData.childs[1]}
+            xpos={10}
+            yposObj={yposObj}
+            dy="17.5"
+          />
+          <SubNode
+            subNodeData={mainNodeData.childs[2]}
+            xpos={210}
+            yposObj={yposObj}
+            dy="42.5"
+          />
+          <SubNode
+            subNodeData={mainNodeData.childs[3]}
+            xpos={210}
+            yposObj={yposObj}
+            dy="17.5"
+          />
         </g>
-      )
+      );
     case 5:
       return (
         <g>
           <Julgi roadmapWidth={roadmapWidth} yposObj={yposObj} />
-          <MainNode mainNodeData={mainNodeData} roadmapWidth={roadmapWidth} yposObj={yposObj} />
-          <SubNode subNodeData={mainNodeData.childs[0]} xpos={10} yposObj={yposObj} dy="55"/>
-          <SubNode subNodeData={mainNodeData.childs[1]} xpos={10} yposObj={yposObj} dy="30"/>
-          <SubNode subNodeData={mainNodeData.childs[2]} xpos={10} yposObj={yposObj} dy="5"/>
-          <SubNode subNodeData={mainNodeData.childs[3]} xpos={210} yposObj={yposObj} dy="42.5"/>
-          <SubNode subNodeData={mainNodeData.childs[4]} xpos={210} yposObj={yposObj} dy="17.5"/>
+          <MainNode
+            mainNodeData={mainNodeData}
+            roadmapWidth={roadmapWidth}
+            yposObj={yposObj}
+          />
+          <SubNode
+            subNodeData={mainNodeData.childs[0]}
+            xpos={10}
+            yposObj={yposObj}
+            dy="55"
+          />
+          <SubNode
+            subNodeData={mainNodeData.childs[1]}
+            xpos={10}
+            yposObj={yposObj}
+            dy="30"
+          />
+          <SubNode
+            subNodeData={mainNodeData.childs[2]}
+            xpos={10}
+            yposObj={yposObj}
+            dy="5"
+          />
+          <SubNode
+            subNodeData={mainNodeData.childs[3]}
+            xpos={210}
+            yposObj={yposObj}
+            dy="42.5"
+          />
+          <SubNode
+            subNodeData={mainNodeData.childs[4]}
+            xpos={210}
+            yposObj={yposObj}
+            dy="17.5"
+          />
         </g>
-      )
+      );
     case 6:
       return (
         <g>
           <Julgi roadmapWidth={roadmapWidth} yposObj={yposObj} />
-          <MainNode mainNodeData={mainNodeData} roadmapWidth={roadmapWidth} yposObj={yposObj} />
-          <SubNode subNodeData={mainNodeData.childs[0]} xpos={10} yposObj={yposObj} dy="55"/>
-          <SubNode subNodeData={mainNodeData.childs[1]} xpos={10} yposObj={yposObj} dy="30"/>
-          <SubNode subNodeData={mainNodeData.childs[2]} xpos={10} yposObj={yposObj} dy="5"/>
-          <SubNode subNodeData={mainNodeData.childs[3]} xpos={210} yposObj={yposObj} dy="55"/>
-          <SubNode subNodeData={mainNodeData.childs[4]} xpos={210} yposObj={yposObj} dy="30"/>
-          <SubNode subNodeData={mainNodeData.childs[5]} xpos={210} yposObj={yposObj} dy="5"/>
+          <MainNode
+            mainNodeData={mainNodeData}
+            roadmapWidth={roadmapWidth}
+            yposObj={yposObj}
+          />
+          <SubNode
+            subNodeData={mainNodeData.childs[0]}
+            xpos={10}
+            yposObj={yposObj}
+            dy="55"
+          />
+          <SubNode
+            subNodeData={mainNodeData.childs[1]}
+            xpos={10}
+            yposObj={yposObj}
+            dy="30"
+          />
+          <SubNode
+            subNodeData={mainNodeData.childs[2]}
+            xpos={10}
+            yposObj={yposObj}
+            dy="5"
+          />
+          <SubNode
+            subNodeData={mainNodeData.childs[3]}
+            xpos={210}
+            yposObj={yposObj}
+            dy="55"
+          />
+          <SubNode
+            subNodeData={mainNodeData.childs[4]}
+            xpos={210}
+            yposObj={yposObj}
+            dy="30"
+          />
+          <SubNode
+            subNodeData={mainNodeData.childs[5]}
+            xpos={210}
+            yposObj={yposObj}
+            dy="5"
+          />
         </g>
-      )
+      );
     default:
-      return <text x="30" y="30">그릴 수 없음</text>
+      return (
+        <text x="30" y="30">
+          그릴 수 없음
+        </text>
+      );
   }
-}
+};
 
 export default RoadmapSection;

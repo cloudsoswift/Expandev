@@ -5,6 +5,8 @@ import WhatWhy from "../../components/Modal/WhatWhy";
 import Links from "../../components/Modal/Links";
 import Review from "../../components/Modal/Review";
 
+import RoadmapPage from "../RoadmapPage";
+
 const MainPage = () => {
   const [showModal, setShowModal] = useState(false);
 
@@ -14,11 +16,12 @@ const MainPage = () => {
 
   const [checkbox, setCheckbox] = useState(false);
 
-  const handleClickButton = (e) => {
-    const { id } = e.target;
+  const handleClickButton = (id) => {
+    // const { id } = e.target;
     setNodeId(() => id);
     setCheck(!check);
   };
+
 
   const getData = useCallback(async () => {
     const res = await fetch(
@@ -40,9 +43,10 @@ const MainPage = () => {
 
   return (
     <>
-      {/* 로드맵 노드부분 시작*/}
       <div className="p-10 ">
-        <h1 className="text-3xl mb-5">Main Page</h1>
+      <RoadmapPage handleClickButton={handleClickButton} />
+      {/* 로드맵 노드부분 시작*/}
+        {/* <h1 className="text-3xl mb-5">Main Page</h1>
         <button
           id="1"
           className="cursor-pointer bg-blue-600 hover:bg-blue-800 focus:outline-none px-5 py-2 rounded-md font-medium text-sm text-white mr-5"
@@ -63,7 +67,7 @@ const MainPage = () => {
           onClick={handleClickButton}
         >
           Node4
-        </button>
+        </button> */}
         {/* 로드맵 노드부분 끝 */}
         <Modal
           id={reqData.id}
