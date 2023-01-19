@@ -1,13 +1,15 @@
-import RoadmapPage from "./pages/RoadmapPage.jsx";
-import MainPage from "./pages/Roadmap/MainPage";
-import "./index.css";
-import SignIn from "./pages/SignIn.jsx";
-import SignUp from "./pages/SignUp.jsx";
+import React, { Fragment } from "react";
+import IndexPage from "./pages/index/IndexPage";
+import { Route, Routes } from "react-router-dom";
 
-export default function App() {
+function App() {
   return (
-    <div className="w-full h-screen bg-gray-300">
-      <MainPage />
-    </div>
+    <Fragment>
+      <Routes>
+        <Route index element={<IndexPage />} />
+      </Routes>
+    </Fragment>
   );
 }
+
+export default App;
