@@ -1,36 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <!-- <link href="./reset.css" rel="stylesheet"> -->
-  <style>
-    .julgi {
-      filter: drop-shadow(0px 0px 2px rgb(0 0 0 / 0.2));
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- <link href="./reset.css" rel="stylesheet"> -->
+    <style>
+      body {
+        width: 100%;
+        overflow-x: hidden;
+        overflow-y: hidden;
+      }
+      .julgi {
+        filter: drop-shadow(0px 0px 2px rgb(0 0 0 / 0.2));
+      }
 
-    g .main-node {
-      filter: drop-shadow(0px 0px 2px rgb(0 0 0 / 0.2));
-      cursor: pointer;
-    }
+      g .main-node {
+        filter: drop-shadow(0px 0px 2px rgb(0 0 0 / 0.2));
+        cursor: pointer;
+      }
 
-    g .sub-node {
-      filter: drop-shadow(0px 0px 2px rgb(0 0 0 / 0.2));
-      cursor: pointer;
-    }
+      g .sub-node {
+        filter: drop-shadow(0px 0px 2px rgb(0 0 0 / 0.2));
+        cursor: pointer;
+      }
 
-    text {
-      font-weight: bold;
-    }
-    
-    input:focus, textarea:focus, select:focus{
+      text {
+        font-weight: bold;
+      }
+
+      input:focus,
+      textarea:focus,
+      select:focus {
         outline: none;
-    }
-  </style>
-</head>
-<body>
-  <div id="root"></div>
-</body>
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
 </html>
