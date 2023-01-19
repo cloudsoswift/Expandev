@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useCallback } from "react";
 
-import Modal from "../components/Modal";
-import WhatWhy from "../components/WhatWhy";
-import Links from "../components/Links";
-import Review from "../components/Review";
+import Modal from "../../components/Modal/Modal";
+import WhatWhy from "../../components/Modal/WhatWhy";
+import Links from "../../components/Modal/Links";
+import Review from "../../components/Modal/Review";
 
 const MainPage = () => {
   const [showModal, setShowModal] = useState(false);
@@ -24,9 +24,10 @@ const MainPage = () => {
     const res = await fetch(
       `https://ssekerapi.site/roadmaps/${nodeId}/node`
     ).then((res) => res.json());
-    // console.log(res);
+
     setReqData(res);
     setShowModal(() => !showModal);
+    // eslint-disable-next-line
   }, [check]);
 
   useEffect(() => {
@@ -39,6 +40,7 @@ const MainPage = () => {
 
   return (
     <>
+      {/* 로드맵 노드부분 시작*/}
       <div className="p-10 ">
         <h1 className="text-3xl mb-5">Main Page</h1>
         <button
@@ -62,6 +64,7 @@ const MainPage = () => {
         >
           Node4
         </button>
+        {/* 로드맵 노드부분 끝 */}
         <Modal
           id={reqData.id}
           data={reqData}

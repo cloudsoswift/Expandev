@@ -2,7 +2,6 @@ import React from "react";
 import ReviewListItem from "./ReviewListItem";
 
 const ReviewList = ({ reviewList, onDelete, onEdit }) => {
-  
   const getAvgImp = (list) => {
     if (list.length === 0) return 0;
     let sum = 0;
