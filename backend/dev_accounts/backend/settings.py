@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-_7*p2pg7ex3c+xoq=4v4+nhzyt6rh9op=xzpa!1312v!v^-9h&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     # 설치한 라이브러리 List
     'rest_framework',
     'rest_framework.authtoken',
+
+    'corsheaders',
+
     'dj_rest_auth',
     'django.contrib.sites',
     'allauth',
@@ -51,6 +54,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -117,11 +121,14 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'mariadb',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': '54.180.169.128',
+        'PORT': '4000'
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -167,4 +174,14 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer',
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASS': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES':(
+        #'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
 }
