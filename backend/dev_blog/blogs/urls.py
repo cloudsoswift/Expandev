@@ -13,7 +13,8 @@ urlpatterns = [
     #comment
     path('article/<int:article_id>/comment', views.comment), # 게시글에 달린 댓글 조회, 게시글에 댓글 작성
     path('article/<int:article_id>/<int:parent_id>/comment', views.comment), #대댓글 작성
-    path('article/<int:article_id>/<int:parent_id>/<int:comment_id>/comment', views.comment), #댓글 수정, 삭제
+    
+    path('comment/<int:comment_id>', views.comment), #댓글 수정, 삭제
     path('comment/<int:comment_id>/like',views.like_comment), #댓글 좋아요
 
     #tag

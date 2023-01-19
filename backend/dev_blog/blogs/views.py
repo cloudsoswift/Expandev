@@ -94,9 +94,10 @@ def article(request, article_id=None):  # 게시글 디테일
 # 댓글
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
-def comment(request, article_id, parent_id=None, comment_id=None):  # 댓글 조회, 작성, 삭제, 수정
-    article = get_object_or_404(Article, pk=article_id)
+def comment(request, article_id=None, parent_id=None, comment_id=None):  # 댓글 조회, 작성, 삭제, 수정
     parent_comment = None
+    if article_id:
+        article = get_object_or_404(Article, pk=article_id)
     if comment_id:
         comment = get_object_or_404(Comment, pk=comment_id)
     if parent_id:
@@ -125,7 +126,7 @@ def comment(request, article_id, parent_id=None, comment_id=None):  # 댓글 조
         serializer = CommentSerializer(instance = comment, data=request.data, context = {'user': request.user })
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 @api_view(['POST'])
