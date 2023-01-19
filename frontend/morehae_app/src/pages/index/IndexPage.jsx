@@ -1,7 +1,6 @@
 
 import QuestionList from "../../components/index/QuestionList";
 import { Link } from "react-router-dom";
-import "../../style/basic.css";
 import FeatureList from "../../components/index/FeatureList";
 
 const IndexPage = () => {
