@@ -44,7 +44,7 @@ const RoadmapPage = ({ handleClickButton }) => {
       });
 
     axios
-      .get("https://ssekerapi.site/roadmaps/1")
+      .get("https://ssekerapi.site/roadmaps/track/1")
       .then((Response) => {
         setNodesDataJSON(Response.data);
       })
@@ -53,12 +53,12 @@ const RoadmapPage = ({ handleClickButton }) => {
       });
 
     return () => {
-      document.removeEventListener("mousedown");
+      document.removeEventListener("mousedown", handler);
     };
   }, []);
 
   return (
-    <div className="bg-blue-100">
+    <div className="bg-blue-100" style={{  "width": "100%", "overflow-x": "hidden", "overflow-y": "hidden"}}>
       <div className="flex justify-center">
         <div ref={DropdownRefA}>
           <Dropdown

@@ -20,8 +20,8 @@ const DUMMY_DATA = [
 const FeatureList = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   return (
-    <div className="grid grid-cols-1 place-items-center justify-center w-full">
-      <div className="col-span w-2/3 p-4 bg-white rounded-xl shadow-md">
+    <div className="grid grid-cols-1 place-items-center justify-center w-full pb-14">
+      <div className="col-span w-4/5 p-4 bg-white rounded-xl shadow-md">
         <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
           <Tab.Panels className="w-full">
             {DUMMY_DATA.map((data) => (
