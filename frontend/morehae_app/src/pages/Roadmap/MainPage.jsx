@@ -25,7 +25,7 @@ const MainPage = () => {
 
   const getData = useCallback(async () => {
     const res = await fetch(
-      `https://ssekerapi.site/roadmaps/${nodeId}/node`
+      `https://ssekerapi.site/roadmaps/node/${nodeId}`
     ).then((res) => res.json());
 
     setReqData(res);
