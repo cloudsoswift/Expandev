@@ -1,70 +1,50 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+# Convention
+- ## Naming
+    - ### Pascal Case
+        - #### type
+        - #### interface
+        - #### React Component
+    - ### camel Case
+        - #### 변수(let, const)
+        - #### Javascript 함수
+        - #### Custom Hook
+            - `use__` 로 지정.
+        - #### props
+    - ### UPPER CASE
+        - #### const ( HardCoded )
+        - #### UPPER_SNAKE_CASE
+            - Array ( especially const )
+    - ### Unit Test File
+        - #### 원본 파일명과 동일하게 (ex. 원본이 `List.js` 라면,  `List.test.js`)
+- ## Event Handler
+    - ### prop
+        - `on___`
+    - ### Event Handler Function 
+        - `handle___` 
+- ## Null Check
+    - ### Optional Chaining 연산자(`?.`) 사용하기.
+        - `?.`은 `?.`'앞’의 평가 대상이 `undefined`나 `null`이면 평가를 멈추고 `undefined`를 반환합니다.
+- ## 코드 중복을 피하기 위해 여러 곳에서 사용되는 기능은 모듈화시켜 `src/utils/` 에 두고 사용한다.
+- ## Import
+    - ### 상대경로보다, *`src/` 폴더를 기준으로 한 절대경로*를 사용한다.
+        - `src/`의 Alias는 `~` 이다.
+- ## prettier 설정
+    - Arrow Parens - always
+    - Bracket Same Line - false
+    - Bracket Spacing - true
+    - Embedded Language Formatting - auto
+    - Enable Debug Logs - false
+    - End Of Line - If
+    - HTML Whitespace Sensitivity - css
+    - Insert Pragma - none
+    - Jsx Single Quote - none
+    - Print Width - 80
+    - Prose Wrap - preserve
+    - Quote Props - as-needed
+    - Resolve Global Modules - false
+    - Semi - true
+    - Single Attribute Per Line - false
+    - Single Quote - false
+    - Tab Width - 2
+    - Trailing Comma - es5
+    - Use Tabs - false
