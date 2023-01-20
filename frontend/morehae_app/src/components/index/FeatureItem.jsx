@@ -31,7 +31,7 @@ const FeatureItem = (props) => {
         </div>
         <div className="self-end">
           <Link
-            className="bg-black opacity-90 text-white text bold rounded-lg p-3 inline-block w-full text-center"
+            className="bg-black opacity-70 hover:opacity-100 text-white text bold rounded-lg p-3 inline-block w-full text-center mix-blend-multiply"
             to="/"
           >
             이동하기
