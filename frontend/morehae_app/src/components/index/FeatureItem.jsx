@@ -14,18 +14,11 @@ const FeatureItem = (props) => {
         </div>
         <div>
           <div className="text-2xl">
-            <span>{props.data.text}</span>
+            <span>{props.data.title}</span>
           </div>
           <div className="">
             <span>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean
-              vehicula sollicitudin elit sit amet gravida. Duis eget mi eget
-              enim blandit dictum sed quis eros. Fusce blandit id justo sit amet
-              laoreet. Praesent vitae felis sed nisl egestas efficitur. Proin id
-              lorem et est pellentesque sodales sed quis justo. Suspendisse
-              tincidunt malesuada ex, a faucibus ex commodo in. Nunc vehicula
-              tristique pulvinar. Fusce dignissim enim quam, sit amet suscipit
-              eros rhoncus sollicitudin.
+              {props.data.content}
             </span>
           </div>
         </div>

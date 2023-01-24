@@ -5,15 +5,24 @@ import FeatureItem from "@/components/Index/FeatureItem";
 const DUMMY_DATA = [
   {
     id:1, 
-    text: "하이",
+    title: "로드맵",
+    content: "",
+    img: "",
+    to: "",
   },
   {
     id:2, 
-    text: "하이2",
+    title: "블로그",
+    content: "",
+    img: "",
+    to: "",
   },
   {
     id:3, 
-    text: "하이3",
+    title: "리뷰",
+    content: "",
+    img: "",
+    to: "",
   },
 ];
 
@@ -25,13 +34,13 @@ const FeatureList = () => {
         <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
           <Tab.Panels className="w-full">
             {DUMMY_DATA.map((data) => (
-              <FeatureItem data={data} />
+              <FeatureItem key={data.id} data={data} />
               ))}
           </Tab.Panels>
           <Tab.List>
             <div className="flex justify-center space-x-2 mt-4">
               {DUMMY_DATA.map((data) => (
-                <Tab className="px-2 bg-gray-800 rounded-2xl">&nbsp;</Tab>
+                <Tab className="px-2 bg-gray-800 rounded-2xl" key={data.id}>&nbsp;</Tab>
                 ))}
             </div>
           </Tab.List>
