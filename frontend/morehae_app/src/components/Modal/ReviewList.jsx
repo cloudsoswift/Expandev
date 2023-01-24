@@ -1,5 +1,5 @@
 import React from "react";
-import ReviewListItem from "./ReviewListItem";
+import ReviewListItem from "@/components/Modal/ReviewListItem";
 
 const ReviewList = ({ reviewList, onDelete, onEdit }) => {
   const getAvgImp = (list) => {

@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
-import ReviewEditor from "./ReviewEditor";
-import ReviewList from "./ReviewList";
+import ReviewEditor from "@/components/Modal/ReviewEditor";
+import ReviewList from "@/components/Modal/ReviewList";
 
 // const dummyList = [
 //   {
