@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useCallback } from "react";
 
-import Modal from "../../components/Modal/Modal";
-import WhatWhy from "../../components/Modal/WhatWhy";
-import Links from "../../components/Modal/Links";
-import Review from "../../components/Modal/Review";
+import Modal from "@/components/Modal/Modal";
+import WhatWhy from "@/components/Modal/WhatWhy";
+import Links from "@/components/Modal/Links";
+import Review from "@/components/Modal/Review";
 
-import RoadmapPage from "../RoadmapPage";
+import RoadmapPage from "@/pages/RoadmapPage";
 
 const MainPage = () => {
   const [showModal, setShowModal] = useState(false);

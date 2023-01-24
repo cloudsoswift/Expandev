@@ -1,5 +1,5 @@
-import RoadmapSection from "./RoadmapSection";
-import Julgi from "./components/Julgi";
+import RoadmapSection from "@/components/Roadmap/RoadmapSection";
+import Julgi from "@/components/Roadmap/components/Julgi";
 import { useEffect } from "react";
 
 const Roadmap = ({ nodesDataJSON, handleClickButton }) => {

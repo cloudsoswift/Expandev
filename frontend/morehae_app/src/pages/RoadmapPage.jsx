@@ -1,6 +1,6 @@
-import Roadmap from "../components/Roadmap/Roadmap";
+import Roadmap from "@/components/Roadmap/Roadmap";
 // import nodesDataJSON from "./nodesDataJSON.json"
-import Dropdown from "../components/Dropdown/Dropdown";
+import Dropdown from "@/components/Dropdown/Dropdown";
 import axios from "axios";
 
 import { useState, useRef, useEffect } from "react";

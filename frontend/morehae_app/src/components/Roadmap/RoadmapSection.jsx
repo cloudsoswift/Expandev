@@ -1,6 +1,6 @@
-import Julgi from "./components/Julgi";
-import MainNode from "./components/MainNode";
-import SubNode from "./components/SubNode";
+import Julgi from "@/components/Roadmap/components/Julgi";
+import MainNode from "@/components/Roadmap/components/MainNode";
+import SubNode from "@/components/Roadmap/components/SubNode";
 
 import { useEffect } from 'react'
 
