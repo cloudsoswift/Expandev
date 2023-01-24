@@ -1,4 +1,4 @@
-import QuestionItem from "./QuestionItem";
+import QuestionItem from "@/components/Index/QuestionItem";
 
 const DUMMY_DATA = [
   {

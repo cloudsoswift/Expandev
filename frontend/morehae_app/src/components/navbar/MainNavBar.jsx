@@ -3,7 +3,7 @@ import { Menu } from "@headlessui/react";
 import { BsFillPersonFill, BsPencilSquare } from "react-icons/bs";
 import { FaBell } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import NotificationList from "./NotificationList";
+import NotificationList from "@/components/Navbar/NotificationList";
 
 // 블로그 url 구조 나오면 블로그 글 작성 페이지로 to 설정 필요.
 

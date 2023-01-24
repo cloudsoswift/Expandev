@@ -1,6 +1,6 @@
 import { Menu } from "@headlessui/react";
 import { useState } from "react";
-import NotificationItem from "./NotificationItem";
+import NotificationItem from "@/components/Navbar/NotificationItem";
 
 const DUMMY_DATA = [
   {

@@ -1,6 +1,6 @@
 import { Tab } from "@headlessui/react";
 import { useState } from "react";
-import FeatureItem from "./FeatureItem";
+import FeatureItem from "@/components/Index/FeatureItem";
 
 const DUMMY_DATA = [
   {
