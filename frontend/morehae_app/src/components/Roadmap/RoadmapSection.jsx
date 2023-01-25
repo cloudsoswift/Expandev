@@ -10,10 +10,6 @@ const RoadmapSection = ({
   mainNodeData,
   handleClickButton,
 }) => {
-  useEffect(() => {
-    // console.log("Roadmap 렌더링됨");
-    console.log(typeof handleClickButton, "1111");
-  });
   switch (mainNodeData.childs.length) {
     case 1:
       return (
