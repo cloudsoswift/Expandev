@@ -15,11 +15,6 @@ const Roadmap = ({ nodesDataJSON, handleClickButton }) => {
   const roadmapHeight = 110 * (nodesData.length + 1) - 30;
   const viewBoxArgs = "0 0 300 " + roadmapHeight;
 
-  useEffect(() => {
-    // console.log("Roadmap 렌더링됨");
-    console.log(typeof handleClickButton, "0000");
-  });
-
   return (
     <svg viewBox={viewBoxArgs}>
       {nodesData.map((mainNodeData) => (
