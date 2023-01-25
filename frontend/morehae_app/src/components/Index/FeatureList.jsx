@@ -6,22 +6,22 @@ const DUMMY_DATA = [
   {
     id:1, 
     title: "로드맵",
-    content: "",
-    img: "",
-    to: "",
+    content: "로드맵을 통해 ",
+    img: `roadmap.jpg`,
+    to: "/roadmap",
   },
   {
     id:2, 
     title: "블로그",
-    content: "",
-    img: "",
-    to: "",
+    content: "로드맵과 함께 배운 정보를 나만의 블로그에 정리해보세요. 다른 사용자들은 어떻게 공부했는지 살펴보세요.",
+    img: "blog.jpg",
+    to: "/blog",
   },
   {
     id:3, 
     title: "리뷰",
     content: "",
-    img: "",
+    img: "review.jpg",
     to: "",
   },
 ];
@@ -29,10 +29,10 @@ const DUMMY_DATA = [
 const FeatureList = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   return (
-    <div className="grid grid-cols-1 place-items-center justify-center w-full pb-14">
-      <div className="col-span w-4/5 p-4 bg-white rounded-xl shadow-md">
+    <div className="place-items-center justify-center w-full pb-14">
+      <div className="col-span p-4 shadow-md">
         <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
-          <Tab.Panels className="w-full">
+          <Tab.Panels className="w-full h-full">
             {DUMMY_DATA.map((data) => (
               <FeatureItem key={data.id} data={data} />
               ))}
