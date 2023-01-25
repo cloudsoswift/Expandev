@@ -7,6 +7,8 @@ import Review from "@/components/Modal/Review";
 
 import RoadmapPage from "@/pages/RoadmapPage";
 
+
+
 const MainPage = () => {
   const [showModal, setShowModal] = useState(false);
 
@@ -41,34 +43,12 @@ const MainPage = () => {
     setCheckbox(!checkbox);
   };
 
+
+
   return (
     <>
       <div className="p-10 ">
       <RoadmapPage handleClickButton={handleClickButton} />
-      {/* 로드맵 노드부분 시작*/}
-        {/* <h1 className="text-3xl mb-5">Main Page</h1>
-        <button
-          id="1"
-          className="cursor-pointer bg-blue-600 hover:bg-blue-800 focus:outline-none px-5 py-2 rounded-md font-medium text-sm text-white mr-5"
-          onClick={handleClickButton}
-        >
-          Node1
-        </button>
-        <button
-          id="3"
-          className="cursor-pointer bg-blue-600 hover:bg-blue-800 focus:outline-none px-5 py-2 rounded-md font-medium text-sm text-white mr-5"
-          onClick={handleClickButton}
-        >
-          Node3
-        </button>
-        <button
-          id="4"
-          className="cursor-pointer bg-blue-600 hover:bg-blue-800 focus:outline-none px-5 py-2 rounded-md font-medium text-sm text-white mr-5"
-          onClick={handleClickButton}
-        >
-          Node4
-        </button> */}
-        {/* 로드맵 노드부분 끝 */}
         <Modal
           id={reqData.id}
           data={reqData}
@@ -86,8 +66,8 @@ const MainPage = () => {
                 onClick={handleCheckbox}
               />
             </div>
-            <div className="justify-items-end">
-              <button className=" bg-blue-200 px-3 py-1 rounded text-xs">
+            <div className="flex justify-end">
+              <button className="px-3 py-1 rounded-md bg-blue-600 hover:bg-blue-700 cursor-pointer text-white text-xs">
                 POST
               </button>
             </div>

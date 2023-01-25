@@ -2,56 +2,6 @@ import React, { useState, useRef } from "react";
 import ReviewEditor from "@/components/Modal/ReviewEditor";
 import ReviewList from "@/components/Modal/ReviewList";
 
-// const dummyList = [
-//   {
-//     id: 1,
-//     user: 23,
-//     content: "초보자에게 딱인듯",
-//     importance: 3,
-//     difficulty: 2,
-//     created_date: 1671364299923,
-//   },
-//   {
-//     id: 2,
-//     user: 27,
-//     content: "어려워요",
-//     importance: 3,
-//     difficulty: 2,
-//     created_date: 1671364300000,
-//   },
-//   {
-//     id: 3,
-//     user: 21,
-//     importance: 5,
-//     difficulty: 2,
-//     created_date: 1671366310000,
-//   },
-//   {
-//     id: 4,
-//     user: 20,
-//     content: "오늘 시작해요",
-//     importance: 3,
-//     difficulty: 1,
-//     created_date: 1671384300000,
-//   },
-//   {
-//     id: 5,
-//     user: 24,
-//     content: "3개월째 정체중",
-//     importance: 2,
-//     difficulty: 2,
-//     created_date: 1671394299923,
-//   },
-//   {
-//     id: 6,
-//     user: 12,
-//     content: "초보자에게 딱인듯",
-//     importance: 4,
-//     difficulty: 5,
-//     created_date: 1671464299923,
-//   },
-// ];
-
 const Review = ({ reqData }) => {
   const [data, setData] = useState(reqData.review);
   const dataId = useRef(reqData.review.length + 1);
@@ -84,8 +34,10 @@ const Review = ({ reqData }) => {
 
   return (
     <div>
-      <ReviewList reviewList={data} onDelete={onDelete} onEdit={onEdit} />
-      <ReviewEditor onCreate={onCreate} />
+      <div className="border-2 rounded-md">
+        <ReviewList reviewList={data} onDelete={onDelete} onEdit={onEdit} />
+        <ReviewEditor onCreate={onCreate} />
+      </div>
     </div>
   );
 };

@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import MainNavBar from "@/components/Navbar/MainNavBar";
 import IndexPage from "@/pages/index/IndexPage";
 import { Route, Routes } from "react-router-dom";
-import MainPage from "@/pages/Roadmap/MainPage";
+import MainPage from "@/pages/Main/MainPage";
 import SignIn from "@/pages/SignIn";
 import SignUp from "@/pages/SignUp";
 
