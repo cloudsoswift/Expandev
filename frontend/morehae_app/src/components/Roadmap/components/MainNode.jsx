@@ -13,11 +13,6 @@ const MainNode = ({
     console.log("메인 노드 클릭됨:", mainNodeData.id);
   }
 
-  useEffect(() => {
-    // console.log("Roadmap 렌더링됨");
-    console.log(typeof handleClickButton, "2222");
-  });
-
   const rect = (
     <g className="main-node" onClick={clickHandler}>
       <rect
