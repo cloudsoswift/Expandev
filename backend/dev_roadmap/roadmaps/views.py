@@ -1,5 +1,5 @@
-from .models import Node, Track,  Review, Role
-from .serializer import TrackSerializer, NodeDetailSerializer, ReviewSerializer, RoleSerializer
+from .models import Node, Track,  Review, Role, Situation
+from .serializer import TrackSerializer, NodeDetailSerializer, ReviewSerializer, RoleSerializer, SituationSerializer
 
 from django.db.models import Q
 from rest_framework import status
@@ -71,4 +71,11 @@ def like_node_review(request, review_id):
 def get_roles(request):
     roles = Role.objects.all()
     serializer = RoleSerializer(roles, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def get_roles_situation(request, role_id):
+    situation = Situation.objects.filter(role=role_id)
+    serializer = SituationSerializer(situation, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
