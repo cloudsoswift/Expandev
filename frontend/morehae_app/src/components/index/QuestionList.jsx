@@ -29,7 +29,7 @@ const DUMMY_DATA = [
 
 const QuestionList = () => {
   return (
-    <div className="question-list roadmap-inform grid grid-flow-row grid-cols-2 auto-rows-auto mt-10 mx-5 gap-32">
+    <div className="question-list roadmap-inform grid grid-flow-row grid-cols-1 auto-rows-auto my-10 mx-5 gap-16">
       {DUMMY_DATA.map((data) => (
         <QuestionItem data={data} key={data.id} />
       ))}
