@@ -46,3 +46,8 @@ class Review(models.Model):
 
 class Role(models.Model):
     content = models.CharField(max_length=255)
+
+
+class Situation(models.Model):
+    role = models.ManyToManyField(Role, related_name='situation')
+    content = models.CharField(max_length=255)

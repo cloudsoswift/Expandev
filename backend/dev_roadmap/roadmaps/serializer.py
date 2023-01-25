@@ -1,4 +1,4 @@
-from .models import Node, Track, RecommendContent, Interview, Review, Role
+from .models import Node, Track, RecommendContent, Interview, Review, Role, Situation
 
 from django.contrib.auth import get_user_model
 
@@ -134,3 +134,10 @@ class RoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Role
         fields = '__all__'
+
+
+class SituationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Situation
+        fields = ('id', 'content')
