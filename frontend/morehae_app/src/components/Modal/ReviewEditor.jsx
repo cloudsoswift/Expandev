@@ -33,14 +33,15 @@ const ReviewEditor = ({ onCreate }) => {
   };
 
   return (
-    <div className="border-solid border-2 p-2 bg-slate-200">
-      <h2>리뷰 작성</h2>
-      <div className="mb-3">
+    <div className="p-3 bg-slate-100">
+      <h2 className="mb-2">리뷰 작성</h2>
+      <div className="mb-1">
         <span>중요도</span>
         <select
           name="importance"
           value={state.importance}
           onChange={handleChangeState}
+          className="mx-2 rounded-md"
         >
           <option value={1}>1</option>
           <option value={2}>2</option>
@@ -49,13 +50,13 @@ const ReviewEditor = ({ onCreate }) => {
           <option value={5}>5</option>
         </select>
       </div>
-      <div className="mb-3">
+      <div className="mb-2">
         <span>난이도</span>
         <select
           name="difficulty"
           value={state.difficulty}
           onChange={handleChangeState}
-          className=""
+          className="mx-2 rounded-md"
         >
           <option value={1}>1</option>
           <option value={2}>2</option>
@@ -70,7 +71,7 @@ const ReviewEditor = ({ onCreate }) => {
           placeholder="이름"
           value={state.user}
           onChange={handleChangeState}
-          className="mb-3 w-[100px]"
+          className=" rounded-md p-1 mb-3 w-[100px] text-sm"
         />
       </div>
       <div>
@@ -80,13 +81,13 @@ const ReviewEditor = ({ onCreate }) => {
           placeholder="내용"
           value={state.content}
           onChange={handleChangeState}
-          className="mb-3 w-[500px] h-[100px]"
+          className="rounded-md p-1 mb-3 w-full h-[100px] text-sm"
         />
       </div>
-      <div>
+      <div className="flex justify-end">
         <button
           onClick={handleSubmit}
-          className="p-1 bg-blue-200 cursor-pointer"
+          className="px-3 py-1 rounded-md bg-blue-600 hover:bg-blue-700 cursor-pointer text-white text-xs"
         >
           저장
         </button>

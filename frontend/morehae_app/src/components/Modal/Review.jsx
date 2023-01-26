@@ -1,60 +1,14 @@
 import React, { useState, useRef } from "react";
 import ReviewEditor from "@/components/Modal/ReviewEditor";
 import ReviewList from "@/components/Modal/ReviewList";
+import axios from "axios";
 
-// const dummyList = [
-//   {
-//     id: 1,
-//     user: 23,
-//     content: "초보자에게 딱인듯",
-//     importance: 3,
-//     difficulty: 2,
-//     created_date: 1671364299923,
-//   },
-//   {
-//     id: 2,
-//     user: 27,
-//     content: "어려워요",
-//     importance: 3,
-//     difficulty: 2,
-//     created_date: 1671364300000,
-//   },
-//   {
-//     id: 3,
-//     user: 21,
-//     importance: 5,
-//     difficulty: 2,
-//     created_date: 1671366310000,
-//   },
-//   {
-//     id: 4,
-//     user: 20,
-//     content: "오늘 시작해요",
-//     importance: 3,
-//     difficulty: 1,
-//     created_date: 1671384300000,
-//   },
-//   {
-//     id: 5,
-//     user: 24,
-//     content: "3개월째 정체중",
-//     importance: 2,
-//     difficulty: 2,
-//     created_date: 1671394299923,
-//   },
-//   {
-//     id: 6,
-//     user: 12,
-//     content: "초보자에게 딱인듯",
-//     importance: 4,
-//     difficulty: 5,
-//     created_date: 1671464299923,
-//   },
-// ];
+const tempToken = "dcc403128edf6707bc1e8b1defd434e317c72ad7"
 
-const Review = ({ reqData }) => {
+const Review = ({ reqData, nodeId }) => {
   const [data, setData] = useState(reqData.review);
   const dataId = useRef(reqData.review.length + 1);
+
   const onCreate = (user, content, importance, difficulty) => {
     const created_date = new Date().getTime();
     const newItem = {
@@ -65,6 +19,16 @@ const Review = ({ reqData }) => {
       created_date,
       id: dataId.current,
     };
+    axios({
+      url: "http://i8d212.p.ssafy.io/roadmaps/review",
+      method: "post",
+      header: {'Authorization' : tempToken},
+      data: { node: nodeId, content, importance, difficulty },
+    })
+      .then((res) => {
+        console.log("success");
+      })
+      .catch((err) => console.log("fail"));
     dataId.current += 1;
     setData([newItem, ...data]);
   };
@@ -84,8 +48,10 @@ const Review = ({ reqData }) => {
 
   return (
     <div>
-      <ReviewList reviewList={data} onDelete={onDelete} onEdit={onEdit} />
-      <ReviewEditor onCreate={onCreate} />
+      <div className="border-2 rounded-md">
+        <ReviewList reviewList={data} onDelete={onDelete} onEdit={onEdit} />
+        <ReviewEditor onCreate={onCreate} />
+      </div>
     </div>
   );
 };
