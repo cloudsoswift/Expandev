@@ -10,9 +10,17 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+
+import os, json
 from pathlib import Path
 from datetime import timedelta
-import os
+
+import pymysql
+
+from django.core.exceptions import ImproperlyConfigured
+
+pymysql.install_as_MySQLdb()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,7 +30,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-_7*p2pg7ex3c+xoq=4v4+nhzyt6rh9op=xzpa!1312v!v^-9h&'
+secret_file = os.path.join(BASE_DIR, 'secrets.json') # secrets.json 파일 위치를 명시
+with open(secret_file) as f:
+    secrets = json.loads(f.read())
+
+def get_secret(setting, secrets=secrets):
+    try:
+        return secrets[setting]
+    except KeyError:
+        error_msg = "Set the {} environment variable".format(setting)
+        raise ImproperlyConfigured(error_msg)
+
+SECRET_KEY = get_secret("SECRET_KEY")
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -33,27 +53,28 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
     # 새로 추가한 앱 List
     'accounts',
+    'roadmaps',
+    'blogs',
     # 설치한 라이브러리 List
+    'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
-
-    'corsheaders',
-
+    # Django 내장 라이브러리
     'dj_rest_auth',
     'django.contrib.sites',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'dj_rest_auth.registration',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
 ]
 
 MIDDLEWARE = [
@@ -157,9 +178,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'mariadb',
         'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': '54.180.169.128',
-        'PORT': '4000'
+        'PASSWORD': get_secret('PASSWORD'),
+        'HOST': get_secret('HOST'),
+        'PORT': get_secret('PORT')
     }
 }
 
