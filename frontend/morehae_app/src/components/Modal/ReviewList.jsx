@@ -21,12 +21,12 @@ const ReviewList = ({ reviewList, onDelete, onEdit }) => {
   };
 
   return (
-    <div className="bg-blue-300 p-3">
+    <div className=" bg-white p-3">
       <div>
         <div>REVIEW</div>
 
-        <div>전체 중요도 | {getAvgImp(reviewList)}</div>
-        <div>전체 난이도 | {getAvgDif(reviewList)}</div>
+        <div className="mt-2 text-sm">전체 중요도 | {getAvgImp(reviewList)}</div>
+        <div className="mb-2 text-sm"> 전체 난이도 | {getAvgDif(reviewList)}</div>
 
         <div>
           {reviewList.map((item) => (
