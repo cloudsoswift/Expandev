@@ -1,9 +1,9 @@
 // validation 판단 핸들러는 useEffect를 사용하여 코드 개선이 가능하다
 // 마찬가지로 패스워드 일치여부 판단 핸들러 또한 useEffect를 사용하여 코드 개선이 가능하다
 
-import { useState, useRef } from "react";
+import { useState, useRef } from "react"
 import axios from 'axios'
-import Dropdown from "@/components/Dropdown/Dropdown";
+import Dropdown from "@/components/Dropdown/Dropdown"
 
 const dummyItems = [
   {id: 0, content: "None"},
