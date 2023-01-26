@@ -1,14 +1,17 @@
 // 입력에 대한 validation 과정 아직 구현 안됨
 
 import { useState } from "react"
-import axios from 'axios'
+import { userLogin } from "../../utils/store/user-slice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailWarnMsg] = useState("");
   const [passwordWarnMsg] = useState("");
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   // 이메일 입력 처리하는 핸들러
   const handleEmail = (e) => {
     const newState = e.target?.value ?? "";
@@ -29,16 +32,7 @@ const SignIn = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     console.log(email, password);
-    axios.post('http://i8d212.p.ssafy.io:8080/accounts/login/', {
-      email: email,
-      password: password,
-    })  // }, {withCredentials: true})
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+    dispatch(userLogin({email, password}, navigate));
   }
 
   const textStyle = "text-sm text-gray-500";
