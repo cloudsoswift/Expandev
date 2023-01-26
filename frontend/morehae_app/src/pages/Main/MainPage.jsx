@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from "react";
-import axios from "axios";
 
 import Modal from "@/components/Modal/Modal";
 import WhatWhy from "@/components/Modal/WhatWhy";
@@ -8,6 +7,8 @@ import Review from "@/components/Modal/Review";
 import Dropdown from "@/components/Dropdown/Dropdown";
 import Roadmap from "@/components/Roadmap/Roadmap";
 // import nodesDataJSON from ".././nodesDataJSON.json"
+
+import axios from 'axios'
 
 const MainPage = () => {
   const [showModal, setShowModal] = useState(false);
@@ -161,7 +162,7 @@ const MainPage = () => {
             </div>
             <WhatWhy reqData={reqData} />
             <Links reqData={reqData} />
-            <Review reqData={reqData} />
+            <Review reqData={reqData} nodeId={nodeId}/>
           </div>
         </Modal>
       </div>
