@@ -9,7 +9,8 @@ function Dropdown({items, selectedItem, setSelectedItem}) {
   const menuRef = useRef(null);
 
   // 드롭다운 클릭에 대한 핸들러
-  const handleOpen = () => {
+  const handleOpen = (e) => {
+    e.preventDefault();
     // 드롭다운 창 닫기
     setIsOpen((oldState) => {
       return !oldState;
@@ -60,7 +61,7 @@ function Dropdown({items, selectedItem, setSelectedItem}) {
         <div><BsChevronDown/></div>
       </button>
       { isOpen && 
-      <ul className="overflow-y-auto max-h-96 bg-white absolute w-full rounded-lg p-2 mt-2 border" style={{boxShadow: '1px 2px 9px rgba(0, 0, 0, 0.07)'}}>
+      <ul className="overflow-y-auto max-h-48 bg-white absolute w-full rounded-lg p-2 mt-2 border" style={{boxShadow: '1px 2px 9px rgba(0, 0, 0, 0.07)'}}>
         {items.map((item, index) => {
           let style = "transition p-4 rounded-lg cursor-pointer font-extralight";
           if (item.id === selectedItem.id) {
