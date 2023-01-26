@@ -3,8 +3,8 @@ import MainNavBar from "@/components/Navbar/MainNavBar";
 import IndexPage from "@/pages/Index/IndexPage";
 import { Route, Routes } from "react-router-dom";
 import MainPage from "@/pages/Main/MainPage";
-import SignIn from "@/pages/SignIn";
-import SignUp from "@/pages/SignUp";
+import SignIn from "@/pages/Sign/SignIn";
+import SignUp from "@/pages/Sign/SignUp";
 
 import "@/style/basic.css";
 

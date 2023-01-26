@@ -4,19 +4,27 @@ import { BsFillPersonFill, BsPencilSquare } from "react-icons/bs";
 import { FaBell } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import NotificationList from "@/components/Navbar/NotificationList";
+import { useDispatch, useSelector } from "react-redux";
+import { userLogout } from "@/utils/store/user-slice";
 
 // 블로그 url 구조 나오면 블로그 글 작성 페이지로 to 설정 필요.
 
 const MainNavBar = () => {
-  const [isLogin, setIsLogin] = useState(true);
-
+  // 유저 정보
+  const user = useSelector(state=>state.user.user);
+  // 로그인 여부 판단 - user 정보를 담은 객체가 빈 객체면 로그인하지 않은 상태
+  const isLogin = user.constructor === Object && Object.keys(user).length !== 0 ? true : false;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   // Handler
   /* AlarmLoadHandler()
    *
    *
    *
    */
-  const logoutHandler = () => {};
+  const logoutHandler = () => {
+    dispatch(userLogout(navigate));
+  };
 
   const buttonStyle = "border-2 border-black rounded-full p-2 mx-2";
 
@@ -76,8 +84,8 @@ const MainNavBar = () => {
                       <BsFillPersonFill size="48" className={buttonStyle} />
                     </div>
                     <div className="grid justify-center items-center h-full border">
-                      <span>사용자 이름</span>
-                      <span>사용자 아이디</span>
+                      <span>{user.nickname}</span>
+                      <span>{user.email}</span>
                     </div>
                   </div>
                 </Menu.Item>

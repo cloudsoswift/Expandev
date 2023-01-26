@@ -10,4 +10,5 @@ urlpatterns = [
     path('review/<int:review_id>', views.node_review),
     path('review/<int:review_id>/like', views.like_node_review),
     path('roles', views.get_roles),
+    path('roles/<int:role_id>',views.get_roles_situation),
 ]
