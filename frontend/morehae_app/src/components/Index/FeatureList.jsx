@@ -6,23 +6,23 @@ const DUMMY_DATA = [
   {
     id:1, 
     title: "로드맵",
-    content: "로드맵을 통해 ",
+    content: "로드맵을 통해 희망하는 커리어를 준비하기 위해 무엇을 배워야 할지 찾아보세요.\n 그리고 학습한 부분에 대해 잘 이해했는지 자가진단도 해보세요.",
     img: `roadmap.jpg`,
     to: "/roadmap",
   },
   {
     id:2, 
     title: "블로그",
-    content: "로드맵과 함께 배운 정보를 나만의 블로그에 정리해보세요. 다른 사용자들은 어떻게 공부했는지 살펴보세요.",
+    content: "로드맵과 함께 배운 정보를 나만의 블로그에 정리해보세요.\n 다른 사용자들은 어떻게 공부했는지 살펴보세요.",
     img: "blog.jpg",
     to: "/blog",
   },
   {
     id:3, 
-    title: "리뷰",
-    content: "",
+    title: "정보 공유",
+    content: "로드맵의 각 키워드들에 대해 정보를 공유해보세요.\n 키워드에 대한 생각을 리뷰로 달거나, 관련된 글을 쓴 블로그도 확인해보세요.\n 키워드에 관련된 추천 컨텐츠나 인터뷰도 확인할 수 있습니다.",
     img: "review.jpg",
-    to: "",
+    to: "/roadmap",
   },
 ];
 
@@ -30,7 +30,7 @@ const FeatureList = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   return (
     <div className="place-items-center justify-center w-full pb-14">
-      <div className="col-span py-4 shadow-md">
+      <div className="py-4">
         <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
           <Tab.Panels className="w-full h-full">
             {DUMMY_DATA.map((data) => (

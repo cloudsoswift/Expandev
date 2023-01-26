@@ -11,7 +11,7 @@ const Links = ({ reqData }) => {
       <div>
         <div className=" flex justify-between">
           <h2>Blog</h2>
-          <button className="bg-blue-200 px-3 py-1 rounded text-xs">
+          <button className="rounded text-xs">
             more..
           </button>
         </div>
@@ -25,8 +25,8 @@ const Links = ({ reqData }) => {
         <h2>Interview</h2>
         <Carousel reqData={reqData} />
       </div>
-      <div>
-        <h2>R Contents</h2>
+      <div className="my-3">
+        <h2>RECOMMEND Contents</h2>
         <div className="grid grid-cols-3 gap-3 justify-items-center text-center p-3">
           {reqData.recommend_content.map((item) => (
             <div
@@ -34,10 +34,10 @@ const Links = ({ reqData }) => {
               onClick={() => {
                 openLink(item.url);
               }}
-              className="bg-blue-100 w-36 h-36"
+              className="bg-blue-100 w-xs h-sx"
             >
-              <div>{item.title}</div>
               <img src={item.img_url} alt="img" />
+              <div>{item.title}</div>
             </div>
           ))}
         </div>
