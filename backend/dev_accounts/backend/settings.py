@@ -88,6 +88,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CORS_ALLOW_ALL_ORIGINS = True
+
 ##############################################################
 #
 #  dj_auth -> jwt 설정 config
