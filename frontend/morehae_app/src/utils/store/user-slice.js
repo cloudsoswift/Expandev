@@ -30,12 +30,13 @@ export const userLogin = (loginData, navigate) => {
     })
     .then((data) => {
       // refresh token을 86,400초 (60초 * 60분 * 24시간 = 1일) 유지되는 httpOnly Cookie로 설정.
-      document.cookie = `refresh_token=${data.refresh_token}; max-age=86400; httpOnly;`;
+      document.cookie = `refresh_token=${data.refresh_token};path=/;max-age=86400;httpOnly;`;
       setAccessToken(data.access_token);
       dispatch(userActions.setUser({
         ...data.user,
       }))
-      navigate("/");
+      // 로그인 후 로드맵 페이지로 이동
+      navigate("/roadmap");
     })
   }
 }
@@ -50,7 +51,8 @@ export const userLogout = (navigate) => {
           // Axios Default Header에 설정된 Access Token 삭제
           setAccessToken();
           dispatch(userActions.setUser({}));
-          navigate("/");
+          // 로그아웃 후 로드맵 페이지로 이동
+          navigate("/roadmap");
       }
     })
   }
