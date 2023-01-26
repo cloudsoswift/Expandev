@@ -73,7 +73,7 @@ const MainPage = () => {
             </div>
             <WhatWhy reqData={reqData} />
             <Links reqData={reqData} />
-            <Review reqData={reqData} />
+            <Review reqData={reqData} nodeId={nodeId}/>
           </div>
         </Modal>
       </div>
