@@ -11,7 +11,7 @@ class Article(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     hit = models.IntegerField(default=1)
-    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="like_articles")
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="like_articles", blank=True)
     tags = models.ManyToManyField(Tag, related_name="articles")
 
 class Comment(models.Model):
@@ -22,7 +22,7 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_secret = models.BooleanField(default=False)
-    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="like_comments")
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="like_comments", blank=True)
 
 
 

@@ -19,7 +19,7 @@ class Node(models.Model):
     content = models.TextField()
     purpose = models.TextField()
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='childs')
-    completion = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='clear_nodes')
+    completion = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='clear_nodes', blank=True)
 
 
 class RecommendContent(models.Model):
@@ -41,7 +41,7 @@ class Review(models.Model):
     content = models.CharField(max_length=100)
     importance = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)], default=3)
     difficulty = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)], default=3)
-    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="like_reviews") 
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="like_reviews", blank=True) 
 
 
 class Role(models.Model):
