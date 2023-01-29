@@ -3,6 +3,7 @@ import MainNavBar from "@/components/Navbar/MainNavBar";
 import IndexPage from "@/pages/Index/IndexPage";
 import { Route, Routes } from "react-router-dom";
 import MainPage from "@/pages/Main/MainPage";
+import Example from "@/pages/Roadmap/example";
 import SignIn from "@/pages/Sign/SignIn";
 import SignUp from "@/pages/Sign/SignUp";
 
@@ -14,7 +15,7 @@ function App() {
       <MainNavBar />
       <Routes>
         <Route index element={<IndexPage />} />
-        <Route path="roadmap" element={<MainPage />} />
+        <Route path="roadmap" element={<Example />} />
         <Route path="login" element={<SignIn />} />
         <Route path="signup" element={<SignUp />} />
       </Routes>
