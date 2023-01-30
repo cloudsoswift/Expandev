@@ -49,9 +49,17 @@ def tag_articles(request):  # 태그 게시글 조회
 
 @api_view(['GET'])
 def article_list(request):  # 전체게시판 조회
-    articles = Article.objects.all()
+    count = int(request.GET.get('count'))
+    filter_count = 12
+    
+    articles = Article.objects.all()[(count-1)*filter_count:count*filter_count]
     serializer = ArticleSerializer(articles, many=True, context = {'user': request.user })
-    return Response(serializer.data)
+    articles_count = len(articles)
+    context = {
+        'articles': serializer.data,
+        'articles_count': articles_count,
+    }
+    return Response(context)
 
     # 좋아요, 조회수, 최신
 
