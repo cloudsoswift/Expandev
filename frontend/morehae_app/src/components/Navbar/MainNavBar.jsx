@@ -32,8 +32,8 @@ const MainNavBar = () => {
     <nav className="h-20 bg-white sticky top-0 z-10">
       <div className="grid grid-cols-12 auto-cols-auto h-full items-center">
         <div className="logo col-span-3 pl-8 justify-items-center">
-          <Link className="text-4xl font-bold" to="/">
-            MoreHae
+          <Link className="text-4xl font-bold" id="logo" to="/">
+            개발바닥🐾
           </Link>
         </div>
         <div className="roadmapBtn col-span-3 justify-self-end">
@@ -55,7 +55,7 @@ const MainNavBar = () => {
         {!isLogin && (
           <div className="signInBtn col-span-3 justify-self-end pr-4">
             <Link
-              className="rounded-xl p-2 px-8 text-xl text-white font-bold bg-blue-500 hover:bg-blue-400"
+              className="rounded-xl py-2 px-8 text-2xl text-white font-bold bg-blue-500 hover:bg-blue-400"
               to="/login"
             >
               Sign In
