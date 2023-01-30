@@ -18,7 +18,7 @@ import { useEffect } from "react";
 console.log(JSON);
 
 const elk = new ELK();
-const elkLayout = (nodes, edges, direction="DOWN") => {
+const elkLayout = (nodes, edges, direction="DOWN", algorithm="mrtree") => {
   const nodesForElk = nodes.map((node) => {
     return {
       id: node.id,
@@ -29,7 +29,7 @@ const elkLayout = (nodes, edges, direction="DOWN") => {
   const graph = {
     id: "root",
     layoutOptions: {
-      "elk.algorithm": "mrtree",
+      "elk.algorithm": algorithm,
       "elk.direction": direction,
       "nodePlacement.strategy": "SIMPLE",
     },
@@ -177,7 +177,7 @@ const Example = () => {
             (edge) => edge.source === mainNode.id && edge.data.depth === 2
           );
           console.log(subNodes, subEdges);
-          const subGraph = await elkLayout(subNodes, subEdges, "UP");
+          const subGraph = await elkLayout(subNodes, subEdges, "RIGHT", "layered");
           console.log("돌았다");
           // 현재 메인 노드 및 서브노드에만 계산한 position 값 추가 반경, 이외에는 그냥 원래 노드값만.
           initialNodes = initialNodes.map((node) => {
@@ -215,7 +215,11 @@ const Example = () => {
 
   // 노드 클릭시, 해당 노드가 메인 노드라면 해당 메인 노드의 서브 노드들의 Visible Toggle.
   const handleNodeClick = useCallback((event, eventNode) => {
-    if (eventNode.data.depth === undefined || eventNode.data.depth === 2) {
+    if (eventNode.data.depth === undefined){
+      return;
+    }
+    if (eventNode.data.depth === 2){
+      // 모달 띄우기
       return;
     }
     console.log(eventNode, "이벤트 노드 바뀜.");
@@ -235,7 +239,7 @@ const Example = () => {
       prevEdges?.map((edge) => {
         return {
           ...edge,
-          hidden: edge.source === eventNode.id ? !edge.hidden : edge.hidden,
+          hidden: edge.source === eventNode.id && edge.data.depth === 2 ? !edge.hidden : edge.hidden,
         };
       })
     );
