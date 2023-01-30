@@ -1,10 +1,9 @@
-from django.contrib.auth.models import AbstractUser
-from django.db import models
-from django.utils.translation import gettext_lazy as _
-
 from .managers import UserManager
 
-
+from django.db import models
+from django.conf import settings
+from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
@@ -21,9 +20,6 @@ class User(AbstractUser):
     news_feed_push_yn = models.BooleanField(default=False, null=True)
     noti_push_yn = models.BooleanField(default=False, null=True)
     position = models.CharField(null=True, max_length=50)
-
-
-
     REQUIRED_FIELDS = []
 
     objects = UserManager()
@@ -31,3 +27,8 @@ class User(AbstractUser):
     def __str__(self):
         return self.email
 
+
+class Profile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    introduce = models.TextField(default='아직 자기소개가 없습니다.', blank=True, null=True)
+    profile_image = models.ImageField(default='media/default.png')
