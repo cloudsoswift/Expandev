@@ -32,13 +32,13 @@ const MainNavBar = () => {
     <nav className="h-20 bg-white sticky top-0 z-10">
       <div className="grid grid-cols-12 auto-cols-auto h-full items-center">
         <div className="logo col-span-3 pl-8 justify-items-center">
-          <Link className="text-4xl font-bold" to="/">
-            MoreHae
+          <Link className="text-4xl" to="/">
+            개발바닥🐾
           </Link>
         </div>
         <div className="roadmapBtn col-span-3 justify-self-end">
           <Link
-            className="hover:text-indigo-500/75 rounded-xl p-2 px-8 text-2xl font-bold"
+            className="hover:text-indigo-500/75 rounded-xl p-2 px-8 text-2xl"
             to="/roadmap"
           >
             로드맵
@@ -46,7 +46,7 @@ const MainNavBar = () => {
         </div>
         <div className="blogBtn col-span-3 justify-self-start">
           <Link
-            className="hover:text-indigo-500/75 rounded-xl p-2 px-8 text-2xl font-bold"
+            className="hover:text-indigo-500/75 rounded-xl p-2 px-8 text-2xl"
             to="/blog"
           >
             블로그
@@ -55,10 +55,10 @@ const MainNavBar = () => {
         {!isLogin && (
           <div className="signInBtn col-span-3 justify-self-end pr-4">
             <Link
-              className="border-4 border-indigo-500/75 rounded-xl p-2 px-8 text-xl font-bold"
+              className="transition border-2 border-blue-400 rounded-lg p-4 px-8 text-sm hover:border-blue-600 text-blue-400"
               to="/login"
             >
-              Sign In
+              로그인
             </Link>
           </div>
         )}
