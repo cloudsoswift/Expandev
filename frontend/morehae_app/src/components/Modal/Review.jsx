@@ -3,7 +3,10 @@ import ReviewEditor from "@/components/Modal/ReviewEditor";
 import ReviewList from "@/components/Modal/ReviewList";
 import axios from "axios";
 
-const tempToken = "dcc403128edf6707bc1e8b1defd434e317c72ad7"
+
+// const tempToken = "dcc403128edf6707bc1e8b1defd434e317c72ad7"
+
+
 
 const Review = ({ reqData, nodeId }) => {
   const [data, setData] = useState(reqData.review);
@@ -19,16 +22,16 @@ const Review = ({ reqData, nodeId }) => {
       created_date,
       id: dataId.current,
     };
+ 
     axios({
-      url: "http://i8d212.p.ssafy.io/roadmaps/review",
+      url: "http://i8d212.p.ssafy.io:8080/roadmaps/review",
       method: "post",
-      header: {'Authorization' : tempToken},
       data: { node: nodeId, content, importance, difficulty },
     })
       .then((res) => {
-        console.log("success");
+        console.log(res)
       })
-      .catch((err) => console.log("fail"));
+      .catch((err) => console.log(err));
     dataId.current += 1;
     setData([newItem, ...data]);
   };
@@ -51,6 +54,7 @@ const Review = ({ reqData, nodeId }) => {
       <div className="border-2 rounded-md">
         <ReviewList reviewList={data} onDelete={onDelete} onEdit={onEdit} />
         <ReviewEditor onCreate={onCreate} />
+        
       </div>
     </div>
   );
