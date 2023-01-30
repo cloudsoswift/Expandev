@@ -5,6 +5,12 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+@font-face {
+  font-family: 'BinggraeSamanco-Bold';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/BinggraeSamanco-Bold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
 
 @font-face {
   font-family: 'NanumSquareNeo-Variable';
@@ -15,6 +21,9 @@
 
 body {
   font-family: 'NanumSquareNeo-Variable';
+}
+#logo {
+  font-family: 'BinggraeSamanco-Bold';
 }
 /* body {
   width: 100%;
