@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import ArticleSerializer, CommentSerializer, TagSerializer
+from .serializers import ArticleSerializer, CommentSerializer, TagSerializer, AritcleTempImageSerializer
 from .models import Article, Comment, Tag
 from django.shortcuts import get_object_or_404, get_list_or_404
 
@@ -167,3 +167,12 @@ def like_comment(request, comment_id):  # 댓글 좋아요
         'like_count': comment.like_users.count()
     }
     return Response(context)
+
+
+@api_view(['POST'])
+def make_temp_img_path(request):
+    data = request.data
+    serializer = AritcleTempImageSerializer(data=data)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
