@@ -14,7 +14,6 @@ class Article(models.Model):
     hit = models.IntegerField(default=1)
     like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="like_articles", blank=True)
     tags = models.ManyToManyField(Tag, related_name="articles", blank=True)
-    thumnail_image = models.ImageField(default='media/thumnail_default.png', blank=True, null=True)
 
 
 class Comment(models.Model):
