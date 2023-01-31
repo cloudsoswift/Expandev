@@ -25,6 +25,7 @@ function App() {
         <Route path="signup" element={<SignUp />} />
         <Route path="blog" element={<Outlet />}>
           <Route index element={<BlogListPage />} />
+          <Route path="recent" element={<BlogListPage />} />
           <Route path=":id" element={<Outlet />}>
             <Route index element={<BlogMainPage />} />
             <Route path="posts" element={<BlogPostListPage />} />
