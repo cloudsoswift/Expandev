@@ -31,16 +31,6 @@ class ArticleSerializer(serializers.ModelSerializer):
         return False
 
     def create(self, validated_data):
-        title = validated_data['title']
-        content = validated_data['content']
-        user = validated_data['user']
-
-        article = Article.objects.create(
-            title=title,
-            content=content,
-            user=user,
-        )
-
         ModelClass = self.Meta.model
         info = model_meta.get_field_info(ModelClass)
         many_to_many = {}
