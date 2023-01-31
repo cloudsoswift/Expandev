@@ -61,7 +61,7 @@ const SignIn = () => {
             </div>
             <input value={password} onChange={handlePassword} type="password" className={inputStyle + " mb-4"} />
           </div>
-          <Link className="w-full block text-end text-slate-400 hover:text-black" to={"/signup"}>
+          <Link className="w-full block text-end text-slate-400 hover:text-black text-sm mb-1" to={"/signup"}>
             아직 회원이 아니신가요?
           </Link>
           <button onClick={handleLogin} className="transition bg-white w-full h-12 rounded-lg bg-blue-500 text-white hover:bg-blue-400 mb-8">로그인</button>

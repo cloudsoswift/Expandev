@@ -29,7 +29,7 @@ const MainNavBar = () => {
   const buttonStyle = "border-2 border-black rounded-full p-2 mx-2";
 
   return (
-    <nav className="h-20 bg-white sticky top-0 z-10">
+    <nav className="h-20 bg-white sticky top-0 z-10 border-b">
       <div className="grid grid-cols-12 auto-cols-auto h-full items-center">
         <div className="logo col-span-3 pl-8 justify-items-center">
           <Link className="text-4xl font-bold" id="logo" to="/">
