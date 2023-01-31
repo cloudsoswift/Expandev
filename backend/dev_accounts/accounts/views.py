@@ -1,10 +1,11 @@
-from django.shortcuts import render, get_list_or_404, get_object_or_404
-from django.views.decorators.http import require_POST
+from .models import User, Profile
+from .serializers import UserSerializer, UserProfileImage
+
+from rest_framework import status
 from rest_framework.response import Response
-from .serializers import UserSerializer
-from .models import User
 from rest_framework.decorators import api_view
-# Create your views here.
+from django.shortcuts import get_list_or_404, get_object_or_404
+
 
 @api_view(['GET'])
 def userlist(request):
@@ -20,3 +21,23 @@ def userchange(request):
 
     return Response(serializer.data)
 
+
+@api_view(['GET'])
+def get_user_profile(request, user_id):
+    user = get_object_or_404(Profile, user=user_id)
+    serializer = UserProfileImage(user)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['PUT'])
+def set_profile_image(request):
+    user = request.user
+    data = request.data
+
+    profile = Profile.objects.get_or_create(user=user)[0]
+    serializer = UserProfileImage(profile, data=data)
+    if serializer.is_valid():
+        serializer.save(user=user)
+        return Response(status=status.HTTP_201_CREATED)
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
