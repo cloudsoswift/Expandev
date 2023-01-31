@@ -1,0 +1,50 @@
+# Convention
+- ## Naming
+    - ### Pascal Case
+        - #### type
+        - #### interface
+        - #### React Component
+    - ### camel Case
+        - #### 변수(let, const)
+        - #### Javascript 함수
+        - #### Custom Hook
+            - `use__` 로 지정.
+        - #### props
+    - ### UPPER CASE
+        - #### const ( HardCoded )
+        - #### UPPER_SNAKE_CASE
+            - Array ( especially const )
+    - ### Unit Test File
+        - #### 원본 파일명과 동일하게 (ex. 원본이 `List.js` 라면,  `List.test.js`)
+- ## Event Handler
+    - ### prop
+        - `on___`
+    - ### Event Handler Function 
+        - `handle___` 
+- ## Null Check
+    - ### Optional Chaining 연산자(`?.`) 사용하기.
+        - `?.`은 `?.`'앞’의 평가 대상이 `undefined`나 `null`이면 평가를 멈추고 `undefined`를 반환합니다.
+- ## 코드 중복을 피하기 위해 여러 곳에서 사용되는 기능은 모듈화시켜 `src/utils/` 에 두고 사용한다.
+- ## Import
+    - ### 상대경로보다, *`src/` 폴더를 기준으로 한 절대경로*를 사용한다.
+        - `src/`의 Alias는 `~` 이다.
+- ## prettier 설정
+    - Arrow Parens - always
+    - Bracket Same Line - false
+    - Bracket Spacing - true
+    - Embedded Language Formatting - auto
+    - Enable Debug Logs - false
+    - End Of Line - If
+    - HTML Whitespace Sensitivity - css
+    - Insert Pragma - none
+    - Jsx Single Quote - none
+    - Print Width - 80
+    - Prose Wrap - preserve
+    - Quote Props - as-needed
+    - Resolve Global Modules - false
+    - Semi - true
+    - Single Attribute Per Line - false
+    - Single Quote - false
+    - Tab Width - 2
+    - Trailing Comma - es5
+    - Use Tabs - false
