@@ -48,11 +48,20 @@ def tag_articles(request):  # 태그 게시글 조회
 # 게시글
 
 @api_view(['GET'])
-def article_list(request):  # 전체게시판 조회
-    count = int(request.GET.get('count'))
-    filter_count = 12
+def article_list(request):  # 게시글 조회
+    count = int(request.GET.get('count')) #페이지 번호
+    sort_type='-created_at' #없으면 기본 최신순
+    if request.GET.get('sort_type'):
+        sort_type = '-'+ str(request.GET.get('sort_type')) # created_at / hit
     
-    articles = Article.objects.all()[(count-1)*filter_count:count*filter_count]
+    if request.GET.get('search_title'): # 검색 제목 없으면 전체조회
+        search_title = request.GET.get('search_title')
+        articles = Article.objects.filter(title__contains=search_title).order_by(sort_type)
+    else:
+        articles = Article.objects.all().order_by(sort_type)
+
+    filter_count = 12
+    articles = articles[(count-1)*filter_count:count*filter_count]
     serializer = ArticleSerializer(articles, many=True, context = {'user': request.user })
     articles_count = len(articles)
     context = {
@@ -60,8 +69,6 @@ def article_list(request):  # 전체게시판 조회
         'articles_count': articles_count,
     }
     return Response(context)
-
-    # 좋아요, 조회수, 최신
 
 
 @api_view(['POST', 'GET', 'PUT', 'DELETE'])
