@@ -20,6 +20,9 @@ const BlogWritePage = () => {
   const [titleTouched, setTitleTouched] = useState("");
   // 요약글 관련 State
   const [overview, setOverview] = useState("");
+  // Thumbnail 관련 State
+  const [thumbnail, setThumbnail] = useState("");
+  const [thumbnailSrc, setThumbailSrc] = useState("");
   const [tags, setTags] = useState([]);
   const request = http(process.env.REACT_APP_BLOG_URL);
   console.log(request.defaults);
@@ -102,8 +105,22 @@ const BlogWritePage = () => {
     setOverview(e.target.value);
   };
   const overviewIsEmpty = overview.trim() === "";
-  const overviewMaxLengthValid = overview.trim().length ;
-
+  const overviewMaxLengthValid = overview.trim().length;
+  // thumbnail 이미지 관련 Handler
+  const handleThumbnailChange = (e) => {
+    const reader = new FileReader();
+    const file = e.target.files[0];
+    if (!file) {
+      setThumbnail(file);
+      setThumbailSrc(file);
+      return;
+    }
+    reader.onloadend = () => {
+      setThumbnail(file);
+      setThumbailSrc(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
   //
   const handleSendPost = () => {
     if (!titleIsValid) {
@@ -142,6 +159,10 @@ const BlogWritePage = () => {
       <div className="text-2xl mb-4 text-center">글 쓰기</div>
       <div className="input-form">
         <div>
+          <span className="text-sm text-gray-500">
+            제목
+            <br />
+          </span>
           <input
             className="px-3 py-2 bg-white text-2xl rounded-md shadow-sm placeholder-slate-40 w-full"
             type="text"
@@ -157,14 +178,43 @@ const BlogWritePage = () => {
                 : "제목은 100자 이하여야 합니다."}
             </div>
           )}
-          <div>
-            <textarea
-              className="px-3 py-2 border bg-white text-xl rounded-md shadow-sm placeholder-slate-40 w-1/3 resize-none"
-              rows="4"
-              placeholder="(선택)글 요약을 입력해주세요."
-              value={overview}
-              onChange={handleOverviewChange}
-            />
+          <div className="grid grid-cols-2 border rounded-lg">
+            <div className="h-60">
+              <span className="text-sm text-gray-500">
+                (선택)썸네일 파일 첨부
+                <br />
+              </span>
+              <div className="grid grid-cols-2 h-full">
+                <input
+                  className="file:border-0 file:py-2 file:px-4 file:rounded-lg"
+                  type="file"
+                  onChange={handleThumbnailChange}
+                  accept="image/png, image/jpeg"
+                />
+                <div className="inline-block h-full border">
+                  {thumbnail && (
+                    <img
+                      className="h-full object-cover"
+                      src={thumbnailSrc}
+                      alt=""
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+            <div>
+              <span className="text-sm text-gray-500">
+                (선택)썸네일 파일 첨부
+                <br />
+              </span>
+              <textarea
+                className="px-3 py-2 border bg-white text-2xl rounded-md shadow-sm placeholder-slate-40 w-full resize-none"
+                rows="4"
+                placeholder="(선택)글 요약을 입력해주세요."
+                value={overview}
+                onChange={handleOverviewChange}
+              />
+            </div>
           </div>
         </div>
         <div>
