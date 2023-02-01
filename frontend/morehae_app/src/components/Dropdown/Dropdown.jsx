@@ -18,11 +18,9 @@ function Dropdown({items, selectedItem, setSelectedItem}) {
   }
 
   // 아이템 클릭에 대한 핸들러
-  const handleSelect = (e) => {
-    const index = e.target.value
-    if (index === undefined) {  // 가끔씩, 정말 아주 가끔씩 e.target이 <span> 태그를 가리켜
-      console.log("?????????????????");  // e.target.value === undefiend가 되는 경우가 있다
-      console.log(e);
+  const handleSelect = (index) => {
+    if (index === undefined) {
+      console.log("?????????????????");
     } else {
       setSelectedItem((oldState) => {
         return items[index];
@@ -34,6 +32,12 @@ function Dropdown({items, selectedItem, setSelectedItem}) {
       return !oldState;
     })
   }
+    
+  //   // 드롭다운 창 닫기
+  //   setIsOpen((oldState) => {
+  //     return !oldState;
+  //   })
+  // }
 
   useEffect(() => {
     // 마우스 클릭이 드롭다운 컴포넌트 외부에 찍혔는지를 판단하기 위한 핸들러
@@ -72,7 +76,7 @@ function Dropdown({items, selectedItem, setSelectedItem}) {
           return <li
             value={index}
             key={item.id}
-            onClick={handleSelect}
+            onClick={ () => handleSelect(index) }
             className={style}>
               <span>{item.content}</span>
             </li>
