@@ -6,7 +6,7 @@ import Editor from "@toast-ui/editor";
 const MAX_UPLOAD_IMAGE_SIZE = 5242880; // 1024 * 1024 * 5. 5MB로 제한
 const IMAGE_TYPES = ["image/png", "image/jpeg"];
 
-const PostEditor  = ({content}) => {
+const PostEditor = ({ content, onMount }) => {
   const editorRef = useRef();
   const [editor, setEditor] = useState();
   // const [isEditorRendered, setisEditorRendered] = useState(false);
@@ -38,7 +38,10 @@ const PostEditor  = ({content}) => {
         .then((response) => response.data)
         .then((data) => {
           // callback(`${process.env.REACT_APP_SERVER_URL}${data.image}`, blob.name);
-          callback(`${"http://i8d212.p.ssafy.io:9000"}${data.image}`, blob.name);
+          callback(
+            `${"http://i8d212.p.ssafy.io:9000"}${data.image}`,
+            blob.name
+          );
         })
         .catch((e) => {
           callback("image-load-fail", "이미지 로딩 실패.");
@@ -53,18 +56,21 @@ const PostEditor  = ({content}) => {
     if (editor) {
       return;
     }
-    setEditor(
-      new Editor({
+    setEditor(() => {
+      const editor = new Editor({
         el: editorRef.current,
         previewStyle: "vertical",
         minHeight: "600px",
         hideModeSwitch: true,
         hooks: hookMap,
         placeholder: "내용을 입력해주세요.",
-      })
-    );
+        initialValue: content ? content : "",
+      });
+      onMount(editor);
+      return editor;
+    });
   }, []);
-  return <div className="h-screen" id="post-editor" ref={editorRef}/>
-}
+  return <div className="h-screen" id="post-editor" ref={editorRef} />;
+};
 
 export default PostEditor;
