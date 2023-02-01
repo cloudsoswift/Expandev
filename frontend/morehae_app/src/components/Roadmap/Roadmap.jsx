@@ -1,6 +1,6 @@
 import RoadmapSection from "@/components/Roadmap/RoadmapSection";
 import Julgi from "@/components/Roadmap/components/Julgi";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 
 const Roadmap = ({ nodesDataJSON, handleClickButton }) => {
   // 노드들 데이터 프로퍼티
