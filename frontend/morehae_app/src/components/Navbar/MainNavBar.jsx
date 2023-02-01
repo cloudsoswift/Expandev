@@ -55,7 +55,7 @@ const MainNavBar = () => {
         {!isLogin && (
           <div className="signInBtn col-span-3 justify-self-end pr-4">
             <Link
-              className="transition border-2 border-blue-400 rounded-lg p-4 px-8 text-sm hover:border-blue-600 text-blue-400"
+              className="transition border-2 border-blue-400 rounded-lg p-2 px-8 text-2xl hover:border-blue-600 text-blue-400"
               to="/login"
             >
               로그인
