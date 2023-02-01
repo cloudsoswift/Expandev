@@ -61,9 +61,10 @@ const ReviewListItem = ({
         </div>
 
         <div className="text-xs py-1">
-          <FaRegHeart />
-          {id}
-          작성일자 {new Date(created_date).toLocaleString()}
+          {/* {id} */}
+          {user}
+           | 작성일자 {new Date(created_date).toLocaleString()}
+          {/* <span><FaRegHeart /></span> */}
         </div>
 
         {isEdit ? (
