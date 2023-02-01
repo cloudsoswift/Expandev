@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import axios from 'axios'
-import Reply from "../../components/Blog/Reply";
+import Reply from "@/components/Blog/Reply";
+import { useParams } from "react-router-dom";
+import httpWithURL from "@/utils/http";
 
 const dummyReplies = [
   {
@@ -38,16 +39,16 @@ const dummyReplies = [
 ]
 
 const BlogPostPage = () => {
-  const urlString = window.location.href;
+  const params = useParams();
   const [post, setPost] = useState({});
   const [replies, setReplies] = useState([]);
   const [dateString, setDateString] = useState("");
 
   // 게시글의 상세정보 가져오기
   const getPostData = () => {
-    const postID = urlString.split('/').pop();  // url의 마지막 주소를 읽어 게시글의 id를 식별
-    axios  // GET 요청
-      .get(`${process.env.REACT_APP_ARTICLE_URL}${postID}`)
+    const postID = params.postId;  // url의 마지막 주소를 읽어 게시글의 id를 식별
+      // GET 요청
+      httpWithURL(process.env.REACT_APP_ARTICLE_URL).get(postID)
       .then((Response) => {
         // console.log("게시글 상세정보:", Response.data);
         setPost((oldState) => {
@@ -70,9 +71,9 @@ const BlogPostPage = () => {
   }
 
   const getReplyData = () => {
-    const postID = urlString.split('/').pop();
-    axios  // GET 요청
-      .get(`${process.env.REACT_APP_ARTICLE_URL}${postID}/comment`)
+    const postID = params.postId;
+    httpWithURL(process.env.REACT_APP_ARTICLE_URL)  // GET 요청
+      .get(`${postID}/comment`)
       .then((Response) => {
         console.log("댓글 상세정보:", Response.data);
         setReplies((oldState) => {
