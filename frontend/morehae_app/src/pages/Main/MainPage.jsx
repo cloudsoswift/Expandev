@@ -8,9 +8,10 @@ import Dropdown from "@/components/Dropdown/Dropdown";
 import Roadmap from "@/components/Roadmap/Roadmap";
 // import nodesDataJSON from ".././nodesDataJSON.json"
 
-import axios from 'axios'
+import axios from "axios";
 
 const MainPage = () => {
+  // 모달 관련 state
   const [showModal, setShowModal] = useState(false);
 
   const [reqData, setReqData] = useState([]);
@@ -20,12 +21,17 @@ const MainPage = () => {
   const [checkbox, setCheckbox] = useState(false);
 
   /* 드롭다운 메뉴 관련 state들 */
-  const [role, setRole] = useState({id: 0, content: "포지션을 선택해주세요"})  // 직군
-  const [situation, setSituation] = useState({id: 1, content: "상황을 선택해주세요"})  // 상황
-  const [roleList, setRoleList] = useState([  // 직군 리스트
+  const [role, setRole] = useState({ id: 0, content: "포지션을 선택해주세요" }); // 직군
+  const [situation, setSituation] = useState({
+    id: 1,
+    content: "상황을 선택해주세요",
+  }); // 상황
+  const [roleList, setRoleList] = useState([
+    // 직군 리스트
     { id: 0, content: "포지션을 선택해주세요" },
   ]);
-  const [situationList, setSituationList] = useState([  // 상황 리스트
+  const [situationList, setSituationList] = useState([
+    // 상황 리스트
     { id: 1, content: "상황을 선택해주세요" },
   ]);
 
@@ -34,11 +40,6 @@ const MainPage = () => {
     id: 1,
     nodesData: [],
   });
-
-  const handleClickButton = (id) => {
-    setNodeId(() => id);
-    setCheck(!check);
-  };
 
   // 직군 리스트 가져오기
   const getRoleList = () => {
@@ -52,7 +53,7 @@ const MainPage = () => {
       .catch((Error) => {
         console.log(Error);
       });
-  }
+  };
 
   // 상황 리스트 가져오기
   const getSituationList = (role) => {
@@ -66,7 +67,7 @@ const MainPage = () => {
       .catch((Error) => {
         console.log(Error);
       });
-  }
+  };
 
   const getRoadmap = (situation) => {
     axios
@@ -82,7 +83,7 @@ const MainPage = () => {
           return Response.data;
         });
       });
-  }
+  };
 
   // 로드맵 상세 모달 데이터 가져오기
   const loadNodeDetail = (id) => {
@@ -119,13 +120,13 @@ const MainPage = () => {
   useEffect(() => {
     console.log("role 선택됨:", role);
     getSituationList(role);
-  }, [role])
+  }, [role]);
 
   // 상황 선택될 때마다 로드맵 데이터를 가져온다
   useEffect(() => {
     console.log("situation 선택됨:", situation);
     getRoadmap(situation);
-  }, [situation])
+  }, [situation]);
 
   const handleCheckbox = () => {
     setCheckbox(!checkbox);
@@ -137,10 +138,18 @@ const MainPage = () => {
         {/* 드롭다운 컴포넌트들 */}
         <div className="flex justify-center">
           <div className="w-96 mr-2">
-            <Dropdown items={roleList} selectedItem={role} setSelectedItem={setRole}/>
+            <Dropdown
+              items={roleList}
+              selectedItem={role}
+              setSelectedItem={setRole}
+            />
           </div>
           <div className="w-96 ml-2">
-            <Dropdown items={situationList} selectedItem={situation} setSelectedItem={setSituation}/>
+            <Dropdown
+              items={situationList}
+              selectedItem={situation}
+              setSelectedItem={setSituation}
+            />
           </div>
         </div>
 
@@ -174,7 +183,7 @@ const MainPage = () => {
             </div>
             <WhatWhy reqData={reqData} />
             <Links reqData={reqData} />
-            <Review reqData={reqData} nodeId={nodeId}/>
+            <Review reqData={reqData} nodeId={nodeId} />
           </div>
         </Modal>
       </div>

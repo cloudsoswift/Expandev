@@ -8,15 +8,6 @@ const Review = ({ reqData, nodeId }) => {
   const dataId = useRef(reqData.review.length + 1);
 
   const onCreate = (user, content, importance, difficulty) => {
-    const created_date = new Date().getTime();
-    const newItem = {
-      user,
-      content,
-      importance,
-      difficulty,
-      created_date,
-      id: dataId.current,
-    };
     axios({
       url: "http://i8d212.p.ssafy.io:8000/roadmaps/review",
       method: "post",

@@ -31,7 +31,7 @@ const Carousel = ({ reqData }) => {
         </div>
         <div
           id="slider"
-          className="w-full h-full overflow-x-scroll scrollbar-hide whitespace-nowrap scroll-smooth"
+          className="w-full h-full overflow-x-scroll scrollbar-hide scroll-smooth"
         >
           {reqData.interview.map((item, slideIdx) => (
             <div
