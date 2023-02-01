@@ -24,9 +24,8 @@ const BlogWritePage = () => {
   const [thumbnail, setThumbnail] = useState("");
   const [thumbnailSrc, setThumbailSrc] = useState("");
   const [tags, setTags] = useState([]);
-  const request = http(process.env.REACT_APP_BLOG_URL);
-  // const request = http("http://i8d212.p.ssafy.io:8000/blogs");
-  console.log(request.defaults);
+  // const request = http(process.env.REACT_APP_BLOG_URL);
+  const request = http("http://i8d212.p.ssafy.io:9000/blogs");
   const hookMap = {
     addImageBlobHook: (blob, callback) => {
       console.log(blob);
@@ -40,7 +39,6 @@ const BlogWritePage = () => {
         alert("이미지는 png, jpeg, jpg 형식만 첨부할 수 있습니다.");
         return;
       }
-      // if
       const body = {
         image: blob,
       };
@@ -51,9 +49,10 @@ const BlogWritePage = () => {
             "Content-Type": "multipart/form-data",
           },
         })
-        .then((response) => response.json())
+        .then((response) => response.data)
         .then((data) => {
-          callback(data, blob.name);
+          // callback(`${process.env.REACT_APP_SERVER_URL}${data.image}`, blob.name);
+          callback(`${"http://i8d212.p.ssafy.io:9000"}${data.image}`, blob.name);
         })
         .catch((e) => {
           callback("image-load-fail", "이미지 로딩 실패.");
