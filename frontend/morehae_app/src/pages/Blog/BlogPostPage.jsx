@@ -1,78 +1,89 @@
 import { useEffect, useState } from "react";
 import Reply from "@/components/Blog/Reply";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import httpWithURL from "@/utils/http";
+import PostViewer from "../../components/Blog/PostViewer";
+import TagPill from "../../components/Blog/TagPill";
+import { useSelector } from "react-redux";
 
 const dummyReplies = [
   {
-      "id": 12,
-      "like_users_count": 0,
-      "liked": false,
-      "content": "ㅋ",
-      "created_at": "2023-01-19T07:39:44.848376Z",
-      "updated_at": "2023-01-19T07:39:44.848415Z",
-      "is_secret": false,
-      "article": 2,
-      "user": 3,
-      "username": "티코",
-      "user_thumbnail": "urlurl",
-      "parent_comment": null,
-      "like_users": []
+    id: 12,
+    like_users_count: 0,
+    liked: false,
+    content: "ㅋ",
+    created_at: "2023-01-19T07:39:44.848376Z",
+    updated_at: "2023-01-19T07:39:44.848415Z",
+    is_secret: false,
+    article: 2,
+    user: 3,
+    username: "티코",
+    user_thumbnail: "urlurl",
+    parent_comment: null,
+    like_users: [],
   },
   {
-      "id": 2,
-      "like_users_count": 1,
-      "liked": true,
-      "content": "zzzzz",
-      "created_at": "2023-01-19T05:43:00.625257Z",
-      "updated_at": "2023-01-19T05:43:00.625288Z",
-      "is_secret": false,
-      "article": 2,
-      "user": 3,
-      "username": "강아지",
-      "user_thumbnail": "urlurl",
-      "parent_comment": null,
-      "like_users": [
-          3
-      ]
-  }
-]
+    id: 2,
+    like_users_count: 1,
+    liked: true,
+    content: "zzzzz",
+    created_at: "2023-01-19T05:43:00.625257Z",
+    updated_at: "2023-01-19T05:43:00.625288Z",
+    is_secret: false,
+    article: 2,
+    user: 3,
+    username: "강아지",
+    user_thumbnail: "urlurl",
+    parent_comment: null,
+    like_users: [3],
+  },
+];
+
+const DAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
 const BlogPostPage = () => {
   const params = useParams();
   const [post, setPost] = useState({});
   const [replies, setReplies] = useState([]);
   const [dateString, setDateString] = useState("");
+  const userInfo = useSelector(state=>state.user.user);
+  console.log(userInfo);
 
   // 게시글의 상세정보 가져오기
   const getPostData = () => {
-    const postID = params.postId;  // url의 마지막 주소를 읽어 게시글의 id를 식별
-      // GET 요청
-      httpWithURL(process.env.REACT_APP_ARTICLE_URL).get(postID)
+    const postID = params.postId; // url의 마지막 주소를 읽어 게시글의 id를 식별
+    // GET 요청
+    httpWithURL(process.env.REACT_APP_ARTICLE_URL)
+      .get(postID)
       .then((Response) => {
         // console.log("게시글 상세정보:", Response.data);
+        console.log(Response);
         setPost((oldState) => {
           if (Response?.data !== undefined) {
             return Response.data;
           }
-        })
+        });
 
         // 게시글의 생성날짜를 년월일로 변환
         setDateString((oldState) => {
           if (Response?.data !== undefined) {
             const date = new Date(Response.data.created_at);
-            return `${date.getFullYear()}년 ${date.getMonth()+1}월 ${date.getDate()}일`;
-          } 
-        })
+            return `${date.getFullYear()}년 ${
+              date.getMonth() + 1
+            }월 ${date.getDate()}일 ${
+              DAYS[date.getDay()]
+            }요일 ${date.getHours()}:${date.getMinutes()}`;
+          }
+        });
       })
       .catch((Error) => {
         console.log(Error);
       });
-  }
+  };
 
   const getReplyData = () => {
     const postID = params.postId;
-    httpWithURL(process.env.REACT_APP_ARTICLE_URL)  // GET 요청
+    httpWithURL(process.env.REACT_APP_ARTICLE_URL) // GET 요청
       .get(`${postID}/comment`)
       .then((Response) => {
         console.log("댓글 상세정보:", Response.data);
@@ -81,21 +92,53 @@ const BlogPostPage = () => {
             return dummyReplies;
             // return Response.data;
           }
-        })
+        });
       })
       .catch((Error) => {
         console.log(Error);
       });
-  }
+  };
   useEffect(() => {
     getPostData();
     getReplyData();
-  }, [])
+  }, []);
+
+  const handleLike = () => {
+
+  }
+  const handleDeletePost = () => {
+
+  }
+
   return (
-    <div>
-      {replies.map(reply => <Reply key={reply.id} reply={reply}/>)}
+    <div className="grid">
+      <div className="border w-4/5 justify-self-center p-2 rounded-xl">
+        <div className="text-2xl text-center">{post.title}</div>
+        <div className="text-sm text-end">{dateString}</div>
+        <div></div>
+        <PostViewer content={post.content} />
+        <div>
+          {post.tags?.map((tag) => (
+            <TagPill key={tag.id} title={tag.tag} />
+          ))}
+        </div>
+        <div className="btn-area ">
+          <button className="px-2 py-2 border rounded-xl" onClick={handleLike}>좋아요</button>
+          {
+            // 작성자 닉네임과 현재 로그인한 유저 닉네임이 같을 경우 수정, 삭제 버튼 표시
+            userInfo && userInfo.nickname === post.username &&
+            <span className="justify-self-end">
+              <Link to={`/blog/post/${params.postId}/edit`} className="px-6 py-3 border rounded-xl">수정</Link>
+              <button className="px-6 py-2 border rounded-xl" onClick={handleDeletePost}>삭제</button>
+            </span>
+          }
+        </div>
+        {replies.map((reply) => (
+          <Reply key={reply.id} reply={reply} />
+        ))}
+      </div>
     </div>
-  )
-}
+  );
+};
 
 export default BlogPostPage;
