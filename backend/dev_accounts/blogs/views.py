@@ -20,9 +20,7 @@ def tag_list(request, search_tag=None):  # articles_count 수로 정렬
 
 
 @api_view(['GET'])
-def tag_articles(request):  # 태그 게시글 조회
-    # sort_type에 들어오는 값 : like_users_count / hit
-    sort_type = request.data.get('sort_type')
+def tag_articles(request):  # 태그 게시글 조회 (hit으로 정렬)
     select_tags = request.data.getlist('tags')
     temp_articles = []
     for search_tag in select_tags:
@@ -39,9 +37,10 @@ def tag_articles(request):  # 태그 게시글 조회
     else:
         sort_article = []
         for article in temp_articles:
-            serializer = ArticleSerializer(instance = article, context = {'user': request.user })
+            serializer = ArticleSerializer(
+                instance=article, context={'user': request.user})
             sort_article.append(serializer.data)
-        sort_article = sorted(sort_article, key=lambda x: -x[sort_type])
+        sort_article = sorted(sort_article, key=lambda x: -x['hit'])
         return Response(sort_article)
 
 
@@ -49,20 +48,22 @@ def tag_articles(request):  # 태그 게시글 조회
 
 @api_view(['GET'])
 def article_list(request):  # 게시글 조회
-    count = int(request.GET.get('count')) #페이지 번호
-    sort_type='-created_at' #없으면 기본 최신순
+    count = int(request.GET.get('count'))  # 페이지 번호
+    sort_type = '-created_at'  # 없으면 기본 최신순
     if request.GET.get('sort_type'):
-        sort_type = '-'+ str(request.GET.get('sort_type')) # created_at / hit
-    
-    if request.GET.get('search_title'): # 검색 제목 없으면 전체조회
+        sort_type = '-' + str(request.GET.get('sort_type'))  # created_at / hit
+
+    if request.GET.get('search_title'):  # 검색 제목 없으면 전체조회
         search_title = request.GET.get('search_title')
-        articles = Article.objects.filter(title__contains=search_title).order_by(sort_type)
+        articles = Article.objects.filter(
+            title__contains=search_title).order_by(sort_type)
     else:
         articles = Article.objects.all().order_by(sort_type)
 
     filter_count = 12
     articles = articles[(count-1)*filter_count:count*filter_count]
-    serializer = ArticleSerializer(articles, many=True, context = {'user': request.user })
+    serializer = ArticleSerializer(
+        articles, many=True, context={'user': request.user})
     articles_count = len(articles)
     context = {
         'articles': serializer.data,
@@ -79,7 +80,7 @@ def article(request, article_id=None):  # 게시글 디테일
     if request.method == 'GET':  # 조회
         article.hit += 1
         article.save()
-        serializer = ArticleSerializer(article, context = {'user': request.user })
+        serializer = ArticleSerializer(article, context={'user': request.user})
         return Response(serializer.data)
 
     elif request.method == 'DELETE':  # 삭제
@@ -89,18 +90,22 @@ def article(request, article_id=None):  # 게시글 디테일
     elif request.method == 'PUT' or 'POST':  # 수정, 작성
         entered_tags = request.POST.getlist('tags')
         data = {
-            'title': request.data['title'],
-            'content': request.data['content'],
+            'title': request.data.get('title'),
+            'content': request.data.get('content'),
         }
+        if  request.data.get('overview'):
+            data['overview'] = request.data.get('overview')
         tags = []
         if entered_tags:
             for tag in entered_tags:
                 temp, _ = Tag.objects.get_or_create(tag=tag)
                 tags.append(temp)
         if request.method == 'POST':
-            serializer = ArticleSerializer(data=data, context = {'user': request.user })
+            serializer = ArticleSerializer(
+                data=data, context={'user': request.user})
         elif request.method == 'PUT':
-            serializer = ArticleSerializer(instance = article, data=data, context = {'user': request.user })
+            serializer = ArticleSerializer(
+                instance=article, data=data, context={'user': request.user})
         if serializer.is_valid():
             serializer.save(tags=tags, user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -122,12 +127,14 @@ def comment(request, article_id=None, parent_id=None, comment_id=None):  # 댓�
         comments = Comment.objects.filter(article=article)
         if comments:
             comments = comments.order_by('-created_at')
-        serializer = CommentSerializer(instance = comments, many = True, context = {'user': request.user })
+        serializer = CommentSerializer(
+            instance=comments, many=True, context={'user': request.user})
 
         return Response(serializer.data)
 
     elif request.method == 'POST':  # 댓글 작성
-        serializer = CommentSerializer(data=request.data, context = {'user': request.user })
+        serializer = CommentSerializer(
+            data=request.data, context={'user': request.user})
         if serializer.is_valid(raise_exception=True):
             serializer.save(user=request.user, article=article,
                             parent_comment=parent_comment)
@@ -138,7 +145,8 @@ def comment(request, article_id=None, parent_id=None, comment_id=None):  # 댓�
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     elif request.method == 'PUT':  # 댓글 수정
-        serializer = CommentSerializer(instance = comment, data=request.data, context = {'user': request.user })
+        serializer = CommentSerializer(
+            instance=comment, data=request.data, context={'user': request.user})
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
