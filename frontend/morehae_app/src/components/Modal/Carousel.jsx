@@ -37,10 +37,10 @@ const Carousel = ({ reqData }) => {
             <div
               id="slide"
               key={slideIdx}
-              className="w-[165px] h-[165px] inline-block p-2 mx-1 cursor-pointer hover:scale-105 ease-in-out duration-300 bg-yellow-200 border-2"
+              className="w-[165px] h-[165px] inline-block p-2 mx-1 cursor-pointer hover:scale-105 ease-in-out duration-300 bg-blue-200 "
             >
+              <div className="w-[165px]">{item.content}</div>
               <div className="text-xs text-gray-700">{item.interviewee}</div>
-              <div >{item.content}</div>
             </div>
           ))}
         </div>

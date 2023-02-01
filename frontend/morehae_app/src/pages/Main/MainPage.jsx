@@ -43,7 +43,7 @@ const MainPage = () => {
   // 직군 리스트 가져오기
   const getRoleList = () => {
     axios
-      .get("http://i8d212.p.ssafy.io:8080/roadmaps/roles")
+      .get("http://i8d212.p.ssafy.io:8000/roadmaps/roles")
       .then((Response) => {
         setRoleList((oldState) => {
           return Response.data;
@@ -57,7 +57,7 @@ const MainPage = () => {
   // 상황 리스트 가져오기
   const getSituationList = (role) => {
     axios
-      .get(`http://i8d212.p.ssafy.io:8080/roadmaps/roles/${role.id}`)
+      .get(`http://i8d212.p.ssafy.io:8000/roadmaps/roles/${role.id}`)
       .then((Response) => {
         setSituationList((oldState) => {
           return Response.data;
@@ -70,7 +70,7 @@ const MainPage = () => {
 
   const getRoadmap = (situation) => {
     axios
-      .get(`http://i8d212.p.ssafy.io:8080/roadmaps/track/${situation.id}`)
+      .get(`http://i8d212.p.ssafy.io:8000/roadmaps/track/${situation.id}`)
       .then((Response) => {
         setNodesDataJSON((oldState) => {
           return Response.data;
@@ -85,14 +85,26 @@ const MainPage = () => {
   }
 
   // 로드맵 상세 모달 데이터 가져오기
-  const getData = useCallback(async () => {
-    const res = await fetch(
-      `http://i8d212.p.ssafy.io:8080/roadmaps/node/${nodeId}`
-    ).then((res) => res.json());
+  const loadNodeDetail = (id) => {
+    setNodeId(() => id);
+    setCheck(!check);
+  };
 
-    setReqData(res);
+  const getData = useCallback(async () => {
+    await axios
+      .get(`http://i8d212.p.ssafy.io:8000/roadmaps/node/${nodeId}`)
+      .then((res) => setReqData(res.data));
+
+    // fetch 썼을 때
+    // const res = await fetch(
+    //   `http://i8d212.p.ssafy.io:8000/roadmaps/node/${nodeId}`
+    // ).then((res) => res.json());
+    // setReqData(res);
+
     setShowModal(() => !showModal);
+    // eslint-disable-next-line
   }, [check]);
+
 
   useEffect(() => {
     getData();
@@ -135,7 +147,7 @@ const MainPage = () => {
         {/* 로드맵 컴포넌트*/}
         <Roadmap
           nodesDataJSON={nodesDataJSON}
-          handleClickButton={handleClickButton}
+          handleClickButton={loadNodeDetail}
         />
 
         <Modal

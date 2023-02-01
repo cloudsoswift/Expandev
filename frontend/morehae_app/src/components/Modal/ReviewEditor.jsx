@@ -1,4 +1,8 @@
-import React, { useRef, useState } from "react";
+
+import React, {  useRef, useState } from "react";
+// import { FaStar } from "react-icons/fa";
+
+
 
 const ReviewEditor = ({ onCreate }) => {
   const contentInput = useRef();
@@ -10,6 +14,9 @@ const ReviewEditor = ({ onCreate }) => {
     difficulty: 5,
   });
 
+  
+
+
   const handleChangeState = (e) => {
     setState({
       ...state,
@@ -17,9 +24,13 @@ const ReviewEditor = ({ onCreate }) => {
     });
   };
 
+
+
   const handleSubmit = (e) => {
     if (state.content.length < 5) {
       contentInput.current.focus();
+      alert("5글자 이상 입력해주세요")
+      return
     }
     onCreate(state.user, state.content, state.importance, state.difficulty);
     console.log(state);
@@ -35,6 +46,8 @@ const ReviewEditor = ({ onCreate }) => {
   return (
     <div className="p-3 bg-slate-100">
       <h2 className="mb-2">리뷰 작성</h2>
+
+      
       <div className="mb-1">
         <span>중요도</span>
         <select
@@ -50,6 +63,7 @@ const ReviewEditor = ({ onCreate }) => {
           <option value={5}>5</option>
         </select>
       </div>
+
       <div className="mb-2">
         <span>난이도</span>
         <select
@@ -65,6 +79,7 @@ const ReviewEditor = ({ onCreate }) => {
           <option value={5}>5</option>
         </select>
       </div>
+
       <div>
         <input
           name="user"
@@ -92,6 +107,7 @@ const ReviewEditor = ({ onCreate }) => {
           저장
         </button>
       </div>
+
     </div>
   );
 };
