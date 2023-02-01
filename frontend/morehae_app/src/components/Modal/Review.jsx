@@ -18,7 +18,7 @@ const Review = ({ reqData, nodeId }) => {
       })
       .catch((err) => console.log(err));
     // dataId.current += 1;
-    setData([...data]);
+    setData([newItem, ...data]);
   };
 
   const onDelete = (targetId) => {

@@ -18,7 +18,7 @@ const Modal = ({ isVisible, onClose, children }) => {
   return createPortal(
     // modal blur
     <div
-      className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-end items-center z-20"
+      className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-end items-center"
       id="wrapper"
       onClick={handleClose}
     >
