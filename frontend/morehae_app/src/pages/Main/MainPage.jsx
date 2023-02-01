@@ -44,7 +44,7 @@ const MainPage = () => {
   // 직군 리스트 가져오기
   const getRoleList = () => {
     axios
-      .get("https://ssekerapi.site/roadmaps/roles")
+      .get("http://i8d212.p.ssafy.io:8080/roadmaps/roles")
       .then((Response) => {
         setRoleList((oldState) => {
           return Response.data;
@@ -58,7 +58,7 @@ const MainPage = () => {
   // 상황 리스트 가져오기
   const getSituationList = (role) => {
     axios
-      .get(`https://ssekerapi.site/roadmaps/roles/${role.id}`)
+      .get(`http://i8d212.p.ssafy.io:8080/roadmaps/roles/${role.id}`)
       .then((Response) => {
         setSituationList((oldState) => {
           return Response.data;
@@ -71,7 +71,7 @@ const MainPage = () => {
 
   const getRoadmap = (situation) => {
     axios
-      .get(`https://ssekerapi.site/roadmaps/track/${situation.id}`)
+      .get(`http://i8d212.p.ssafy.io:8080/roadmaps/track/${situation.id}`)
       .then((Response) => {
         setNodesDataJSON((oldState) => {
           return Response.data;

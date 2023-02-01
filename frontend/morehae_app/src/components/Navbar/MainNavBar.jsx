@@ -29,16 +29,16 @@ const MainNavBar = () => {
   const buttonStyle = "border-2 border-black rounded-full p-2 mx-2";
 
   return (
-    <nav className="h-20 bg-white sticky top-0 z-10">
+    <nav className="h-20 bg-white sticky top-0 z-10 border-b">
       <div className="grid grid-cols-12 auto-cols-auto h-full items-center">
         <div className="logo col-span-3 pl-8 justify-items-center">
-          <Link className="text-4xl font-bold" to="/">
-            MoreHae
+          <Link className="text-4xl font-bold" id="logo" to="/">
+            개발바닥🐾
           </Link>
         </div>
         <div className="roadmapBtn col-span-3 justify-self-end">
           <Link
-            className="hover:text-indigo-500/75 rounded-xl p-2 px-8 text-2xl font-bold"
+            className="hover:text-indigo-500/75 rounded-xl p-2 px-8 text-2xl"
             to="/roadmap"
           >
             로드맵
@@ -46,7 +46,7 @@ const MainNavBar = () => {
         </div>
         <div className="blogBtn col-span-3 justify-self-start">
           <Link
-            className="hover:text-indigo-500/75 rounded-xl p-2 px-8 text-2xl font-bold"
+            className="hover:text-indigo-500/75 rounded-xl p-2 px-8 text-2xl"
             to="/blog"
           >
             블로그
@@ -55,10 +55,10 @@ const MainNavBar = () => {
         {!isLogin && (
           <div className="signInBtn col-span-3 justify-self-end pr-4">
             <Link
-              className="border-4 border-indigo-500/75 rounded-xl p-2 px-8 text-xl font-bold"
+              className="transition border-2 border-blue-400 rounded-lg p-2 px-8 text-2xl hover:border-blue-600 text-blue-400"
               to="/login"
             >
-              Sign In
+              로그인
             </Link>
           </div>
         )}
@@ -83,9 +83,9 @@ const MainNavBar = () => {
                     <div className="flex justify-center self-center">
                       <BsFillPersonFill size="48" className={buttonStyle} />
                     </div>
-                    <div className="grid justify-center items-center h-full border">
-                      <span>{user.nickname}</span>
-                      <span>{user.email}</span>
+                    <div className="grid-cols-1 text-center items-center h-full border grid">
+                      <div className="text-xl"title={user.nickname}>{user.nickname}</div>
+                      <div className="text-sm text-black/70 overflow-hidden whitespace-nowrap text-ellipsis" title={user.email}>{user.email}</div>
                     </div>
                   </div>
                 </Menu.Item>
