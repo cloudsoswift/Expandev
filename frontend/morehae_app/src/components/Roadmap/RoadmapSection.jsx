@@ -2,7 +2,7 @@ import Julgi from "@/components/Roadmap/components/Julgi";
 import MainNode from "@/components/Roadmap/components/MainNode";
 import SubNode from "@/components/Roadmap/components/SubNode";
 
-import { useEffect } from 'react'
+// import { useEffect } from 'react'
 
 const RoadmapSection = ({
   roadmapWidth,
