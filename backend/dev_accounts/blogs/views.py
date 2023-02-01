@@ -90,9 +90,11 @@ def article(request, article_id=None):  # 게시글 디테일
     elif request.method == 'PUT' or 'POST':  # 수정, 작성
         entered_tags = request.POST.getlist('tags')
         data = {
-            'title': request.data['title'],
-            'content': request.data['content'],
+            'title': request.data.get('title'),
+            'content': request.data.get('content'),
         }
+        if  request.data.get('overview'):
+            data['overview'] = request.data.get('overview')
         tags = []
         if entered_tags:
             for tag in entered_tags:
