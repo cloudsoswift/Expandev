@@ -1,4 +1,3 @@
-
 import QuestionList from "@/components/Index/QuestionList";
 import { Link } from "react-router-dom";
 import FeatureList from "@/components/Index/FeatureList";
