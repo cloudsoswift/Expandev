@@ -2,7 +2,7 @@ import Editor from "@toast-ui/editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { useEffect } from "react";
 import { useState } from "react";
-import http from "@/utils/http";
+import httpWithURL from "@/utils/http";
 import TagCombobox from "@/components/Blog/TagCombobox";
 import TagList from "../../components/Blog/TagList";
 import { useRef } from "react";
@@ -25,7 +25,7 @@ const BlogWritePage = () => {
   const [thumbnailSrc, setThumbailSrc] = useState("");
   const [tags, setTags] = useState([]);
   // const request = http(process.env.REACT_APP_BLOG_URL);
-  const request = http("http://i8d212.p.ssafy.io:9000/blogs");
+  const request = httpWithURL("http://i8d212.p.ssafy.io:9000/blogs");
   const hookMap = {
     addImageBlobHook: (blob, callback) => {
       console.log(blob);
@@ -75,14 +75,6 @@ const BlogWritePage = () => {
         hideModeSwitch: true,
         hooks: hookMap,
         placeholder: "내용을 입력해주세요.",
-        // toolbarItems: [
-        //   // 툴바 옵션 설정
-        //   ["heading", "bold", "italic", "strike"],
-        //   ["hr", "quote"],
-        //   ["ul", "ol", "task", "indent", "outdent"],
-        //   ["table", "image", "link"],
-        //   ["code", "codeblock"],
-        // ],
       })
     );
     setisEditorRendered(true);
@@ -106,6 +98,7 @@ const BlogWritePage = () => {
   };
   const overviewIsEmpty = overview.trim() === "";
   const overviewMaxLengthValid = overview.trim().length;
+
   // thumbnail 이미지 관련 Handler
   const handleThumbnailChange = (e) => {
     const reader = new FileReader();
@@ -129,7 +122,7 @@ const BlogWritePage = () => {
     let body = new FormData();
     body.append("title", title.trim());
     body.append("content", editor.getMarkdown());
-    if (overview !== "") {
+    if (!overviewIsEmpty) {
       body.append("overview", "");
     }
     if (!thumbnail) {
@@ -187,7 +180,7 @@ const BlogWritePage = () => {
                 (선택)썸네일 파일 첨부
                 <br />
               </span>
-              <div className="grid col-span-1 grid-cols-2 h-full">
+              <div className="grid grid-cols-2 h-full">
                 <input
                   className="file:border-0 file:py-2 file:px-4 file:rounded-lg"
                   type="file"
