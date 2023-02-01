@@ -29,6 +29,8 @@ const ReviewEditor = ({ onCreate }) => {
   const handleSubmit = (e) => {
     if (state.content.length < 5) {
       contentInput.current.focus();
+      alert("5글자 이상 입력해주세요")
+      return
     }
     onCreate(state.user, state.content, state.importance, state.difficulty);
     console.log(state);
