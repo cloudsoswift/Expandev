@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 import { Menu } from "@headlessui/react";
 
@@ -58,9 +59,12 @@ const ReviewListItem = ({
             </Menu>
           </div>
         </div>
+
         <div className="text-xs py-1">
-          {id}
-          작성일자 {new Date(created_date).toLocaleString()}
+          {/* {id} */}
+          {user}
+           | 작성일자 {new Date(created_date).toLocaleString()}
+          {/* <span><FaRegHeart /></span> */}
         </div>
 
         {isEdit ? (
