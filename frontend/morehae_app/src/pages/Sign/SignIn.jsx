@@ -28,7 +28,7 @@ const SignIn = () => {
     })
   }
 
-  // 제출 이벤트 핸들러
+  // 로그인 form 이벤트 핸들러
   const handleLogin = (e) => {
     e.preventDefault();
     console.log(email, password);
