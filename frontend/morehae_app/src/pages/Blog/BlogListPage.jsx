@@ -28,7 +28,7 @@ const BlogListPage = () => {
   // 트렌드 탭의 게시글 리스트 가져오기
   const getTrendPostList = () => {
     axios
-      .get(`http://i8d212.p.ssafy.io:9000/blogs?sort_type=hit&count=${trendPage}`)
+      .get(`${process.env.REACT_APP_BLOG_URL}?sort_type=hit&count=${trendPage}`)
       .then((Response) => {
         console.log("트렌드 탭 게시글 리스트:", Response.data.articles);
         setPostListTrend((oldState) => {
@@ -47,7 +47,7 @@ const BlogListPage = () => {
   // 최신 탭의 게시글 리스트 가져오기
   const getRecentPostList = () => {
     axios
-      .get(`http://i8d212.p.ssafy.io:9000/blogs?sort_type=created_at&count=${recentPage}`)
+      .get(`${process.env.REACT_APP_BLOG_URL}?sort_type=created_at&count=${recentPage}`)
       .then((Response) => {
         console.log("최신 탭 게시글 리스트:", Response.data.articles);
         setPostListRecent((oldState) => {
@@ -114,12 +114,12 @@ const BlogListPage = () => {
         </div>
         
         {/* 게시글 리스트 UI */}
-          <div className="flex flex-wrap w-[76rem]">
-            {activeTabIndex === 0 ?
-              (postListTrend.length === 0 ? <div>트렌드 글 없음</div> : postListTrend.map(post => <PostPreview key={post.id} post={post}/>) ):
-              (postListTrend.length === 0 ? <div>최신 글 없음</div> : postListRecent.map(post => <PostPreview key={post.id} post={post}/>) )
-            }
-          </div>
+        <div className="flex flex-wrap w-[76rem]">
+          {activeTabIndex === 0 ?
+            (postListTrend.length === 0 ? <div>트렌드 글 없음</div> : postListTrend.map(post => <Link to={`/blog/post/${post.id}`}><PostPreview key={post.id} post={post}/></Link>) ):
+            (postListTrend.length === 0 ? <div>최신 글 없음</div> : postListRecent.map(post => <Link to={`/blog/post/${post.id}`}><PostPreview key={post.id} post={post}/></Link>) )
+          }
+        </div>
       </div>
     </div>
   )
