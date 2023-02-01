@@ -12,7 +12,7 @@ const tags = [
   "웹페이지를 만들어볼까",
 ];
 
-const TagCombobox = ({onAddTag}) => {
+const TagCombobox = ({onAddTag, tagList}) => {
   const [selectedTag, setSelectedTag] = useState("");
   const [query, setQuery] = useState("");
 
@@ -33,6 +33,10 @@ const TagCombobox = ({onAddTag}) => {
     // Tag가 선택된 상태에서 Enter 입력시 Tag 추가.
     if (e.key === "Enter" && selectedTag !== "") {
       console.log(selectedTag);
+      console.log(tagList);
+      if(tagList.length >= 10){
+        return;
+      }
       onAddTag((prevTagList)=>{
         let newTagList = [...prevTagList];
         if(!prevTagList.includes(selectedTag)){
@@ -80,6 +84,7 @@ const TagCombobox = ({onAddTag}) => {
           ))}
         </Combobox.Options>
       </Transition>
+      <span className="text-sm">{tagList.length}/10</span>
     </Combobox>
   );
 };
