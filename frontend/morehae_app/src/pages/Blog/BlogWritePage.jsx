@@ -19,10 +19,12 @@ const BlogWritePage = () => {
   const [tags, setTags] = useState([]);
   const [isEditorRendered, setisEditorRendered] = useState(false);
   const request = http(process.env.REACT_APP_BLOG_URL);
+  console.log(request.defaults);
   const hookMap = {
     addImageBlobHook: (blob, callback) => {
       console.log(blob);
       console.log(blob.size);
+      console.log(encodeURIComponent(blob.name));
       if(blob.size > MAX_UPLOAD_IMAGE_SIZE){
         alert("첨부하는 이미지는 5MB 이하여야 합니다.");
         return;
@@ -32,17 +34,17 @@ const BlogWritePage = () => {
         return;
       }
       // if
-      // const body = {
-      //   image: blob,
-      // }
-      // request.post("article/temp-img", body, {
-      //   withCredentials: true,
-      //   headers: {
-      //     "Content-Type": "multipart/form-data",
-      //   },
-      // }).then((response)=>response.json())
-      // .then((data)=>{callback(data, "image")})
-      // .catch((e)=>{callback('image-load-fail', '이미지 로딩 실패.')});
+      const body = {
+        image: blob,
+      }
+      request.post("article/temp-img", body, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }).then((response)=>response.json())
+      .then((data)=>{callback(data, blob.name)})
+      .catch((e)=>{callback('image-load-fail', '이미지 로딩 실패.')});
     },
   };
 
@@ -77,13 +79,20 @@ const BlogWritePage = () => {
   const handleTitleInputChange = (e) => {
     setTitle(e.target.value);
   };
-  const titleIsValid = !(title.trim() === "");
+  // 제목 Validation을 위한 값
+  const titleIsEmpty = title.trim() === "";
+  const titleMaxLengthValid = title.trim().length < 100;
+  const titleIsValid = !(titleIsEmpty) && titleMaxLengthValid;
   const handleTitleInputBlur = (e) => {
     setTitleTouched(true);
   }
+  // 
   const handleSendPost = () => {
+    if(!titleIsValid){
+      return;
+    }
     let body = new FormData();
-    body.append("title", title);
+    body.append("title", title.trim());
     body.append("content", editor.getMarkdown());
     for (let tag of tags) {
       body.append("tags", tag);
@@ -120,7 +129,7 @@ const BlogWritePage = () => {
             onChange={handleTitleInputChange}
             onBlur={handleTitleInputBlur}
           />
-          {!titleIsValid && titleTouched && <div className="text-xs text-red-500">제목은 필수입니다.</div>}
+          {!titleIsValid && titleTouched && <div className="text-xs text-red-500">{titleIsEmpty ? "제목은 필수입니다." : "제목은 100자 이하여야 합니다."}</div>}
         </div>
         <div>
           <TagCombobox onAddTag={setTags} />
