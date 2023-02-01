@@ -43,7 +43,7 @@ const MainPage = () => {
   // 직군 리스트 가져오기
   const getRoleList = () => {
     axios
-      .get("http://i8d212.p.ssafy.io:8080/roadmaps/roles")
+      .get(`${process.env.REACT_APP_SERVER_URL}/roadmaps/roles`)
       .then((Response) => {
         setRoleList((oldState) => {
           return Response.data;
@@ -57,7 +57,7 @@ const MainPage = () => {
   // 상황 리스트 가져오기
   const getSituationList = (role) => {
     axios
-      .get(`http://i8d212.p.ssafy.io:8080/roadmaps/roles/${role.id}`)
+      .get(`${process.env.REACT_APP_SERVER_URL}/roadmaps/roles/${role.id}`)
       .then((Response) => {
         setSituationList((oldState) => {
           return Response.data;
@@ -70,7 +70,7 @@ const MainPage = () => {
 
   const getRoadmap = (situation) => {
     axios
-      .get(`http://i8d212.p.ssafy.io:8080/roadmaps/track/${situation.id}`)
+      .get(`${process.env.REACT_APP_SERVER_URL}/roadmaps/track/${situation.id}`)
       .then((Response) => {
         setNodesDataJSON((oldState) => {
           return Response.data;
@@ -87,7 +87,7 @@ const MainPage = () => {
   // 로드맵 상세 모달 데이터 가져오기
   const getData = useCallback(async () => {
     const res = await fetch(
-      `http://i8d212.p.ssafy.io:8080/roadmaps/node/${nodeId}`
+      `${process.env.REACT_APP_SERVER_URL}/roadmaps/node/${nodeId}`
     ).then((res) => res.json());
 
     setReqData(res);
