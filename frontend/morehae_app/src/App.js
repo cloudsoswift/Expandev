@@ -9,6 +9,7 @@ import BlogListPage from "@/pages/Blog/BlogListPage";
 import BlogPostPage from "@/pages/Blog/BlogPostPage";
 import BlogEditPage from "@/pages/Blog/BlogEditPage";
 import BlogWritePage from "@/pages/Blog/BlogWritePage";
+import UserMainPage from "@/pages/User/UserMainPage";
 
 import "@/style/basic.css";
 
@@ -30,6 +31,7 @@ function App() {
           </Route>
           <Route path="write" element={<BlogWritePage />} />
         </Route>
+        <Route path="user" element={<UserMainPage />} />
       </Routes>
     </Fragment>
   );
