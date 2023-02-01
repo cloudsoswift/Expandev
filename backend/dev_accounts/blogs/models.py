@@ -4,6 +4,7 @@ from django.conf import settings
 class Tag(models.Model):
     tag = models.CharField(max_length=100)
 
+
 class Article(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) 
     title = models.CharField(max_length=100)
@@ -27,4 +28,10 @@ class Comment(models.Model):
     like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="like_comments", blank=True)
 
 
+class ArticleTempImage(models.Model):
+    image = models.ImageField(upload_to='temp_images/')
 
+
+class ArticleImage(models.Model):
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    image_path = models.CharField(max_length=255)
