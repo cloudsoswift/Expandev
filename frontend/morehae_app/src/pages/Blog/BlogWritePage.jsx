@@ -25,6 +25,7 @@ const BlogWritePage = () => {
   const [thumbnailSrc, setThumbailSrc] = useState("");
   const [tags, setTags] = useState([]);
   const request = http(process.env.REACT_APP_BLOG_URL);
+  // const request = http("http://i8d212.p.ssafy.io:8000/blogs");
   console.log(request.defaults);
   const hookMap = {
     addImageBlobHook: (blob, callback) => {
@@ -132,6 +133,9 @@ const BlogWritePage = () => {
     if (overview !== "") {
       body.append("overview", "");
     }
+    if (!thumbnail) {
+      body.append("thumnail", thumbnail);
+    }
     for (let tag of tags) {
       body.append("tags", tag);
     }
@@ -184,14 +188,14 @@ const BlogWritePage = () => {
                 (선택)썸네일 파일 첨부
                 <br />
               </span>
-              <div className="grid grid-cols-2 h-full">
+              <div className="grid col-span-1 grid-cols-2 h-full">
                 <input
                   className="file:border-0 file:py-2 file:px-4 file:rounded-lg"
                   type="file"
                   onChange={handleThumbnailChange}
                   accept="image/png, image/jpeg"
                 />
-                <div className="inline-block h-full border">
+                <div className="h-full border">
                   {thumbnail && (
                     <img
                       className="h-full object-cover"
@@ -202,15 +206,15 @@ const BlogWritePage = () => {
                 </div>
               </div>
             </div>
-            <div>
+            <div className="">
               <span className="text-sm text-gray-500">
-                (선택)썸네일 파일 첨부
+                (선택)글 요약
                 <br />
               </span>
               <textarea
                 className="px-3 py-2 border bg-white text-2xl rounded-md shadow-sm placeholder-slate-40 w-full resize-none"
                 rows="4"
-                placeholder="(선택)글 요약을 입력해주세요."
+                placeholder="글 요약을 입력해주세요."
                 value={overview}
                 onChange={handleOverviewChange}
               />
@@ -218,7 +222,7 @@ const BlogWritePage = () => {
           </div>
         </div>
         <div>
-          <TagCombobox onAddTag={setTags} />
+          <TagCombobox onAddTag={setTags} tagList={tags}/>
         </div>
         <div className="h-full my-1">
           <TagList TagList={tags} onDelete={setTags} />
