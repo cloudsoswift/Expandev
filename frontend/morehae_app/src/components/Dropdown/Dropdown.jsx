@@ -7,6 +7,7 @@ import { BsChevronDown } from 'react-icons/bs'
 function Dropdown({items, selectedItem, setSelectedItem}) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
+  const [isDisable, setIsDisable] = useState(true);
 
   // 드롭다운 클릭에 대한 핸들러
   const handleOpen = (e) => {
@@ -58,9 +59,17 @@ function Dropdown({items, selectedItem, setSelectedItem}) {
     }
   }, [])
 
+  useEffect(() => {
+    if (items?.length > 0) {
+      setIsDisable(false);
+    } else {
+      setIsDisable(true);
+    }
+  }, [items])
+
   return (
     <div className="flex-col relative w-full" ref={menuRef}>
-      <button onClick={handleOpen} className="transition bg-white w-full p-4 rounded-lg border hover:border-blue-500 flex justify-between font-extralight items-center">
+      <button onClick={handleOpen} disabled={isDisable} className="transition bg-white w-full p-4 rounded-lg border hover:border-blue-500 flex justify-between font-extralight items-center">
         <div>{selectedItem.content}</div>
         <div><BsChevronDown/></div>
       </button>
