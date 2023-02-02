@@ -29,6 +29,6 @@ class User(AbstractUser):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile")
     introduce = models.TextField(default='아직 자기소개가 없습니다.', blank=True, null=True)
     profile_image = models.ImageField(default='media/default.png')
