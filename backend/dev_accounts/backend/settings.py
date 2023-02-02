@@ -88,7 +88,8 @@ MIDDLEWARE = [
 CORS_ORIGIN_WHITELIST= [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
-    # 'http://http://i8d212.p.ssafy.io'
+    'http://i8d212.p.ssafy.io:80',
+    'http://i8d212.p.ssafy.io:3000',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -206,14 +207,6 @@ DATABASES = {
         'PORT': get_secret('TEST_PORT')
     }
 }
-
-# TEST Sqlite DB
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
