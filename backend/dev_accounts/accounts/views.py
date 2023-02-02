@@ -6,6 +6,12 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import get_list_or_404, get_object_or_404
 
+from blogs.serializers import ArticleSerializer, CommentSerializer
+from blogs.models import Article, Comment
+
+from roadmaps.models import Review, Node
+from roadmaps.serializer import ReviewSerializer, Nodeserializer
+
 
 @api_view(['GET'])
 def userlist(request):
@@ -22,12 +28,6 @@ def userchange(request):
     return Response(serializer.data)
 
 
-@api_view(['GET'])
-def get_user_profile(request, user_id):
-    user = get_object_or_404(Profile, user=user_id)
-    serializer = UserProfileImage(user)
-    return Response(serializer.data, status=status.HTTP_200_OK)
-
 
 @api_view(['PUT'])
 def set_profile_image(request):
@@ -41,3 +41,37 @@ def set_profile_image(request):
         return Response(status=status.HTTP_201_CREATED)
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def get_user_profile(request, user_id):
+    user = get_object_or_404(Profile, user=user_id)
+    serializer = UserProfileImage(user)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def get_user_blogs(request, user_id):
+    profile_user = get_object_or_404(User, id=user_id)
+    articles = ArticleSerializer(instance = Article.objects.filter(user=profile_user), many=True, context={'user': request.user}) #작성한 게시글
+    comments = CommentSerializer(instance = Comment.objects.filter(user=profile_user), many=True, context={'user': request.user}) #작성한 댓글
+    data = {
+        'articles': articles.data,
+        'comments': comments.data
+    }
+    return Response(data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def get_user_roadmaps(request, user_id):
+    profile_user = get_object_or_404(User, id=user_id)
+    reviews = ReviewSerializer(instance = Review.objects.filter(user=profile_user), many=True) #작성한 리뷰
+    clear_nodes = Nodeserializer(profile_user.clear_nodes.all(), many=True, context={'user': request.user}) #클리어한 노드
+    data = {
+        'reviews':reviews.data,
+        'clear_nodes':clear_nodes.data
+    }
+    return Response(data, status=status.HTTP_200_OK)
+
+
+
+
