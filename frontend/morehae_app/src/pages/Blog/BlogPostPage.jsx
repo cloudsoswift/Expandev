@@ -103,9 +103,12 @@ const BlogPostPage = () => {
     getReplyData();
   }, []);
 
+  // 좋아요 버튼 클릭 이벤트 핸들러
   const handleLike = () => {
 
   }
+
+  // 글 삭제 버튼 클릭 이벤트 핸들러
   const handleDeletePost = () => {
 
   }
@@ -128,7 +131,7 @@ const BlogPostPage = () => {
             // 작성자 닉네임과 현재 로그인한 유저 닉네임이 같을 경우 수정, 삭제 버튼 표시
             userInfo && userInfo.nickname === post.username &&
             <span className="justify-self-end">
-              <Link to={`/blog/post/${params.postId}/edit`} className="px-6 py-3 border rounded-xl">수정</Link>
+              <Link to={`/blog/post/${params.postId}/edit`} state={post} className="px-6 py-3 border rounded-xl">수정</Link>
               <button className="px-6 py-2 border rounded-xl" onClick={handleDeletePost}>삭제</button>
             </span>
           }
