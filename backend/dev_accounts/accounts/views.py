@@ -1,16 +1,17 @@
 from .models import User, Profile
-from .serializers import UserSerializer, UserProfileSerializer
+from .serializers import UserSerializer, UserProfileImage
+from blogs.models import Article, Comment
+from blogs.serializers import ArticleSerializer, CommentSerializer
+from roadmaps.models import Review, Node
+from roadmaps.serializer import ReviewSerializer, Nodeserializer
 
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from django.contrib.auth import get_user_model
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 from django.shortcuts import get_list_or_404, get_object_or_404
-
-from blogs.serializers import ArticleSerializer, CommentSerializer
-from blogs.models import Article, Comment
-
-from roadmaps.models import Review, Node
-from roadmaps.serializer import ReviewSerializer, Nodeserializer
 
 
 @api_view(['GET'])
@@ -41,6 +42,29 @@ def set_profile_image(request):
         return Response(status=status.HTTP_201_CREATED)
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def check_duplicate_email(request, email):
+    try:
+        validate_email(email)
+    except ValidationError:
+        return Response({"message" : "VALIDATION_ERROR"}, status=status.HTTP_400_BAD_REQUEST)
+    if get_user_model().objects.filter(email=email).exists():
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def check_duplicate_nickname(request, nickname):
+    if nickname.count > 15:
+        return Response({'message': 'Invalid nickname'}, status=status.HTTP_400_BAD_REQUEST) 
+
+    if get_user_model().objects.filter(nickname=nickname).exists():
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
