@@ -1,5 +1,5 @@
 from .models import User, Profile
-from .serializers import UserSerializer, UserProfileImage
+from .serializers import UserSerializer, UserProfileSerializer
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -35,7 +35,7 @@ def set_profile_image(request):
     data = request.data
 
     profile = Profile.objects.get_or_create(user=user)[0]
-    serializer = UserProfileImage(profile, data=data)
+    serializer = UserProfileSerializer(profile, data=data)
     if serializer.is_valid():
         serializer.save(user=user)
         return Response(status=status.HTTP_201_CREATED)
@@ -46,7 +46,7 @@ def set_profile_image(request):
 @api_view(['GET'])
 def get_user_profile(request, user_id):
     user = get_object_or_404(Profile, user=user_id)
-    serializer = UserProfileImage(user)
+    serializer = UserProfileSerializer(user)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -61,7 +61,7 @@ def get_user_blogs(request, user_id):
     data = {
         'post_articles': post_articles.data,
         'like_articles': like_articles.data,
-        'comments': comments.data
+        'post_comments': comments.data
     }
     return Response(data, status=status.HTTP_200_OK)
 

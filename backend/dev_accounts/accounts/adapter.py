@@ -15,6 +15,6 @@ class CustomAccountAdapter(DefaultAccountAdapter):
         user.news_feed_push_yn = data.get('news_feed_push_yn')
         user.noti_push_yn = data.get('noti_push_yn')
         user.position = data.get('position')
-
+        user.id = data.get('id')
         user.save()
         return user
