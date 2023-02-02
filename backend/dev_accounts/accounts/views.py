@@ -44,15 +44,16 @@ def set_profile_image(request):
 
 
 @api_view(['GET'])
-def get_user_profile(request, user_id):
-    user = get_object_or_404(Profile, user=user_id)
-    serializer = UserProfileSerializer(user)
+def get_user_profile(request, nickname):
+    user = get_object_or_404(User, nickname=nickname)    
+    profile_user = get_object_or_404(Profile, user=user)
+    serializer = UserProfileSerializer(profile_user)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
-def get_user_blogs(request, user_id):
-    profile_user = get_object_or_404(User, id=user_id)
+def get_user_blogs(request, nickname):
+    profile_user = get_object_or_404(User, nickname=nickname)
     post_articles = ArticleSerializer(instance=Article.objects.filter(
         user=profile_user), many=True, context={'user': request.user})
     like_articles = ArticleSerializer(instance=profile_user.like_articles, many=True, context={'user': request.user})
@@ -67,8 +68,8 @@ def get_user_blogs(request, user_id):
 
 
 @api_view(['GET'])
-def get_user_roadmaps(request, user_id):
-    profile_user = get_object_or_404(User, id=user_id)
+def get_user_roadmaps(request, nickname):
+    profile_user = get_object_or_404(User, nickname=nickname)
     reviews = ReviewSerializer(instance=Review.objects.filter(
         user=profile_user), many=True)
     clear_nodes = Nodeserializer(profile_user.clear_nodes.all(
