@@ -117,7 +117,7 @@ const SignUp = () => {
     */
     console.log("제출!!");
     console.log(emailRef.current, passwordRef.current, passwordMatchRef.current, nicknameRef.current, position.content);
-    axios.post('http://i8d212.p.ssafy.io:8080/accounts/registration', {
+    axios.post('http://i8d212.p.ssafy.io:8000/accounts/registration', {
       email: emailRef.current,
       password1: passwordRef.current,
       password2: passwordMatchRef.current,
