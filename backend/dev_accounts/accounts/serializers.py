@@ -28,6 +28,7 @@ class CustomRegisterSerializer(RegisterSerializer):
     news_feed_push_yn = serializers.BooleanField(required = False)
     noti_push_yn = serializers.BooleanField(required = False)
     position = serializers.CharField(required = True)
+    
 
     def get_cleaned_data(self):
         data = super().get_cleaned_data()
@@ -47,22 +48,29 @@ class CustomRegisterSerializer(RegisterSerializer):
 # 유저 디테일 시리얼라이저
 class CustomUserDetailSerializer(UserDetailsSerializer):
     class Meta(UserDetailsSerializer.Meta):
-        fields = ('email', 'nickname', 'login_type', 'is_active','stat', 'phone_number', 'svc_use_pcy_agmt_yn', 'ps_info_proc_agmt_yn', 'mkt_info_recv_agmt_yn', 'news_feed_push_yn', 'noti_push_yn', 'position')
+        fields = ('id','email', 'nickname', 'login_type', 'is_active','stat', 'phone_number', 'svc_use_pcy_agmt_yn', 'ps_info_proc_agmt_yn', 'mkt_info_recv_agmt_yn', 'news_feed_push_yn', 'noti_push_yn', 'position')
         read_only_fields = ('email', 'password',)
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('email','nickname', 'login_type', 'stat', 'phone_number', 'svc_use_pcy_agmt_yn', 'ps_info_proc_agmt_yn', 'mkt_info_recv_agmt_yn', 'news_feed_push_yn', 'noti_push_yn', 'position')
+        fields = ('id','email','nickname', 'login_type', 'stat', 'phone_number', 'svc_use_pcy_agmt_yn', 'ps_info_proc_agmt_yn', 'mkt_info_recv_agmt_yn', 'news_feed_push_yn', 'noti_push_yn', 'position')
 
 
-class UserProfileImage(serializers.ModelSerializer):
+class UserProfileSerializer(serializers.ModelSerializer):
     profile_image = serializers.ImageField(use_url=True)
+    nickname = serializers.CharField(source='user.nickname', read_only=True)
+    position = serializers.CharField(source='user.position', read_only=True)
+    clear_nodes_count = serializers.IntegerField(source='user.clear_nodes.count', read_only=True)
+    like_articles_count = serializers.IntegerField(source='user.like_articles.count', read_only=True)
+    post_articles_count= serializers.IntegerField(source='user.articles.count', read_only=True)
+    post_reviews_count= serializers.IntegerField(source='user.review.count', read_only=True)
+
 
     class Meta:
         model = Profile
-        fields = ('profile_image', 'introduce',)
+        exclude = ('user','id')
         read_only_fields = ('user',)
 
     def update(self, instance, validated_data):

@@ -88,7 +88,9 @@ MIDDLEWARE = [
 CORS_ORIGIN_WHITELIST= [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
-    # 'http://http://i8d212.p.ssafy.io'
+    'http://i8d212.p.ssafy.io:80',
+    'http://i8d212.p.ssafy.io:3000',
+    'http://i8d212.p.ssafy.io',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -116,7 +118,7 @@ REST_AUTH_SERIALIZERS = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
@@ -143,7 +145,7 @@ SIMPLE_JWT = {
     'JTI_CLAIM': 'jti',
 
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
-    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    'SLIDING_TOKEN_LIFETIME': timedelta(days=1),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 ##############################################################
@@ -178,16 +180,6 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'mariadb',
-#         'USER': 'root',
-#         'PASSWORD': get_secret('PASSWORD'),
-#         'HOST': get_secret('HOST'),
-#         'PORT': get_secret('PORT')
-#     }
-# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
