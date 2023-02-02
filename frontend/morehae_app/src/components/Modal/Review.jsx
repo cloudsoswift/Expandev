@@ -26,8 +26,8 @@ const Review = ({ reqData, nodeId }) => {
         console.log(res);
       })
       .catch((err) => console.log(err));
-    // dataId.current += 1; 여기 손좀 봐주세요~
-    // setData([newItem, ...data]);
+      // 생성 즉시 반영
+    setData([...data,newItem]);
   };
 
   const onDelete = (targetId) => {
