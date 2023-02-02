@@ -18,13 +18,13 @@ const Modal = ({ isVisible, onClose, children }) => {
   return createPortal(
     // modal blur
     <div
-      className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-end items-center"
+      className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-end items-center z-20"
       id="wrapper"
       onClick={handleClose}
     >
       {/* modal bg */}
       {/* scroll을 지정할 땐 max값이 필수 */}
-      <div className="overflow-y-auto scroll-smooth  max-h-screen sm:w-[600px] right-0 top-0">
+      <div className="overflow-y-auto scroll-smooth max-h-screen sm:w-[600px] right-0 top-0 z-[999]">
         <div className=" bg-white p-2 ">{children}</div>
       </div>
     </div>,
