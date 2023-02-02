@@ -1,16 +1,15 @@
 from .models import User, Profile
 from .serializers import UserSerializer, UserProfileImage
+from blogs.models import Article, Comment
+from blogs.serializers import ArticleSerializer, CommentSerializer
+from roadmaps.models import Review, Node
+from roadmaps.serializer import ReviewSerializer, Nodeserializer
 
 from rest_framework import status
 from rest_framework.response import Response
+from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view
 from django.shortcuts import get_list_or_404, get_object_or_404
-
-from blogs.serializers import ArticleSerializer, CommentSerializer
-from blogs.models import Article, Comment
-
-from roadmaps.models import Review, Node
-from roadmaps.serializer import ReviewSerializer, Nodeserializer
 
 
 @api_view(['GET'])
@@ -18,6 +17,7 @@ def userlist(request):
     user_list = get_list_or_404(User)
     serializer = UserSerializer(user_list, many=True)
     return Response(serializer.data)
+
 
 @api_view(['PUT'])
 def userchange(request):
@@ -41,6 +41,25 @@ def set_profile_image(request):
         return Response(status=status.HTTP_201_CREATED)
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def check_duplicate_email(request):
+    email = request.data['email']
+    if get_user_model().objects.filter(email=email).exists():
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def check_duplicate_nickname(request):
+    nickname = request.data['nickname']
+    if get_user_model().objects.filter(nickname=nickname).exists():
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(status=status.HTTP_200_OK)
+
 
 @api_view(['GET'])
 def get_user_profile(request, user_id):
@@ -71,7 +90,3 @@ def get_user_roadmaps(request, user_id):
         'clear_nodes':clear_nodes.data
     }
     return Response(data, status=status.HTTP_200_OK)
-
-
-
-
