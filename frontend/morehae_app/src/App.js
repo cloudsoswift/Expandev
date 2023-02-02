@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import MainNavBar from "@/components/Navbar/MainNavBar";
-import IndexPage from "@/pages/Index/IndexPage";
+// import IndexPage from "@/pages/Index/IndexPage";
+import WelcomePage from "@/pages/Welcome/WelcomePage"
 import { Outlet, Route, Routes } from "react-router-dom";
 import MainPage from "@/pages/Main/MainPage";
 import SignIn from "@/pages/Sign/SignIn";
@@ -13,12 +14,14 @@ import UserMainPage from "@/pages/User/UserMainPage";
 
 import "@/style/basic.css";
 
+
 function App() {
   return (
     <Fragment>
       <MainNavBar />
       <Routes>
-        <Route index element={<IndexPage />} />
+        {/* <Route index element={<IndexPage />} /> */}
+        <Route index element={<WelcomePage />} />
         <Route path="roadmap" element={<MainPage />} />
         <Route path="login" element={<SignIn />} />
         <Route path="signup" element={<SignUp />} />

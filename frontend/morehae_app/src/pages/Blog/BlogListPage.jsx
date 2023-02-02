@@ -83,8 +83,16 @@ const BlogListPage = () => {
     searchBoxRef.current.classList.replace('border-blue-500', 'border-gray-400');
   };
 
-  const clickSearch = () => {
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      /* 검색 API 보내고 받아올 것 */
+      console.log(e.target.value);
+    }
+  }
+
+  const clickSearch = (e) => {
     /* 검색 API 보내고 받아올 것 */
+    console.log(searchBoxRef.current.firstChild["value"]);
   }
 
   return (
@@ -108,7 +116,7 @@ const BlogListPage = () => {
           </div>
           {/* 검색 상자 UI */}
           <div ref={searchBoxRef} className="transition rounded-md h-10 flex items-center text-sm border border-gray-400 p-2">
-            <input type="text" placeholder="검색어 입력" onFocus={handleFocus} onBlur={handleBlur} className="h-full border-none" />
+            <input type="text" placeholder="검색어 입력" onFocus={handleFocus} onBlur={handleBlur} onKeyDown={handleKeyDown} className="h-full border-none" />
             <button onClick={clickSearch} className="w-8 h-full pl-4"><BsSearch/></button>
           </div>
         </div>
@@ -116,8 +124,8 @@ const BlogListPage = () => {
         {/* 게시글 리스트 UI */}
         <div className="flex flex-wrap w-[76rem]">
           {activeTabIndex === 0 ?
-            (postListTrend.length === 0 ? <div>트렌드 글 없음</div> : postListTrend.map(post => <Link to={`/blog/post/${post.id}`}><PostPreview key={post.id} post={post}/></Link>) ):
-            (postListTrend.length === 0 ? <div>최신 글 없음</div> : postListRecent.map(post => <Link to={`/blog/post/${post.id}`}><PostPreview key={post.id} post={post}/></Link>) )
+            (postListTrend.length === 0 ? <div>트렌드 글 없음</div> : postListTrend.map(post => <Link key={post.id} to={`/blog/post/${post.id}`}><PostPreview post={post}/></Link>) ):
+            (postListTrend.length === 0 ? <div>최신 글 없음</div> : postListRecent.map(post => <Link key={post.id} to={`/blog/post/${post.id}`}><PostPreview post={post}/></Link>) )
           }
         </div>
       </div>
