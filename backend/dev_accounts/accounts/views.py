@@ -30,14 +30,13 @@ def userchange(request):
     return Response(serializer.data)
 
 
-
 @api_view(['PUT'])
 def set_profile_image(request):
     user = request.user
     data = request.data
 
     profile = Profile.objects.get_or_create(user=user)[0]
-    serializer = UserProfileImage(profile, data=data)
+    serializer = UserProfileSerializer(profile, data=data)
     if serializer.is_valid():
         serializer.save(user=user)
         return Response(status=status.HTTP_201_CREATED)
@@ -69,31 +68,38 @@ def check_duplicate_nickname(request, nickname):
 
 
 @api_view(['GET'])
-def get_user_profile(request, user_id):
-    user = get_object_or_404(Profile, user=user_id)
-    serializer = UserProfileImage(user)
+def get_user_profile(request, nickname):
+    user = get_object_or_404(User, nickname=nickname)    
+    profile_user = get_object_or_404(Profile, user=user)
+    serializer = UserProfileSerializer(profile_user)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
-def get_user_blogs(request, user_id):
-    profile_user = get_object_or_404(User, id=user_id)
-    articles = ArticleSerializer(instance = Article.objects.filter(user=profile_user), many=True, context={'user': request.user}) #작성한 게시글
-    comments = CommentSerializer(instance = Comment.objects.filter(user=profile_user), many=True, context={'user': request.user}) #작성한 댓글
+def get_user_blogs(request, nickname):
+    profile_user = get_object_or_404(User, nickname=nickname)
+    post_articles = ArticleSerializer(instance=Article.objects.filter(
+        user=profile_user), many=True, context={'user': request.user})
+    like_articles = ArticleSerializer(instance=profile_user.like_articles, many=True, context={'user': request.user})
+    comments = CommentSerializer(instance=Comment.objects.filter(
+        user=profile_user), many=True, context={'user': request.user})
     data = {
-        'articles': articles.data,
-        'comments': comments.data
+        'post_articles': post_articles.data,
+        'like_articles': like_articles.data,
+        'post_comments': comments.data
     }
     return Response(data, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
-def get_user_roadmaps(request, user_id):
-    profile_user = get_object_or_404(User, id=user_id)
-    reviews = ReviewSerializer(instance = Review.objects.filter(user=profile_user), many=True) #작성한 리뷰
-    clear_nodes = Nodeserializer(profile_user.clear_nodes.all(), many=True, context={'user': request.user}) #클리어한 노드
+def get_user_roadmaps(request, nickname):
+    profile_user = get_object_or_404(User, nickname=nickname)
+    reviews = ReviewSerializer(instance=Review.objects.filter(
+        user=profile_user), many=True)
+    clear_nodes = Nodeserializer(profile_user.clear_nodes.all(
+    ), many=True, context={'user': request.user})
     data = {
-        'reviews':reviews.data,
-        'clear_nodes':clear_nodes.data
+        'reviews': reviews.data,
+        'clear_nodes': clear_nodes.data
     }
     return Response(data, status=status.HTTP_200_OK)
