@@ -1,7 +1,7 @@
 // import { useState } from "react";
 import { Menu } from "@headlessui/react";
-import { BsFillPersonFill, BsPencilSquare } from "react-icons/bs";
-import { FaBell } from "react-icons/fa";
+import { BsPerson, BsPencilSquare } from "react-icons/bs";
+import { VscBell } from "react-icons/vsc";
 import { Link, useNavigate } from "react-router-dom";
 import NotificationList from "@/components/Navbar/NotificationList";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,19 +26,19 @@ const MainNavBar = () => {
     dispatch(userLogout(navigate));
   };
 
-  const buttonStyle = "border-2 border-black rounded-full p-2 mx-2";
+  const buttonStyle = "border border-black rounded-full mr-2";
 
   return (
     <nav className="h-20 bg-white sticky top-0 z-10 border-b">
       <div className="grid grid-cols-12 auto-cols-auto h-full items-center">
         <div className="logo col-span-3 pl-8 justify-items-center">
           <Link className="text-4xl font-bold" id="logo" to="/">
-            개발바닥🐾
+            개발자국🐾
           </Link>
         </div>
         <div className="roadmapBtn col-span-3 justify-self-end">
           <Link
-            className="hover:text-indigo-500/75 rounded-xl p-2 px-8 text-2xl"
+            className="text-gray-500 hover:text-blue-500 rounded-xl p-2 px-8"
             to="/roadmap"
           >
             로드맵
@@ -46,7 +46,7 @@ const MainNavBar = () => {
         </div>
         <div className="blogBtn col-span-3 justify-self-start">
           <Link
-            className="hover:text-indigo-500/75 rounded-xl p-2 px-8 text-2xl"
+            className="text-gray-500 hover:text-blue-500 rounded-xl p-2 px-8"
             to="/blog"
           >
             블로그
@@ -55,33 +55,33 @@ const MainNavBar = () => {
         {!isLogin && (
           <div className="signInBtn col-span-3 justify-self-end pr-4">
             <Link
-              className="transition border-2 border-blue-400 rounded-lg p-2 px-8 text-2xl hover:border-blue-600 text-blue-400"
+              className="transition border-2 border-blue-400 rounded-lg text-2xl hover:border-blue-600 text-blue-400 text-sm p-4"
               to="/login"
             >
-              로그인
+              로그인/회원가입
             </Link>
           </div>
         )}
         {isLogin && (
           <div className="userProfile col-span-3 flex justify-self-center items-center">
-            <Link className={buttonStyle + ' inline-block'} to='/blog/write'>
-              <BsPencilSquare size="24" />
+            <Link to='/blog/write'>
+              <button className="transition bg-blue-100 p-2 px-4 rounded-full mr-4 text-sm text-blue-600 hover:bg-blue-500 hover:text-white" >글 작성하기</button>
             </Link>
             <Menu>
-              <Menu.Button className={buttonStyle}>
-                <FaBell size="24" />
+              <Menu.Button>
+                <VscBell className="mr-4" size="25" />
               </Menu.Button>
               <NotificationList />
             </Menu>
             <Menu>
-              <Menu.Button className={buttonStyle}>
-                <BsFillPersonFill size="24" />
+              <Menu.Button>
+                <BsPerson size="25" />
               </Menu.Button>
               <Menu.Items className="absolute top-full bg-slate-100 shadow-md rounded-md mt-2 w-56 flex flex-col focus:outline-none py-2 border">
                 <Menu.Item>
                   <div className="w-full h-28 border-y grid grid-cols-2">
                     <div className="flex justify-center self-center">
-                      <BsFillPersonFill size="48" className={buttonStyle} />
+                      <BsPerson size="15" className={buttonStyle} />
                     </div>
                     <div className="grid-cols-1 text-center items-center h-full border grid">
                       <div className="text-xl"title={user.nickname}>{user.nickname}</div>
