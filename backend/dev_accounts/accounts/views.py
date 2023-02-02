@@ -19,6 +19,7 @@ def userlist(request):
     serializer = UserSerializer(user_list, many=True)
     return Response(serializer.data)
 
+
 @api_view(['PUT'])
 def userchange(request):
     serializer = UserSerializer(instance=User, data=request)
@@ -26,7 +27,6 @@ def userchange(request):
         serializer.save()
 
     return Response(serializer.data)
-
 
 
 @api_view(['PUT'])
@@ -42,6 +42,7 @@ def set_profile_image(request):
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET'])
 def get_user_profile(request, user_id):
     user = get_object_or_404(Profile, user=user_id)
@@ -52,10 +53,14 @@ def get_user_profile(request, user_id):
 @api_view(['GET'])
 def get_user_blogs(request, user_id):
     profile_user = get_object_or_404(User, id=user_id)
-    articles = ArticleSerializer(instance = Article.objects.filter(user=profile_user), many=True, context={'user': request.user}) #작성한 게시글
-    comments = CommentSerializer(instance = Comment.objects.filter(user=profile_user), many=True, context={'user': request.user}) #작성한 댓글
+    post_articles = ArticleSerializer(instance=Article.objects.filter(
+        user=profile_user), many=True, context={'user': request.user})
+    like_articles = ArticleSerializer(instance=profile_user.like_articles, many=True, context={'user': request.user})
+    comments = CommentSerializer(instance=Comment.objects.filter(
+        user=profile_user), many=True, context={'user': request.user})
     data = {
-        'articles': articles.data,
+        'post_articles': post_articles.data,
+        'like_articles': like_articles.data,
         'comments': comments.data
     }
     return Response(data, status=status.HTTP_200_OK)
@@ -64,14 +69,12 @@ def get_user_blogs(request, user_id):
 @api_view(['GET'])
 def get_user_roadmaps(request, user_id):
     profile_user = get_object_or_404(User, id=user_id)
-    reviews = ReviewSerializer(instance = Review.objects.filter(user=profile_user), many=True) #작성한 리뷰
-    clear_nodes = Nodeserializer(profile_user.clear_nodes.all(), many=True, context={'user': request.user}) #클리어한 노드
+    reviews = ReviewSerializer(instance=Review.objects.filter(
+        user=profile_user), many=True)
+    clear_nodes = Nodeserializer(profile_user.clear_nodes.all(
+    ), many=True, context={'user': request.user})
     data = {
-        'reviews':reviews.data,
-        'clear_nodes':clear_nodes.data
+        'reviews': reviews.data,
+        'clear_nodes': clear_nodes.data
     }
     return Response(data, status=status.HTTP_200_OK)
-
-
-
-
