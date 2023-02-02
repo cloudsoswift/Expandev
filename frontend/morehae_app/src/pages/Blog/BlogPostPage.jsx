@@ -5,6 +5,7 @@ import httpWithURL from "@/utils/http";
 import PostViewer from "../../components/Blog/PostViewer";
 import TagPill from "../../components/Blog/TagPill";
 import { useSelector } from "react-redux";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 
 const dummyReplies = [
   {
@@ -46,8 +47,7 @@ const BlogPostPage = () => {
   const [post, setPost] = useState({});
   const [replies, setReplies] = useState([]);
   const [dateString, setDateString] = useState("");
-  const userInfo = useSelector(state=>state.user.user);
-  console.log(userInfo);
+  const userInfo = useSelector((state) => state.user.user);
 
   // 게시글의 상세정보 가져오기
   const getPostData = () => {
@@ -105,13 +105,23 @@ const BlogPostPage = () => {
 
   // 좋아요 버튼 클릭 이벤트 핸들러
   const handleLike = () => {
-
-  }
+    httpWithURL(process.env.REACT_APP_BLOG_URL)
+      .post(`article/${params.postId}/like`)
+      .then((response) => {
+        if (response.data?.liked) {
+          setPost((prevPost) => {
+            return { ...prevPost, liked: true, like_users_count: prevPost.like_users_count + 1};
+          });
+        } else {
+          setPost((prevPost) => {
+            return { ...prevPost, liked: false, like_users_count: prevPost.like_users_count - 1};
+          });
+        }
+      });
+  };
 
   // 글 삭제 버튼 클릭 이벤트 핸들러
-  const handleDeletePost = () => {
-
-  }
+  const handleDeletePost = () => {};
 
   return (
     <div className="grid">
@@ -126,14 +136,33 @@ const BlogPostPage = () => {
           ))}
         </div>
         <div className="btn-area ">
-          <button className="px-2 py-2 border rounded-xl" onClick={handleLike}>좋아요</button>
+          <button className="px-2 py-2 border rounded-xl" onClick={handleLike}>
+            {post.liked ? (
+              <AiFillHeart className="inline" />
+            ) : (
+              <AiOutlineHeart className="inline" />
+            )}
+            {post.like_users_count}
+          </button>
           {
             // 작성자 닉네임과 현재 로그인한 유저 닉네임이 같을 경우 수정, 삭제 버튼 표시
-            userInfo && userInfo.nickname === post.username &&
-            <span className="justify-self-end">
-              <Link to={`/blog/post/${params.postId}/edit`} state={post} className="px-6 py-3 border rounded-xl">수정</Link>
-              <button className="px-6 py-2 border rounded-xl" onClick={handleDeletePost}>삭제</button>
-            </span>
+            userInfo && userInfo.nickname === post.username && (
+              <span className="justify-self-end">
+                <Link
+                  to={`/blog/post/${params.postId}/edit`}
+                  state={post}
+                  className="px-6 py-3 border rounded-xl"
+                >
+                  수정
+                </Link>
+                <button
+                  className="px-6 py-2 border rounded-xl"
+                  onClick={handleDeletePost}
+                >
+                  삭제
+                </button>
+              </span>
+            )
           }
         </div>
         {replies.map((reply) => (
