@@ -61,6 +61,7 @@ class UserSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     profile_image = serializers.ImageField(use_url=True)
     nickname = serializers.CharField(source='user.nickname', read_only=True)
+    position = serializers.CharField(source='user.position', read_only=True)
     clear_nodes_count = serializers.IntegerField(source='user.clear_nodes.count', read_only=True)
     like_articles_count = serializers.IntegerField(source='user.like_articles.count', read_only=True)
     post_articles_count= serializers.IntegerField(source='user.articles.count', read_only=True)
