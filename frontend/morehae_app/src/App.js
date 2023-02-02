@@ -34,7 +34,10 @@ function App() {
           </Route>
           <Route path="write" element={<BlogWritePage />} />
         </Route>
-        <Route path="user" element={<UserMainPage />} />
+        {/* <Route path="user" element={<UserMainPage />} /> */}
+        <Route path="user" element={<Outlet />}>
+          <Route path=":nickname" element={<UserMainPage/>} />
+        </Route>
       </Routes>
     </Fragment>
   );
