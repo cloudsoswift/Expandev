@@ -1,5 +1,5 @@
 from .models import User, Profile
-from .serializers import UserSerializer, UserProfileImage
+from .serializers import UserSerializer, UserProfileSerializer
 from blogs.models import Article, Comment
 from blogs.serializers import ArticleSerializer, CommentSerializer
 from roadmaps.models import Review, Node
