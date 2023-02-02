@@ -7,6 +7,7 @@ import { BsChevronDown } from 'react-icons/bs'
 function Dropdown({items, selectedItem, setSelectedItem}) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
+  const [isDisable, setIsDisable] = useState(true);
 
   // 드롭다운 클릭에 대한 핸들러
   const handleOpen = (e) => {
@@ -18,11 +19,9 @@ function Dropdown({items, selectedItem, setSelectedItem}) {
   }
 
   // 아이템 클릭에 대한 핸들러
-  const handleSelect = (e) => {
-    const index = e.target.value
-    if (index === undefined) {  // 가끔씩, 정말 아주 가끔씩 e.target이 <span> 태그를 가리켜
-      console.log("?????????????????");  // e.target.value === undefiend가 되는 경우가 있다
-      console.log(e);
+  const handleSelect = (index) => {
+    if (index === undefined) {
+      console.log("?????????????????");
     } else {
       setSelectedItem((oldState) => {
         return items[index];
@@ -34,6 +33,12 @@ function Dropdown({items, selectedItem, setSelectedItem}) {
       return !oldState;
     })
   }
+    
+  //   // 드롭다운 창 닫기
+  //   setIsOpen((oldState) => {
+  //     return !oldState;
+  //   })
+  // }
 
   useEffect(() => {
     // 마우스 클릭이 드롭다운 컴포넌트 외부에 찍혔는지를 판단하기 위한 핸들러
@@ -54,9 +59,17 @@ function Dropdown({items, selectedItem, setSelectedItem}) {
     }
   }, [])
 
+  useEffect(() => {
+    if (items?.length > 0) {
+      setIsDisable(false);
+    } else {
+      setIsDisable(true);
+    }
+  }, [items])
+
   return (
     <div className="flex-col relative w-full" ref={menuRef}>
-      <button onClick={handleOpen} className="transition bg-white w-full p-4 rounded-lg border hover:border-blue-500 flex justify-between font-extralight items-center">
+      <button onClick={handleOpen} disabled={isDisable} className="transition bg-white w-full p-4 rounded-lg border hover:border-blue-500 flex justify-between font-extralight items-center">
         <div>{selectedItem.content}</div>
         <div><BsChevronDown/></div>
       </button>
@@ -72,7 +85,7 @@ function Dropdown({items, selectedItem, setSelectedItem}) {
           return <li
             value={index}
             key={item.id}
-            onClick={handleSelect}
+            onClick={ () => handleSelect(index) }
             className={style}>
               <span>{item.content}</span>
             </li>

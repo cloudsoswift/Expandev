@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { userLogin } from "../../utils/store/user-slice";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -28,7 +28,7 @@ const SignIn = () => {
     })
   }
 
-  // 제출 이벤트 핸들러
+  // 로그인 form 이벤트 핸들러
   const handleLogin = (e) => {
     e.preventDefault();
     console.log(email, password);
@@ -61,7 +61,9 @@ const SignIn = () => {
             </div>
             <input value={password} onChange={handlePassword} type="password" className={inputStyle + " mb-4"} />
           </div>
-
+          <Link className="w-full block text-end text-slate-400 hover:text-black text-sm mb-1" to={"/signup"}>
+            아직 회원이 아니신가요?
+          </Link>
           <button onClick={handleLogin} className="transition bg-white w-full h-12 rounded-lg bg-blue-500 text-white hover:bg-blue-400 mb-8">로그인</button>
           <button className="transition bg-green w-full h-12 rounded-lg bg-green-600 text-white hover:bg-green-500 mb-2">네이버로 시작</button>
           <button className="transition bg-white w-full h-12 rounded-lg bg-yellow-500 text-white hover:bg-yellow-300 mb-2">카카오로 시작</button>

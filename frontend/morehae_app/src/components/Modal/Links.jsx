@@ -34,7 +34,7 @@ const Links = ({ reqData }) => {
               onClick={() => {
                 openLink(item.url);
               }}
-              className="bg-blue-100 w-xs h-sx"
+              className="bg-blue-100 w-xs h-xs"
             >
               <img src={item.img_url} alt="img" />
               <div>{item.title}</div>

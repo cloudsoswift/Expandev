@@ -88,7 +88,9 @@ MIDDLEWARE = [
 CORS_ORIGIN_WHITELIST= [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
-    # 'http://http://i8d212.p.ssafy.io'
+    'http://i8d212.p.ssafy.io:80',
+    'http://i8d212.p.ssafy.io:3000',
+    'http://i8d212.p.ssafy.io',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -178,16 +180,6 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'mariadb',
-#         'USER': 'root',
-#         'PASSWORD': get_secret('PASSWORD'),
-#         'HOST': get_secret('HOST'),
-#         'PORT': get_secret('PORT')
-#     }
-# }
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
