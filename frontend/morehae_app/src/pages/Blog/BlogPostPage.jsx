@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Reply from "@/components/Blog/Reply";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import httpWithURL from "@/utils/http";
 import PostViewer from "../../components/Blog/PostViewer";
 import TagPill from "../../components/Blog/TagPill";
@@ -48,6 +48,7 @@ const BlogPostPage = () => {
   const [replies, setReplies] = useState([]);
   const [dateString, setDateString] = useState("");
   const userInfo = useSelector((state) => state.user.user);
+  const navigate = useNavigate();
 
   // 게시글의 상세정보 가져오기
   const getPostData = () => {
@@ -117,11 +118,24 @@ const BlogPostPage = () => {
             return { ...prevPost, liked: false, like_users_count: prevPost.like_users_count - 1};
           });
         }
+      }).catch((e)=>{
+        alert("서버와 통신중 에러가 발생했습니다. 다시 시도해주세요.");
       });
   };
 
   // 글 삭제 버튼 클릭 이벤트 핸들러
-  const handleDeletePost = () => {};
+  const handleDeletePost = () => {
+    httpWithURL(process.env.REACT_APP_BLOG_URL)
+    .delete(`article/${params.postId}`)
+    .then((response) => {
+      if(response.status === 204){
+        alert("글 삭제에 성공했습니다!");
+        navigate("/blog");
+      }
+    }).catch((e)=>{
+      alert("글 삭제에 실패했습니다. 다시 시도해주세요.");
+    });
+  };
 
   return (
     <div className="grid">
