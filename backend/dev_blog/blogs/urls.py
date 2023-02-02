@@ -6,6 +6,7 @@ app_name = 'blogs'
 urlpatterns = [
     #article
     path('',views.article_list), #전체조회
+
     path('article', views.article),#게시글 작성
     path('article/<int:article_id>', views.article),#게시글 디테일 조회 수정 삭제
     path('article/<int:article_id>/like',views.like_article), #게시글 좋아요
