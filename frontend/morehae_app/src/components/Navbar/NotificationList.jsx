@@ -42,7 +42,7 @@ const NotificationList = () => {
   }
   return (
     <Menu.Items className="absolute top-full bg-white shadow-md rounded-md mt-2 w-56 max-h-56 flex flex-col focus:outline-none py-2 border overflow-x-hidden text-ellipsis">  
-      {notiList.map((data)=><NotificationItem data={data} deleteNotification={deleteNotificationHandler}/>)}
+      {notiList.map((data)=><NotificationItem key={data.id} data={data} deleteNotification={deleteNotificationHandler}/>)}
     </Menu.Items>
   )
 }
