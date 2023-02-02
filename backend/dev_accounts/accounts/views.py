@@ -3,8 +3,10 @@ from .serializers import UserSerializer, UserProfileImage
 
 from rest_framework import status
 from rest_framework.response import Response
-from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view
+from django.contrib.auth import get_user_model
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 from django.shortcuts import get_list_or_404, get_object_or_404
 
 
@@ -45,8 +47,11 @@ def set_profile_image(request):
 
 
 @api_view(['GET'])
-def check_duplicate_email(request):
-    email = request.data['email']
+def check_duplicate_email(request, email):
+    try:
+        validate_email(email)
+    except ValidationError:
+        return Response({"message" : "VALIDATION_ERROR"}, status=status.HTTP_400_BAD_REQUEST)
     if get_user_model().objects.filter(email=email).exists():
         return Response(status=status.HTTP_400_BAD_REQUEST)
     else:
@@ -54,8 +59,10 @@ def check_duplicate_email(request):
 
 
 @api_view(['GET'])
-def check_duplicate_nickname(request):
-    nickname = request.data['nickname']
+def check_duplicate_nickname(request, nickname):
+    if nickname.count > 15:
+        return Response({'message': 'Invalid nickname'}, status=status.HTTP_400_BAD_REQUEST) 
+
     if get_user_model().objects.filter(nickname=nickname).exists():
         return Response(status=status.HTTP_400_BAD_REQUEST)
     else:
