@@ -142,6 +142,9 @@ const BlogPostPage = () => {
       <div className="border w-4/5 justify-self-center p-2 rounded-xl">
         <div className="text-2xl text-center">{post.title}</div>
         <div className="text-sm text-end">{dateString}</div>
+        <div className="text-sm text-gray-500 text-end">{`${post.hit}번 읽힌 글입니다.`}</div>
+        <div className="text-xl text-end">{post.username}</div>
+        <div></div>
         <div></div>
         <PostViewer content={post.content} />
         <div>
