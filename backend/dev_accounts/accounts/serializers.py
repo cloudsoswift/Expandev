@@ -28,12 +28,10 @@ class CustomRegisterSerializer(RegisterSerializer):
     news_feed_push_yn = serializers.BooleanField(required = False)
     noti_push_yn = serializers.BooleanField(required = False)
     position = serializers.CharField(required = True)
-    id = serializers.IntegerField()
     
 
     def get_cleaned_data(self):
         data = super().get_cleaned_data()
-        data['id']=self.validated_data.get('id')
         data['phone_number'] = self.validated_data.get('phone_number','')
         data['nickname'] = self.validated_data.get('nickname','Ghost')
         data['login_type'] = self.validated_data.get('login_type')
