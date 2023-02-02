@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useState } from "react";
 
 const InputTitle = ({onChange, value, setValid}) => {
@@ -8,12 +9,16 @@ const InputTitle = ({onChange, value, setValid}) => {
   const titleMaxLengthValid = value.trim().length < 100;
   const titleIsValid = !titleIsEmpty && titleMaxLengthValid;
   // 제목 관련 Handler 및 Valicdation 값
-  const handleTitleInputChange = (e) => {
+  const handleInputChange = (e) => {
     onChange(e.target.value);
   };
-  const handleTitleInputBlur = (e) => {
+  const handleInputBlur = (e) => {
     setTitleTouched(true);
   };
+
+  useEffect(()=>{
+    setValid(titleIsValid);
+  }, [value]);
 
   return (
     <div>
@@ -26,8 +31,8 @@ const InputTitle = ({onChange, value, setValid}) => {
         type="text"
         placeholder="제목을 입력하세요"
         value={value}
-        onChange={handleTitleInputChange}
-        onBlur={handleTitleInputBlur}
+        onChange={handleInputChange}
+        onBlur={handleInputBlur}
       />
       {!titleIsValid && titleTouched && (
         <div className="text-xs text-red-500">
