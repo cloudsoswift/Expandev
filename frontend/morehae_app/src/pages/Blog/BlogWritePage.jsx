@@ -19,22 +19,23 @@ const BlogWritePage = () => {
   const [overviewIsValid, setOverviewIsValid] = useState(false);
   // Thumbnail 관련 State
   const [thumbnail, setThumbnail] = useState("");
-
+  //
   const [tags, setTags] = useState([]);
   const [editor, setEditor] = useState();
-  // const request = http(process.env.REACT_APP_BLOG_URL);
-  const request = httpWithURL("http://i8d212.p.ssafy.io:9000/blogs");
+  // const request = httpWithURL(process.env.REACT_APP_BLOG_URL);
+  const request = httpWithURL("http://i8d212.p.ssafy.io:8000/blogs");
 
-  //
+  // 게시물 등록 이벤트 핸들러
   const handleSendPost = () => {
-    if (!titleIsValid) {
+    // 제목이나 요약글이 Valid 하지 않으면 진행하지 않음.
+    if (!titleIsValid || !overviewIsValid) {
       return;
     }
     let body = new FormData();
     body.append("title", title.trim());
     body.append("content", editor.getMarkdown());
     if (!overviewIsValid) {
-      body.append("overview", "");
+      body.append("overview", overview);
     }
     if (!thumbnail) {
       body.append("thumnail", thumbnail);
@@ -42,6 +43,7 @@ const BlogWritePage = () => {
     for (let tag of tags) {
       body.append("tags", tag);
     }
+    console.log(request.defaults);
     request
       .post("/article", body, {
         withCredentials: true,
