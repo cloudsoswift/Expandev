@@ -27,8 +27,9 @@ class InterviewSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    user = serializers.CharField(source='user.username', read_only=True)
-
+    user = serializers.CharField(source='user.nickname', read_only=True)
+    user_profile_image = serializers.CharField(source='user.profile.profile_image.url', read_only=True)
+    
     class Meta:
         model = Review
         exclude = ('node',)
@@ -105,11 +106,13 @@ class MainNodeSerializer(serializers.ModelSerializer):
 
 class TrackSerializer(serializers.ModelSerializer):
     nodesData = serializers.SerializerMethodField()
-    
+    favorites_count = serializers.IntegerField(source = 'favorites.count', read_only=True)
+
     class Meta:
         model = Track
-        fields = ('title', 'content', 'purpose', 'nodesData')
-        read_only_fields = ('nodes', )
+        fields = ('title', 'content', 'purpose', 'nodesData', 'favorites_count')
+
+        read_only_fields = ('nodes',  'favorites_count')
 
     def get_nodesData(self, object):
         user = self.context['user']
@@ -141,3 +144,27 @@ class SituationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Situation
         fields = ('id', 'content')
+
+
+class ReviewSimpleSerializer(serializers.ModelSerializer):
+    nickname = serializers.CharField(source='user.username', read_only=True)
+    like_users_count = serializers.IntegerField(source = 'like_users.count', read_only=True)
+
+    class Meta:
+        model = Review
+        exclude = ('node','like_users','user')
+
+
+class NodeSimpleserializer(serializers.ModelSerializer):
+    completion_count = serializers.IntegerField(source='completion.count', read_only=True)
+
+    class Meta:
+        model = Node
+        fields = ('id', 'title', 'content', 'completion_count','isEssential')
+
+class TrackSimpleSerializer(serializers.ModelSerializer):
+    favorites_count = serializers.IntegerField(source = 'favorites.count', read_only=True)
+
+    class Meta:
+        model = Track
+        fields = ('id', 'title', 'content', 'favorites_count')

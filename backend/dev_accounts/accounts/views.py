@@ -1,9 +1,9 @@
 from .models import User, Profile
 from .serializers import UserSerializer, UserProfileSerializer
 from blogs.models import Article, Comment
-from blogs.serializers import ArticleSerializer, CommentSerializer
+from blogs.serializers import ArticleSimpleSerializer, CommentSimpleSerializer
 from roadmaps.models import Review, Node
-from roadmaps.serializer import ReviewSerializer, Nodeserializer
+from roadmaps.serializer import ReviewSimpleSerializer, NodeSimpleserializer, TrackSimpleSerializer
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -51,7 +51,7 @@ def check_duplicate_email(request, email):
     try:
         validate_email(email)
     except ValidationError:
-        return Response({"message" : "VALIDATION_ERROR"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"message": "VALIDATION_ERROR"}, status=status.HTTP_400_BAD_REQUEST)
     if get_user_model().objects.filter(email=email).exists():
         return Response(status=status.HTTP_400_BAD_REQUEST)
     else:
@@ -73,7 +73,7 @@ def check_duplicate_nickname(request, nickname):
 
 @api_view(['GET'])
 def get_user_profile(request, nickname):
-    user = get_object_or_404(User, nickname=nickname)    
+    user = get_object_or_404(User, nickname=nickname)
     profile_user = get_object_or_404(Profile, user=user)
     serializer = UserProfileSerializer(profile_user)
     return Response(serializer.data, status=status.HTTP_200_OK)
@@ -82,10 +82,11 @@ def get_user_profile(request, nickname):
 @api_view(['GET'])
 def get_user_blogs(request, nickname):
     profile_user = get_object_or_404(User, nickname=nickname)
-    post_articles = ArticleSerializer(instance=Article.objects.filter(
+    post_articles = ArticleSimpleSerializer(instance=Article.objects.filter(
         user=profile_user), many=True, context={'user': request.user})
-    like_articles = ArticleSerializer(instance=profile_user.like_articles, many=True, context={'user': request.user})
-    comments = CommentSerializer(instance=Comment.objects.filter(
+    like_articles = ArticleSimpleSerializer(
+        instance=profile_user.like_articles, many=True, context={'user': request.user})
+    comments = CommentSimpleSerializer(instance=Comment.objects.filter(
         user=profile_user), many=True, context={'user': request.user})
     data = {
         'post_articles': post_articles.data,
@@ -98,12 +99,15 @@ def get_user_blogs(request, nickname):
 @api_view(['GET'])
 def get_user_roadmaps(request, nickname):
     profile_user = get_object_or_404(User, nickname=nickname)
-    reviews = ReviewSerializer(instance=Review.objects.filter(
+    post_reviews = ReviewSimpleSerializer(instance=Review.objects.filter(
         user=profile_user), many=True)
-    clear_nodes = Nodeserializer(profile_user.clear_nodes.all(
+    clear_nodes = NodeSimpleserializer(profile_user.clear_nodes.all(
     ), many=True, context={'user': request.user})
+    favorite_roadmpas = TrackSimpleSerializer(
+        profile_user.favorite_roadmaps.all(), many=True, context={'user': request.user})
     data = {
-        'reviews': reviews.data,
-        'clear_nodes': clear_nodes.data
+        'post_reviews': post_reviews.data,
+        'clear_nodes': clear_nodes.data,
+        'favorite_roadmpas': favorite_roadmpas.data
     }
     return Response(data, status=status.HTTP_200_OK)
