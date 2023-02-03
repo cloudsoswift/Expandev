@@ -3,7 +3,7 @@ import Julgi from "@/components/Roadmap/components/Julgi";
 
 const Roadmap = ({ nodesDataJSON, handleClickButton }) => {
   // 노드들 데이터 프로퍼티
-  const nodesData = nodesDataJSON.nodesData; // 선택) try-catch로 안전하게 파싱하기
+  const nodesData = nodesDataJSON?.nodesData ?? {id:1, nodesData:[]}; // 선택) try-catch로 안전하게 파싱하기
   let yposObj = {
     ypos: 5,
     setYpos(val) {
