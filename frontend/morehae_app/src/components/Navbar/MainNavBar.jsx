@@ -25,6 +25,9 @@ const MainNavBar = () => {
   const logoutHandler = () => {
     dispatch(userLogout(navigate));
   };
+  console.log(user.nickname)
+
+  const userLink = `/user/${user.nickname}`
 
   const buttonStyle = "border border-black rounded-full mr-2";
 
@@ -92,7 +95,7 @@ const MainNavBar = () => {
                 <Menu.Item>
                   <Link
                     className="flex px-2 py-2 border-b hover:bg-slate-200"
-                    to="/user"
+                    to={userLink}
                   >
                     <span className="text-xl">마이 페이지</span>
                   </Link>
