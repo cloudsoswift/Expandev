@@ -28,12 +28,15 @@ class RecommendContent(models.Model):
     title = models.CharField(max_length=255)
     url = models.CharField(max_length=1000)
     img_url = models.CharField(max_length=1000, default="")
-
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 class Interview(models.Model):
     node = models.ForeignKey(Node, on_delete=models.CASCADE, related_name='interview')
     interviewee = models.CharField(max_length=255)
     content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 class Review(models.Model):
@@ -43,6 +46,8 @@ class Review(models.Model):
     importance = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)], default=3)
     difficulty = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)], default=3)
     like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="like_reviews", blank=True) 
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 class Role(models.Model):

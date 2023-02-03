@@ -13,6 +13,8 @@ from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.shortcuts import get_list_or_404, get_object_or_404
 
+import re
+
 
 @api_view(['GET'])
 def userlist(request):
@@ -58,8 +60,10 @@ def check_duplicate_email(request, email):
 
 @api_view(['GET'])
 def check_duplicate_nickname(request, nickname):
-    if nickname.count > 15:
-        return Response({'message': 'Invalid nickname'}, status=status.HTTP_400_BAD_REQUEST)
+
+    regx_nickname = re.compile('[a-zA-Z가-힣]{3,15}')
+    if not regx_nickname.match(nickname):
+        return Response({'message': '닉네임은 최소 3글자 최대 15글자, 특수문자, 공백 제외'}, status=status.HTTP_400_BAD_REQUEST)
 
     if get_user_model().objects.filter(nickname=nickname).exists():
         return Response(status=status.HTTP_400_BAD_REQUEST)

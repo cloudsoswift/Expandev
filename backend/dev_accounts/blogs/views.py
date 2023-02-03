@@ -92,6 +92,7 @@ def article(request, article_id=None):  # 게시글 디테일
         data = {
             'title': request.data.get('title'),
             'content': request.data.get('content'),
+            'thumbnail': request.data.get('thumbnail'),
         }
         if  request.data.get('overview'):
             data['overview'] = request.data.get('overview')
