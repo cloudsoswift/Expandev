@@ -88,3 +88,38 @@ class CommentSerializer(serializers.ModelSerializer):
         if user.is_authenticated:
             return user.like_comments.filter(pk=obj.pk).exists()
         return False
+
+
+class ArticleSimpleSerializer(serializers.ModelSerializer):
+    nickname = serializers.CharField(source='user.nickname', read_only=True)
+    like_users_count = serializers.IntegerField(source = 'like_users.count', read_only=True)
+    comments_count = serializers.IntegerField(source = 'comments.count', read_only=True)
+    liked = serializers.SerializerMethodField(read_only=True)
+    tags = TagSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Article
+        fields = ('id','nickname','tags', 'like_users_count', 'comments_count', 'liked', 'overview')
+        read_only_fields = ('nickname','user', 'like_users', 'tags', 'like_users_count', 'comments_count', 'profile_image')
+    
+    def get_liked(self, obj):
+        user = self.context['user']
+        if user.is_authenticated:
+            return user.like_articles.filter(pk=obj.pk).exists()
+        return False
+
+class CommentSimpleSerializer(serializers.ModelSerializer):
+    nickname = serializers.CharField(source='user.nickname', read_only=True)
+    like_users_count = serializers.IntegerField(source = 'like_users.count', read_only=True)
+    liked = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Comment
+        fields = ('id', 'article','like_users_count', 'content','is_secret','liked','nickname')
+        read_only_fields = ('user', 'article','parent_comment', 'like_users_count')
+
+    def get_liked(self, obj):
+        user = self.context['user']
+        if user.is_authenticated:
+            return user.like_comments.filter(pk=obj.pk).exists()
+        return False

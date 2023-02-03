@@ -18,6 +18,9 @@ urlpatterns = [
     path('comment/<int:comment_id>', views.comment), #댓글 수정, 삭제
     path('comment/<int:comment_id>/like',views.like_comment), #댓글 좋아요
 
+    #recomment
+    path('recomment', views.recomment),
+
     #tag
     path('tag', views.tag_list), #전체 태그 조회
     path('tag/<str:search_tag>', views.tag_list), #태그 목록 조회
