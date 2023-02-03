@@ -27,7 +27,7 @@ class InterviewSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    user = serializers.CharField(source='user.username', read_only=True)
+    user = serializers.CharField(source='user.nickname', read_only=True)
 
     class Meta:
         model = Review
