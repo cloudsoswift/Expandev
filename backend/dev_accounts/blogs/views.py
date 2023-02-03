@@ -119,9 +119,13 @@ def recomment(request):
     recomments = Comment.objects.filter(parent_comment_id=parent_id)
     if recomments:
         recomments = recomments.order_by('-created_at')
-    serializer = CommentSerializer(
+    recomments = CommentSerializer(
         instance=recomments, many=True, context={'user': request.user})
-    return Response(serializer.data)
+    data = {
+        'recomments_count': len(recomments.data),
+        'recomments': recomments.data
+    }
+    return Response(data)
 
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
