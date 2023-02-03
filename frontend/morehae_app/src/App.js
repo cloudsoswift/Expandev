@@ -4,7 +4,7 @@ import MainNavBar from "@/components/Navbar/MainNavBar";
 import WelcomePage from "@/pages/Welcome/WelcomePage"
 import { Outlet, Route, Routes } from "react-router-dom";
 import MainPage from "@/pages/Main/MainPage";
-import Example from "@/pages/Roadmap/example";
+import RoadmapPage from "@/pages/Roadmap/RoadmapPage";
 import SignIn from "@/pages/Sign/SignIn";
 import SignUp from "@/pages/Sign/SignUp";
 import BlogListPage from "@/pages/Blog/BlogListPage";
@@ -23,7 +23,7 @@ function App() {
       <Routes>
         {/* <Route index element={<IndexPage />} /> */}
         <Route index element={<WelcomePage />} />
-        <Route path="roadmap" element={<Example />} />
+        <Route path="roadmap" element={<RoadmapPage />} />
         <Route path="login" element={<SignIn />} />
         <Route path="signup" element={<SignUp />} />
         <Route path="blog" element={<Outlet />}>

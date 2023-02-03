@@ -13,10 +13,19 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 import ELK from "elkjs";
 import { useCallback, useEffect, useState } from "react";
+import MainNode from "@/components/Roadmap/nodes/MainNode";
+import SubNode from "@/components/Roadmap/nodes/SubNode";
 
+// Node Type 관련
+const nodeTypes = {
+  main: MainNode,
+  sub: SubNode
+}
+// Layout에 따른 노드 위치 계산을 위한 Elk Layout 설정
 const elk = new ELK();
-const elkLayout = (nodes, edges, direction = "DOWN") => {
+const elkLayout = (nodes, edges, direction = "DOWN", algorithm = "mrtree") => {
   const nodesForElk = nodes.map((node) => {
+    console.log(node);
     return {
       id: node.id,
       width: 150,
@@ -26,7 +35,7 @@ const elkLayout = (nodes, edges, direction = "DOWN") => {
   const graph = {
     id: "root",
     layoutOptions: {
-      "elk.algorithm": "mrtree",
+      "elk.algorithm": algorithm,
       "elk.direction": direction,
       "nodePlacement.strategy": "SIMPLE",
     },
@@ -35,21 +44,23 @@ const elkLayout = (nodes, edges, direction = "DOWN") => {
   };
   return elk.layout(graph);
 };
-const Rooodmap = ({ nodesDataList, loadNodeDetail }) => {
+const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
   // reactFlow 관련 state
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
   const [clickedNode, setClickedNode] = useState(null);
   /* 로드맵 관련 state들 */
-  const { setViewport, zoomIn, zoomOut } = useReactFlow();
+  const { setViewport, zoomIn, zoomOut, setCenter } = useReactFlow();
 
   useEffect(() => {
     let initialNodes = [];
     let initialEdges = [];
     // depth = 0 노드( 최-상단 주제 노드 )
     const calcRoadMap = async () => {
+      setCenter(0, 0, { duration: 800, zoom: 1 });
       let before_node = {
         id: "0",
+        type: 'main',
         data: {
           label: nodesDataList.title,
         },
@@ -68,6 +79,7 @@ const Rooodmap = ({ nodesDataList, loadNodeDetail }) => {
         // 메인 노드를 노드 목록에 추가
         initialNodes.push({
           id: main_node.id.toString(),
+          type: 'main',
           data: {
             label: main_node.title,
             isComplete: main_node.isComplete,
@@ -86,6 +98,7 @@ const Rooodmap = ({ nodesDataList, loadNodeDetail }) => {
           // 서브 노드를 노드 목록에 추가
           initialNodes.push({
             id: sub_node.id.toString(),
+            type: 'sub',
             data: {
               label: sub_node.title,
               isComplete: sub_node.isComplete,
@@ -108,6 +121,7 @@ const Rooodmap = ({ nodesDataList, loadNodeDetail }) => {
             source: main_node.id.toString(),
             target: sub_node.id.toString(),
             hidden: true,
+            sourceHandle: "sub",
           });
         });
         // 이전 메인 노드 -> 현재 메인 노드로 향하는 엣지를 엣지 목록에 추가
@@ -118,6 +132,7 @@ const Rooodmap = ({ nodesDataList, loadNodeDetail }) => {
           },
           source: before_node.id.toString(),
           target: main_node.id.toString(),
+          sourceHandle: "main",
         });
         // 현재 메인 노드를 이전 메인 노드로 기록
         before_node = main_node;
@@ -174,7 +189,12 @@ const Rooodmap = ({ nodesDataList, loadNodeDetail }) => {
               (edge) => edge.source === mainNode.id && edge.data.depth === 2
             );
             console.log(subNodes, subEdges);
-            const subGraph = await elkLayout(subNodes, subEdges, "UP");
+            const subGraph = await elkLayout(
+              subNodes,
+              subEdges,
+              "RIGHT",
+              "layered"
+            );
             console.log("돌았다");
             // 현재 메인 노드 및 서브노드에만 계산한 position 값 추가 반경, 이외에는 그냥 원래 노드값만.
             initialNodes = initialNodes.map((node) => {
@@ -214,45 +234,57 @@ const Rooodmap = ({ nodesDataList, loadNodeDetail }) => {
     calcRoadMap();
   }, [nodesDataList]);
 
-  const handleNodeClick = useCallback((event, eventNode) => {
-    // 클릭된 노드 depth가 undefined(최상단 노드) 거나 depth가 2(서브 노드)인겅우 별다른 작업 수행 X
-    if (eventNode.data.depth === undefined) {
-      return;
-    }
-    console.log(eventNode, "이벤트 노드 바뀜.");
-    // setClickedNode(eventNode);
-    // 노드 클릭시, 해당 노드가 메인 노드라면 해당 메인 노드의 서브 노드들의 Visible Toggle.
-    if (eventNode.data.depth === 2) {
-      console.log(eventNode.id);
-      loadNodeDetail(eventNode.id);
-      return;
-    }
-    setViewport(
-      { x: eventNode.positionAbsolute.x, y: -eventNode.positionAbsolute.y, zoom: 1 },
-      { duration: 800 }
-    );
-    setNodes((prevNodes) =>
-      prevNodes?.map((node) => {
-        return {
-          ...node,
-          hidden:
-            node.parentNode === eventNode.id && node.data.depth === 2
-              ? !node.hidden
-              : (node.data.depth === 2 ? true : node.hidden),
-        };
-      })
-    );
-    setEdges((prevEdges) =>
-      prevEdges?.map((edge) => {
-        return {
-          ...edge,
-          hidden: edge.source === eventNode.id && edge.data.depth === 2 ? !edge.hidden : (
-            edge.data.depth === 2 ? true : edge.hidden
-          ),
-        };
-      })
-    );
-  }, []);
+  const handleNodeClick = useCallback(
+    (event, eventNode) => {
+      // 클릭된 노드 depth가 undefined(최상단 노드) 거나 depth가 2(서브 노드)인겅우 별다른 작업 수행 X
+      if (eventNode.data.depth === undefined) {
+        return;
+      }
+      console.log(eventNode, "이벤트 노드 바뀜.");
+      // setClickedNode(eventNode);
+      // 노드 클릭시, 해당 노드가 메인 노드라면 해당 메인 노드의 서브 노드들의 Visible Toggle.
+      if (eventNode.data.depth === 2) {
+        console.log(eventNode.id);
+        loadNodeDetail(eventNode.id);
+        return;
+      }
+      setNodes((prevNodes) =>
+        prevNodes?.map((node) => {
+          return {
+            ...node,
+            hidden:
+              node.parentNode === eventNode.id && node.data.depth === 2
+                ? !node.hidden
+                : node.data.depth === 2
+                ? true
+                : node.hidden,
+          };
+        })
+      );
+      setEdges((prevEdges) =>
+        prevEdges?.map((edge) => {
+          return {
+            ...edge,
+            hidden:
+              edge.source === eventNode.id && edge.data.depth === 2
+                ? !edge.hidden
+                : edge.data.depth === 2
+                ? true
+                : edge.hidden,
+          };
+        })
+      );
+      setViewport(
+        {
+          x: eventNode.positionAbsolute.x,
+          y: -eventNode.positionAbsolute.y,
+          zoom: 1,
+        },
+        { duration: 800 }
+      );
+    },
+    [loadNodeDetail, setViewport]
+  );
 
   return (
     <ReactFlow
@@ -260,18 +292,25 @@ const Rooodmap = ({ nodesDataList, loadNodeDetail }) => {
       edges={edges}
       nodesConnectable={false}
       nodesDraggable={false}
+      nodeTypes={nodeTypes}
       onNodeClick={handleNodeClick}
       className="mt-40"
     />
   );
 };
 
-const Rooadmap = ({ nodesDataList, loadNodeDetail }) => {
+const ReactFlowRoadmap = ({ nodesDataList, loadNodeDetail }) => {
   return (
-    <ReactFlowProvider>
-      <Rooodmap nodesDataList={nodesDataList} loadNodeDetail={loadNodeDetail}/>
-    </ReactFlowProvider>
+    <div className="w-full h-full">
+      <ReactFlowProvider>
+        <ReactFlowRoadmapComponent
+          nodesDataList={nodesDataList}
+          loadNodeDetail={loadNodeDetail}
+        />
+        <MiniMap />
+      </ReactFlowProvider>
+    </div>
   );
 };
 
-export default Rooadmap;
+export default ReactFlowRoadmap;

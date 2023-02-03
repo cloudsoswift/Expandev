@@ -9,11 +9,11 @@ import Dropdown from "@/components/Dropdown/Dropdown";
 import HttpWithURL from "@/utils/http";
 
 import { useEffect } from "react";
-import Rooadmap from "./Rooadmap";
+import Rooadmap from "@/components/Roadmap/ReactFlowRoadmap";
 
 
 
-const Example = () => {
+const RoadmapPage = () => {
 
 
   // 모달 관련 state
@@ -110,12 +110,12 @@ const Example = () => {
   useEffect(()=>{
     const getRoadMap = async () => {
       const response = await HttpWithURL(process.env.REACT_APP_ROADMAP_URL).get(
-        `track/${situation?.id ? situation.id : 1}`
+        `track/${role?.id ? role.id : 1}`
       );
       setNodesDataList(response.data);
     };
     getRoadMap();
-  }, [situation])
+  }, [role])
 
   const handleCheckbox = () => {
     setCheckbox(!checkbox);
@@ -174,4 +174,4 @@ const Example = () => {
     </div>
   );
 };
-export default Example;
+export default RoadmapPage;
