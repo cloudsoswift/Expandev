@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Tab } from "@headlessui/react";
-import { useSelector } from "react-redux";
 import { FaStar } from "react-icons/fa";
 import { BsPencilSquare } from "react-icons/bs";
 
@@ -15,7 +14,6 @@ export default function Tabs({ userRoadmap, userBlog }) {
   // console.log(userBlog);
   // console.log(userRoadmap?.clear_nodes[0]?.id, "id")
   // console.log(userRoadmap.reviews)
-
   return (
     <div className="w-full px-2 py-16 sm:px-0 ">
       <Tab.Group>
@@ -57,11 +55,11 @@ export default function Tabs({ userRoadmap, userBlog }) {
 
             <div className="mb-12">
               <div className="m-3">클리어한 노드</div>
-              <div className="h-[230px] bg-white border-2 rounded-lg p-4 overflow-y-auto">
+              <div className="h-[230px] bg-white border-2 rounded-lg p-4 overflow-y-auto ">
                 {userRoadmap?.clear_nodes.map((post) => (
                   <span
                     key={post?.id}
-                    className="text-xs py-1 px-3 m-1 bg-blue-300 text-white border-2 hover:bg-blue-500 rounded-full"
+                    className="text-xs py-1 px-3 m-1 bg-blue-300 text-white hover:bg-blue-500 rounded-full "
                   >
                     {post?.content}
                   </span>
@@ -75,7 +73,7 @@ export default function Tabs({ userRoadmap, userBlog }) {
                 {userRoadmap?.reviews.map((post) => (
                   <div
                     key={post?.id}
-                    className="rounded-lg grid grid-flow-row h-[90px] w-1/2  m-1 "
+                    className="rounded-lg grid grid-flow-row h-[90px] w-5/12 m-1  "
                   >
                     <div className="row-span-2 p-3 bg-gray-100 rounded-t-lg">
                       <div className="relative flex">
@@ -88,29 +86,33 @@ export default function Tabs({ userRoadmap, userBlog }) {
                       </div>
                       <div className="flex mt-1">
                         <div className="text-xs mr-2">중요도</div>
-                        {Array.from(Array(post?.importance), () => (
-                          <div className="text-sm text-yellow-300">
-                            <FaStar />
-                          </div>
+                        {Array.from({ length: post?.importance }, (v, idx) => (
+                          <FaStar
+                            key={idx}
+                            className="text-sm text-yellow-300"
+                          />
                         ))}
-                        {Array.from(Array(5 - post?.importance), () => (
-                          <div className="text-sm text-white">
-                            <FaStar />
-                          </div>
-                        ))}
+                        {Array.from(
+                          { length: 5 - post?.importance },
+                          (v, idx) => (
+                            <FaStar key={idx} className="text-sm text-white" />
+                          )
+                        )}
                       </div>
                       <div className="flex mt-1">
                         <div className="text-xs mr-2">난이도</div>
-                        {Array.from(Array(post?.difficulty), () => (
-                          <div className="text-sm text-yellow-300">
-                            <FaStar />
-                          </div>
+                        {Array.from({ length: post?.difficulty }, (v, idx) => (
+                          <FaStar
+                            key={idx}
+                            className="text-sm text-yellow-300"
+                          />
                         ))}
-                        {Array.from(Array(5 - post?.difficulty), () => (
-                          <div className="text-sm text-white">
-                            <FaStar />
-                          </div>
-                        ))}
+                        {Array.from(
+                          { length: 5 - post?.difficulty },
+                          (v, idx) => (
+                            <FaStar key={idx} className="text-sm text-white" />
+                          )
+                        )}
                       </div>
                     </div>
                     <div className=" row-span-1 px-3 py-1 bg-blue-300 rounded-b-lg ">
@@ -143,11 +145,11 @@ export default function Tabs({ userRoadmap, userBlog }) {
 
             <div className="mb-12">
               <div className="m-3">작성한 게시글</div>
-              <div className="h-[230px] bg-white border-2 rounded-lg flex flex-wrap p-4 overflow-y-auto">
+              <div className="grid grid-cols-3 gap-4 h-[230px] bg-white border-2 rounded-lg p-4 overflow-y-auto">
                 {userBlog?.post_articles.map((post) => (
                   <div
                     key={post?.id}
-                    className="rounded-xl h-[90px] w-[90px] bg-white p-3 m-2 border-2 "
+                    className="rounded-xl h-[] bg-white p-3 m-2 border-2 "
                   >
                     <div className="mt-1 flex space-x-1 text-xs font-normal leading-4 text-gray-500">
                       <h3 className="text-xs font-medium text-center leading-5">
@@ -165,7 +167,7 @@ export default function Tabs({ userRoadmap, userBlog }) {
                 {userBlog?.post_comments.map((post) => (
                   <div
                     key={post?.id}
-                    className="rounded-xl h-[90px] w-[90px] bg-white p-3 m-2 border-2 "
+                    className="rounded-xl h-[90px] w-[90px] bg-white p-3 m-2 border-2  "
                   >
                     <div className="mt-1 flex space-x-1 text-xs font-normal leading-4 text-gray-500">
                       <h3 className="text-xs font-medium text-center leading-5">
