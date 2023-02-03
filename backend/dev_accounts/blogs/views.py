@@ -88,10 +88,12 @@ def article(request, article_id=None):  # 게시글 디테일
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     elif request.method == 'PUT' or 'POST':  # 수정, 작성
+        print(request.data)
         entered_tags = request.POST.getlist('tags')
         data = {
             'title': request.data.get('title'),
             'content': request.data.get('content'),
+            'thumnail_image': request.data.get('thumnail_image'),
         }
         if  request.data.get('overview'):
             data['overview'] = request.data.get('overview')
