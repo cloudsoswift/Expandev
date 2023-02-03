@@ -1,19 +1,27 @@
 import axios from "axios";
 
+const http = axios.create({
+  headers: {
+    "Content-Type": "application/json;charset=utf-8",
+  },
+});
+
 export const setAccessToken = (token) => {
-  if(token){
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  if (token) {
+    http.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   } else {
-    delete axios.defaults.headers.common['Authorization'];
+    delete http.defaults.headers.common["Authorization"];
   }
-}
-const http = (URL) => {
-  return axios.create({
-    baseURL: URL,
-    headers: {
-      "Content-Type": "application/json;charset=utf-8",
-    },
-  });
 };
 
-export default http;
+http.interceptors.request.use(
+  (response) => response,
+  (error) => error,
+);
+
+const httpWithURL = (URL) => {
+  http.defaults.baseURL = URL;
+  return http;
+};
+
+export default httpWithURL;

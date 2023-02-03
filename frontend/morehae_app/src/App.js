@@ -4,6 +4,7 @@ import MainNavBar from "@/components/Navbar/MainNavBar";
 import WelcomePage from "@/pages/Welcome/WelcomePage"
 import { Outlet, Route, Routes } from "react-router-dom";
 import MainPage from "@/pages/Main/MainPage";
+import RoadmapPage from "@/pages/Roadmap/RoadmapPage";
 import SignIn from "@/pages/Sign/SignIn";
 import SignUp from "@/pages/Sign/SignUp";
 import BlogListPage from "@/pages/Blog/BlogListPage";
@@ -22,7 +23,7 @@ function App() {
       <Routes>
         {/* <Route index element={<IndexPage />} /> */}
         <Route index element={<WelcomePage />} />
-        <Route path="roadmap" element={<MainPage />} />
+        <Route path="roadmap" element={<RoadmapPage />} />
         <Route path="login" element={<SignIn />} />
         <Route path="signup" element={<SignUp />} />
         <Route path="blog" element={<Outlet />}>
@@ -34,7 +35,10 @@ function App() {
           </Route>
           <Route path="write" element={<BlogWritePage />} />
         </Route>
-        <Route path="user" element={<UserMainPage />} />
+        {/* <Route path="user" element={<UserMainPage />} /> */}
+        <Route path="user" element={<Outlet />}>
+          <Route path=":nickname" element={<UserMainPage/>} />
+        </Route>
       </Routes>
     </Fragment>
   );
