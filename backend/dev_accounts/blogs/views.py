@@ -113,6 +113,16 @@ def article(request, article_id=None):  # 게시글 디테일
 
 
 # 댓글
+@api_view(['GET'])
+def recomment(request):
+    parent_id = int(request.GET.get('parent_id'))
+    recomments = Comment.objects.filter(parent_comment_id=parent_id)
+    if recomments:
+        recomments = recomments.order_by('-created_at')
+    serializer = CommentSerializer(
+        instance=recomments, many=True, context={'user': request.user})
+    return Response(serializer.data)
+
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
 def comment(request, article_id=None, parent_id=None, comment_id=None):  # 댓글 조회, 작성, 삭제, 수정
@@ -125,12 +135,11 @@ def comment(request, article_id=None, parent_id=None, comment_id=None):  # 댓�
         parent_comment = Comment.objects.get(pk=parent_id)
 
     if request.method == 'GET':  # 게시글에 달린 댓글 전체 조회
-        comments = Comment.objects.filter(article=article)
+        comments = Comment.objects.filter(article=article).filter(parent_id=None)
         if comments:
             comments = comments.order_by('-created_at')
         serializer = CommentSerializer(
             instance=comments, many=True, context={'user': request.user})
-
         return Response(serializer.data)
 
     elif request.method == 'POST':  # 댓글 작성
