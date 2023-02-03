@@ -67,7 +67,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
     post_articles_count= serializers.IntegerField(source='user.articles.count', read_only=True)
     post_reviews_count= serializers.IntegerField(source='user.review.count', read_only=True)
 
-
     class Meta:
         model = Profile
         exclude = ('user','id')

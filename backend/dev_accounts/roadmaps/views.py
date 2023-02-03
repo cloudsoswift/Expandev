@@ -79,3 +79,14 @@ def get_roles_situation(request, role_id):
     situation = Situation.objects.filter(role=role_id)
     serializer = SituationSerializer(situation, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+def favorite_roadmaps(request, track_id):
+    track = Track.objects.get(id=track_id)
+    user = request.user
+    if track.favorites.filter(id=user.id).exists():
+         track.favorites.remove(user)
+    else:
+         track.favorites.add(user)
+    return Response(status=status.HTTP_201_CREATED)
