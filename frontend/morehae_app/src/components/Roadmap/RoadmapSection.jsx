@@ -23,6 +23,7 @@ const RoadmapSection = ({
             xpos={10}
             yposObj={yposObj}
             dy="30"
+            handleClickButton={handleClickButton}
           />
         </g>
       );
@@ -40,12 +41,14 @@ const RoadmapSection = ({
             xpos={10}
             yposObj={yposObj}
             dy="30"
+            handleClickButton={handleClickButton}
           />
           <SubNode
             subNodeData={mainNodeData.childs[1]}
             xpos={210}
             yposObj={yposObj}
             dy="30"
+            handleClickButton={handleClickButton}
           />
         </g>
       );
@@ -95,24 +98,28 @@ const RoadmapSection = ({
             xpos={10}
             yposObj={yposObj}
             dy="42.5"
+            handleClickButton={handleClickButton}
           />
           <SubNode
             subNodeData={mainNodeData.childs[1]}
             xpos={10}
             yposObj={yposObj}
             dy="17.5"
+            handleClickButton={handleClickButton}
           />
           <SubNode
             subNodeData={mainNodeData.childs[2]}
             xpos={210}
             yposObj={yposObj}
             dy="42.5"
+            handleClickButton={handleClickButton}
           />
           <SubNode
             subNodeData={mainNodeData.childs[3]}
             xpos={210}
             yposObj={yposObj}
             dy="17.5"
+            handleClickButton={handleClickButton}
           />
         </g>
       );
@@ -130,30 +137,35 @@ const RoadmapSection = ({
             xpos={10}
             yposObj={yposObj}
             dy="55"
+            handleClickButton={handleClickButton}
           />
           <SubNode
             subNodeData={mainNodeData.childs[1]}
             xpos={10}
             yposObj={yposObj}
             dy="30"
+            handleClickButton={handleClickButton}
           />
           <SubNode
             subNodeData={mainNodeData.childs[2]}
             xpos={10}
             yposObj={yposObj}
             dy="5"
+            handleClickButton={handleClickButton}
           />
           <SubNode
             subNodeData={mainNodeData.childs[3]}
             xpos={210}
             yposObj={yposObj}
             dy="42.5"
+            handleClickButton={handleClickButton}
           />
           <SubNode
             subNodeData={mainNodeData.childs[4]}
             xpos={210}
             yposObj={yposObj}
             dy="17.5"
+            handleClickButton={handleClickButton}
           />
         </g>
       );
@@ -171,36 +183,42 @@ const RoadmapSection = ({
             xpos={10}
             yposObj={yposObj}
             dy="55"
+            handleClickButton={handleClickButton}
           />
           <SubNode
             subNodeData={mainNodeData.childs[1]}
             xpos={10}
             yposObj={yposObj}
             dy="30"
+            handleClickButton={handleClickButton}
           />
           <SubNode
             subNodeData={mainNodeData.childs[2]}
             xpos={10}
             yposObj={yposObj}
             dy="5"
+            handleClickButton={handleClickButton}
           />
           <SubNode
             subNodeData={mainNodeData.childs[3]}
             xpos={210}
             yposObj={yposObj}
             dy="55"
+            handleClickButton={handleClickButton}
           />
           <SubNode
             subNodeData={mainNodeData.childs[4]}
             xpos={210}
             yposObj={yposObj}
             dy="30"
+            handleClickButton={handleClickButton}
           />
           <SubNode
             subNodeData={mainNodeData.childs[5]}
             xpos={210}
             yposObj={yposObj}
             dy="5"
+            handleClickButton={handleClickButton}
           />
         </g>
       );

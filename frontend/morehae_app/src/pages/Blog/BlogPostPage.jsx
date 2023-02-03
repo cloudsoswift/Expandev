@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import Reply from "@/components/Blog/Reply";
+import MainReply from "@/components/Blog/MainReply";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import httpWithURL from "@/utils/http";
-import PostViewer from "../../components/Blog/PostViewer";
-import TagPill from "../../components/Blog/TagPill";
+import PostViewer from "@/components/Blog/PostViewer";
+import TagPill from "@/components/Blog/TagPill";
 import { useSelector } from "react-redux";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 
@@ -58,7 +58,6 @@ const BlogPostPage = () => {
       .get(postID)
       .then((Response) => {
         // console.log("게시글 상세정보:", Response.data);
-        console.log(Response);
         setPost((oldState) => {
           if (Response?.data !== undefined) {
             return Response.data;
@@ -183,7 +182,7 @@ const BlogPostPage = () => {
           }
         </div>
         {replies.map((reply) => (
-          <Reply key={reply.id} reply={reply} />
+          <MainReply key={reply.id} reply={reply} />
         ))}
       </div>
     </div>
