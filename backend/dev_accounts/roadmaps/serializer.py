@@ -141,3 +141,20 @@ class SituationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Situation
         fields = ('id', 'content')
+
+
+class ReviewSimpleSerializer(serializers.ModelSerializer):
+    nickname = serializers.CharField(source='user.username', read_only=True)
+    like_users_count = serializers.IntegerField(source = 'like_users.count', read_only=True)
+
+    class Meta:
+        model = Review
+        exclude = ('node','like_users','user')
+
+
+class NodeSimpleserializer(serializers.ModelSerializer):
+    completion_count = serializers.IntegerField(source='completion.count', read_only=True)
+
+    class Meta:
+        model = Node
+        fields = ('id', 'title', 'content', 'completion_count','isEssential')
