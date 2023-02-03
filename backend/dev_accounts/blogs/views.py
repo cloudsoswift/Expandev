@@ -135,7 +135,7 @@ def comment(request, article_id=None, parent_id=None, comment_id=None):  # 댓�
         parent_comment = Comment.objects.get(pk=parent_id)
 
     if request.method == 'GET':  # 게시글에 달린 댓글 전체 조회
-        comments = Comment.objects.filter(article=article).filter(parent_id=None)
+        comments = Comment.objects.filter(article=article).filter(comment_parent_id=None)
         if comments:
             comments = comments.order_by('-created_at')
         serializer = CommentSerializer(
