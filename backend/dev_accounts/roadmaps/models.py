@@ -7,6 +7,7 @@ class Track(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
     purpose = models.TextField()
+    favorites = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='favorite_roadmaps', blank=True)
 
 
 class Node(models.Model):
