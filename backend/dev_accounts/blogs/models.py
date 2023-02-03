@@ -15,7 +15,7 @@ class Article(models.Model):
     like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="like_articles", blank=True)
     tags = models.ManyToManyField(Tag, related_name="articles", blank=True)
     overview = models.TextField()
-    thumnail_image = models.ImageField(default='article/thumnail_default.png', upload_to='article/', blank=True, null=True)
+    thumbnail = models.ImageField(default='article/thumnail.png', upload_to='article/thumbnail/', blank=True, null=True)
 
 
 class Comment(models.Model):
