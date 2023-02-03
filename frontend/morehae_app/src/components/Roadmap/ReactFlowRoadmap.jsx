@@ -44,7 +44,7 @@ const elkLayout = (nodes, edges, direction = "DOWN", algorithm = "mrtree") => {
   };
   return elk.layout(graph);
 };
-const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
+const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail, openAll }) => {
   // reactFlow 관련 state
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
@@ -233,6 +233,10 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
     };
     calcRoadMap();
   }, [nodesDataList]);
+  useEffect(()=>{
+    setNodes((prevNodes)=>prevNodes.map((node)=>{return {...node, hidden: (node.data.depth === 2 ? openAll : node.hidden)}}));
+    setEdges((prevEdges)=>prevEdges.map((edge)=>{return {...edge, hidden: (edge.data.depth === 2 ? openAll : edge.hidden)}}));
+  }, [openAll])
 
   const handleNodeClick = useCallback(
     (event, eventNode) => {
@@ -300,12 +304,18 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
 };
 
 const ReactFlowRoadmap = ({ nodesDataList, loadNodeDetail }) => {
+  const [ isOpenAll, setIsOpenAll ] = useState(false);
+  const handleOpenAll = () => {
+    setIsOpenAll(prevState => !prevState);
+  }
   return (
     <div className="w-full h-full">
+      <button onClick={handleOpenAll}>전체 열기</button>
       <ReactFlowProvider>
         <ReactFlowRoadmapComponent
           nodesDataList={nodesDataList}
           loadNodeDetail={loadNodeDetail}
+          openAll={isOpenAll}
         />
         <MiniMap />
       </ReactFlowProvider>

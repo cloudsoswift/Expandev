@@ -9,7 +9,7 @@ import Dropdown from "@/components/Dropdown/Dropdown";
 import HttpWithURL from "@/utils/http";
 
 import { useEffect } from "react";
-import Rooadmap from "@/components/Roadmap/ReactFlowRoadmap";
+import ReactFlowRoadmap from "@/components/Roadmap/ReactFlowRoadmap";
 
 
 
@@ -143,7 +143,7 @@ const RoadmapPage = () => {
           />
         </div>
       </div>
-      <Rooadmap nodesDataList={nodesDataList} loadNodeDetail={loadNodeDetail}/>
+      <ReactFlowRoadmap nodesDataList={nodesDataList} loadNodeDetail={loadNodeDetail}/>
       <Modal
         id={reqData.id}
         data={reqData}
