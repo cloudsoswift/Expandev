@@ -1,5 +1,6 @@
 import React from "react";
 import ReviewListItem from "@/components/Modal/ReviewListItem";
+import { FaStar } from "react-icons/fa";
 
 const ReviewList = ({ reviewList, onDelete, onEdit }) => {
   const getAvgImp = (list) => {
@@ -20,13 +21,30 @@ const ReviewList = ({ reviewList, onDelete, onEdit }) => {
     return Math.round(sum / list.length);
   };
 
+  console.log(reviewList)
   return (
     <div className=" bg-white p-3">
       <div>
         <div>REVIEW</div>
 
-        <div className="mt-2 text-sm">전체 중요도 | {getAvgImp(reviewList)}</div>
-        <div className="mb-2 text-sm"> 전체 난이도 | {getAvgDif(reviewList)}</div>
+        <div className="mt-2 text-sm flex">
+          <span className="mr-1 ">전체 중요도 |</span>
+          {Array.from({ length: getAvgImp(reviewList) }, (v, idx) => (
+            <FaStar key={idx} className="text-sm text-yellow-300 mt-0.5" />
+          ))}
+          {Array.from({ length: 5 - getAvgImp(reviewList) }, (v, idx) => (
+            <FaStar key={idx} className="text-sm text-gray-300 mt-0.5" />
+          ))}
+        </div>
+        <div className="mb-2 text-sm flex">
+          <span className="mr-1 ">전체 난이도 |</span>
+          {Array.from({ length: getAvgDif(reviewList) }, (v, idx) => (
+            <FaStar key={idx} className="text-sm text-yellow-300 mt-0.5" />
+          ))}
+          {Array.from({ length: 5 - getAvgDif(reviewList) }, (v, idx) => (
+            <FaStar key={idx} className="text-sm text-gray-300 mt-0.5" />
+          ))}
+        </div>
 
         <div>
           {reviewList.map((item) => (

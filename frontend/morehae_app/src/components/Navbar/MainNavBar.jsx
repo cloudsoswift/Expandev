@@ -25,7 +25,6 @@ const MainNavBar = () => {
   const logoutHandler = () => {
     dispatch(userLogout(navigate));
   };
-  console.log(user.nickname)
 
   const userLink = `/user/${user.nickname}`
 
@@ -58,7 +57,7 @@ const MainNavBar = () => {
         {!isLogin && (
           <div className="signInBtn col-span-3 justify-self-end pr-4">
             <Link
-              className="transition border-2 border-blue-400 rounded-lg text-2xl hover:border-blue-600 text-blue-400 text-sm p-4"
+              className="transition border-2 border-blue-400 rounded-lg hover:border-blue-600 text-blue-400 text-sm p-4"
               to="/login"
             >
               로그인/회원가입
