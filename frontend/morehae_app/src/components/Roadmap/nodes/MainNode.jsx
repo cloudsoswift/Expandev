@@ -2,10 +2,10 @@ import { memo } from "react";
 import { Handle, Position } from "reactflow";
 
 const MainNode = ({ data }) => {
-  const isEssentialClass = data.isEssential ? "text-black" : "text-gray-500"
+  const isEssentialClass = data.isEssential ? "text-red-500" : "text-gray-500"
   return (
-    <div className="px-4 py-2 shadow-md rounded-md bg-orange-300 border-2" >
-      <div className="text-gray-500">{data.isEssential ? "필수" : "선택"}</div>
+    <div className="px-4 py-2 shadow-md rounded-xl bg-orange-300 border-2" >
+      <div className={isEssentialClass}>{data.isEssential ? "필수" : "선택"}</div>
       <div className="flex">
         <div className="ml-2">
           <div className="text-lg font-bold">{data.label}</div>
