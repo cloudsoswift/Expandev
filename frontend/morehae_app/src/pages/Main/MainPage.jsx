@@ -21,7 +21,7 @@ const MainPage = () => {
   const [checkbox, setCheckbox] = useState(false);
 
   /* 드롭다운 메뉴 관련 state들 */
-  const [role, setRole] = useState({ id: 0, content: "포지션을 선택해주세요" }); // 직군
+  const [role, setRole] = useState({ id: 1, content: "포지션을 선택해주세요" }); // 직군
   const [situation, setSituation] = useState({
     id: 1,
     content: "상황을 선택해주세요",
@@ -74,6 +74,7 @@ const MainPage = () => {
       .get(`${process.env.REACT_APP_SERVER_URL}/roadmaps/track/${situation.id}`)
       .then((Response) => {
         setNodesDataJSON((oldState) => {
+          console.log(Response.data);
           return Response.data;
         });
       })
@@ -120,12 +121,13 @@ const MainPage = () => {
   useEffect(() => {
     console.log("role 선택됨:", role);
     getSituationList(role);
+    getRoadmap(role);
   }, [role]);
 
   // 상황 선택될 때마다 로드맵 데이터를 가져온다
   useEffect(() => {
     console.log("situation 선택됨:", situation);
-    getRoadmap(situation);
+    // getRoadmap(situation);
   }, [situation]);
 
   const handleCheckbox = () => {
