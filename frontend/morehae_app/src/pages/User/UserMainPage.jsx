@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import Tabs from "@/components/Tab/Tab";
 import axios from "axios";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 
 const UserMainPage = () => {
   const [userProfile, setUserProfile] = useState();
   const [userRoadmap, setUserRoadmap] = useState();
   const [userBlog, setUserBlog] = useState();
 
-  const userInfo = useSelector((state) => state.user.user);
-  const userNickname = userInfo.nickname;
+  // const userInfo = useSelector((state) => state.user.user);
+  // const userNickname = userInfo.nickname;
 
   useEffect(() => {
     axios
@@ -26,7 +26,7 @@ const UserMainPage = () => {
       .get(`http://i8d212.p.ssafy.io:9000/accounts/user/jina/roadmaps`)
       .then((res) =>
         setUserRoadmap(() => {
-          console.log(res.data, "roadmap");
+          // console.log(res.data, "roadmap");
           return res.data;
         })
       )
@@ -36,7 +36,7 @@ const UserMainPage = () => {
       .get(`http://i8d212.p.ssafy.io:9000/accounts/user/jina/blogs`)
       .then((res) =>
         setUserBlog(() => {
-          console.log(res.data, "blog");
+          // console.log(res.data, "blog");
           return res.data;
         })
       )
@@ -45,7 +45,8 @@ const UserMainPage = () => {
 
   // /media/%EA%B5%AC%EB%AF%B8_2%EB%B0%98_%EC%98%A4%EC%A7%80%EB%82%98.JPG
   // ${userProfile?.profile_image}
-  const profile_img = `{% static ${userProfile?.profile_image} %}`;
+
+  const profile_img = `http://i8d212.p.ssafy.io:9000${userProfile?.profile_image}`;
 
   return (
     <div className="flex w-auto h-full justify-center m-8 rounded-lg bg-white ">
@@ -55,7 +56,7 @@ const UserMainPage = () => {
             <div>
               <img
                 className=" h-40 w-40 rounded-full p-1 m-auto shadow-md "
-                // src={profile_img}
+                src={profile_img}
                 alt="img"
               />
             </div>
