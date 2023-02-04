@@ -13,9 +13,9 @@ const MainNode = ({ data }) => {
         </div>
       </div>
 
-      <Handle type="source" position={Position.Right} id="sub" />
-      <Handle type="source" position={Position.Bottom} id="main" />
-      <Handle type="target" position={Position.Top} />
+      <Handle type="source" position={Position.Bottom} id="sub" />
+      <Handle type="source" position={data.direction === "LEFT" ? Position.Left : (data.direction === "MIDDLE" ? Position.Bottom : Position.Right)} id="main" />
+      <Handle type="target" position={data.direction === "LEFT" ? Position.Right : (data.direction === "MIDDLE" ? Position.Top : Position.Left)} />
     </div>
   );
 };
