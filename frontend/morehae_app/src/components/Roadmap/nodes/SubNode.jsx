@@ -14,6 +14,7 @@ const SubNode = ({ data }) => {
         backgroundImage: `url('${
           data.isEssential ? essentialImage : nonEssentialImage
         }')`,
+        fontSize: '0.5rem'
       }}
     >
       <div className={isEssentialClass}>
