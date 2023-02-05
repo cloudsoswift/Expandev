@@ -65,6 +65,7 @@ const PostEditor = ({ content, onMount }) => {
         hooks: hookMap,
         placeholder: "내용을 입력해주세요.",
         initialValue: content ? content : "",
+        theme: "dark",
       });
       onMount(editor);
       return editor;

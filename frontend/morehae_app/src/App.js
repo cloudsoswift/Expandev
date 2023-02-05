@@ -14,6 +14,8 @@ import BlogWritePage from "@/pages/Blog/BlogWritePage";
 import UserMainPage from "@/pages/User/UserMainPage";
 
 import "@/style/basic.css";
+import "@toast-ui/editor/dist/toastui-editor.css";
+import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
 
 
 function App() {
