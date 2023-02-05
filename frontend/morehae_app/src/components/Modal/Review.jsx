@@ -68,7 +68,7 @@ const Review = ({ reqData, nodeId }) => {
 
   return (
     <div>
-      <div className="border-2 rounded-md">
+      <div >
         <ReviewList reviewList={data} onDelete={onDelete} onEdit={onEdit} />
         <ReviewEditor onCreate={onCreate} />
       </div>
