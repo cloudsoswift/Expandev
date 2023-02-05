@@ -19,7 +19,7 @@ const BlogEditPage = () => {
   // useLocation의 state값은 있을 수도, 없을 수도(링크 직접 입력을 통한 비정상적인 접근) 있으므로
   // 렌더링시 에러 막기위해 옵셔널 체이닝으로 없는 경우 "" 또는 [] 할당하도록 설정함.
   const originalPost = locate.state;
-
+  
   useEffect(() => {
     // 수정 버튼을 통해 이동해온게 아니거나, 원글 작성자와 현재 로그인한 유저 다른경우
     // 블로그 페이지로 강제 이동시킴.
@@ -40,13 +40,14 @@ const BlogEditPage = () => {
 
   const [tags, setTags] = useState(originalPost?.tags ? originalPost?.tags : []);
   const [editor, setEditor] = useState();
-  // const request = http(process.env.REACT_APP_BLOG_URL);
-  const request = httpWithURL("http://i8d212.p.ssafy.io:9000/blogs");
+  const request = httpWithURL(process.env.REACT_APP_BLOG_URL);
+  // const request = httpWithURL("http://i8d212.p.ssafy.io:9000/blogs");
   //
   const handleSendEditPost = () => {
     if (!titleIsValid) {
       return;
     }
+    console.log(request.defaults);
     let body = new FormData();
     body.append("title", title.trim());
     body.append("content", editor.getMarkdown());
@@ -57,10 +58,10 @@ const BlogEditPage = () => {
       body.append("thumnail", thumbnail);
     }
     for (let tag of tags) {
-      body.append("tags", tag);
+      body.append("tags", tag.tag);
     }
     request
-      .put("/article", body, {
+      .put(`/article/${originalPost?.id}`, body, {
         withCredentials: true,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -102,7 +103,7 @@ const BlogEditPage = () => {
           <TagCombobox onAddTag={setTags} tagList={tags} />
         </div>
         <div className="h-full my-1">
-          <TagList TagList={tags} onDelete={setTags} />
+          <TagList tagList={tags} onDelete={setTags} />
         </div>
       </div>
       <PostEditor content={originalPost?.content ? originalPost?.content : ""} onMount={setEditor} />
