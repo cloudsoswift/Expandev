@@ -31,7 +31,7 @@ const MainNavBar = () => {
   const buttonStyle = "border border-black rounded-full mr-2";
 
   return (
-    <nav className="h-20 bg-white sticky top-0 z-10 border-b">
+    <nav className="h-20 bg-dark sticky top-0 z-10">
       <div className="grid grid-cols-12 auto-cols-auto h-full items-center">
         <div className="logo col-span-3 pl-8 justify-items-center">
           <Link className="text-4xl font-bold" id="logo" to="/">
@@ -40,7 +40,7 @@ const MainNavBar = () => {
         </div>
         <div className="roadmapBtn col-span-3 justify-self-end">
           <Link
-            className="text-gray-500 hover:text-blue-500 rounded-xl p-2 px-8"
+            className="text-gray-500 hover:text-green-500 rounded-xl p-2 px-8"
             to="/roadmap"
           >
             로드맵
@@ -48,7 +48,7 @@ const MainNavBar = () => {
         </div>
         <div className="blogBtn col-span-3 justify-self-start">
           <Link
-            className="text-gray-500 hover:text-blue-500 rounded-xl p-2 px-8"
+            className="text-gray-500 hover:text-green-500 rounded-xl p-2 px-8"
             to="/blog"
           >
             블로그
@@ -57,7 +57,7 @@ const MainNavBar = () => {
         {!isLogin && (
           <div className="signInBtn col-span-3 justify-self-end pr-4">
             <Link
-              className="transition border-2 border-blue-400 rounded-lg hover:border-blue-600 text-blue-400 text-sm p-4"
+              className="transition rounded-lg border-2 border-green-600 text-green-500 hover:border-green-400 hover:text-green-300 text-sm p-4"
               to="/login"
             >
               로그인/회원가입
@@ -67,7 +67,7 @@ const MainNavBar = () => {
         {isLogin && (
           <div className="userProfile col-span-3 flex justify-self-center items-center">
             <Link to='/blog/write'>
-              <button className="transition bg-blue-100 p-2 px-4 rounded-full mr-4 text-sm text-blue-600 hover:bg-blue-500 hover:text-white" >글 작성하기</button>
+              <button className="transition bg-green-100 p-2 px-4 rounded-full mr-4 text-sm text-green-600 hover:bg-green-500 hover:text-white" >글 작성하기</button>
             </Link>
             <Menu>
               <Menu.Button>

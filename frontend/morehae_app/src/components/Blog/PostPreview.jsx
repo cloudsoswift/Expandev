@@ -13,10 +13,10 @@ const PostPreview = ({post}) => {
   })
 
   return (
-    <div className="w-72 h-96 rounded-xl m-2 hover:bg-gray-300 cursor-pointer shadow-[0px_0px_24px_rgba(149,157,165,0.2)]">
+    <div className="transition w-72 h-96 rounded-xl m-2 bg-[#171b21] border border-slate-800 cursor-pointer hover:-translate-y-2">
       {/* 카드 썸네일 */}
       <div className="p-2">
-        <div role="thumbnail" className="w-full bg-gray-100 h-48 rounded-2xl"></div>
+        <div role="thumbnail" className="w-full bg-slate-800 h-48 rounded-2xl"></div>
       </div>
       
       {/* 카드 내용 */}

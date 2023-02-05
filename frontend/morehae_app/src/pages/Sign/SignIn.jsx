@@ -37,11 +37,11 @@ const SignIn = () => {
 
   const textStyle = "text-sm text-gray-500";
   const textWarningStyle = "text-xs text-red-500";
-  const inputStyle = "transition duration-300 box-border rounded-lg border w-full h-12 p-2 outline-none hover:border-blue-300 focus:border-blue-500";
+  const inputStyle = "transition bg-dark duration-300 box-border rounded-lg border-2 border-slate-700 w-full h-12 p-2 outline-none hover:border-green-500 focus:border-green-300";
 
   return (
     <div className="flex justify-center mt-20">
-      <div className="flex-column w-[36rem] p-4 rounded-lg border">
+      <div className="flex-column bg-[#171b21] w-[36rem] p-4 rounded-lg border border-slate-700">
         <h1 className="text-2xl flex justify-center mb-8">로그인</h1>
         <form>
           {/* 아이디 입력 박스 */}
@@ -61,14 +61,14 @@ const SignIn = () => {
             </div>
             <input value={password} onChange={handlePassword} type="password" className={inputStyle + " mb-4"} />
           </div>
-          <Link className="w-full block text-end text-slate-400 hover:text-black text-sm mb-1" to={"/signup"}>
+          <Link className="transition w-full block text-end text-slate-400 hover:text-green-300 text-sm mb-1" to={"/signup"}>
             아직 회원이 아니신가요?
           </Link>
-          <button onClick={handleLogin} className="transition bg-white w-full h-12 rounded-lg bg-blue-500 text-white hover:bg-blue-400 mb-8">로그인</button>
+          <button onClick={handleLogin} className="transition w-full h-12 rounded-lg text-white bg-green-500 hover:bg-green-400 mb-8">로그인</button>
+          <button className="transition w-full h-12 rounded-lg bg-blue-700 text-white hover:bg-blue-500 mb-2">구글로 시작</button>
+          <button className="transition w-full h-12 rounded-lg bg-yellow-500 text-white hover:bg-yellow-300 mb-2">카카오로 시작</button>
           <button className="transition bg-green w-full h-12 rounded-lg bg-green-600 text-white hover:bg-green-500 mb-2">네이버로 시작</button>
-          <button className="transition bg-white w-full h-12 rounded-lg bg-yellow-500 text-white hover:bg-yellow-300 mb-2">카카오로 시작</button>
-          <button className="transition bg-white w-full h-12 rounded-lg bg-blue-700 text-white hover:bg-blue-500 mb-2">구글로 시작</button>
-          <button className="transition bg-white w-full h-12 rounded-lg bg-black text-white hover:bg-gray-700">애플로 시작</button>
+          <button className="transition w-full h-12 rounded-lg bg-black text-white hover:bg-gray-700">애플로 시작</button>
         </form>
       </div>
     </div>
