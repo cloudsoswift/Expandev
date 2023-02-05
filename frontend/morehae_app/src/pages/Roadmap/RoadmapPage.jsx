@@ -1,6 +1,5 @@
 import { useCallback, useState } from "react";
 
-
 import Modal from "@/components/Modal/Modal";
 import WhatWhy from "@/components/Modal/WhatWhy";
 import Links from "@/components/Modal/Links";
@@ -11,11 +10,7 @@ import HttpWithURL from "@/utils/http";
 import { useEffect } from "react";
 import ReactFlowRoadmap from "@/components/Roadmap/ReactFlowRoadmap";
 
-
-
 const RoadmapPage = () => {
-
-
   // 모달 관련 state
   const [showModal, setShowModal] = useState(false);
 
@@ -107,7 +102,7 @@ const RoadmapPage = () => {
   }, [role]);
 
   // 상황 선택될 때마다 로드맵 데이터를 가져온다
-  useEffect(()=>{
+  useEffect(() => {
     const getRoadMap = async () => {
       const response = await HttpWithURL(process.env.REACT_APP_ROADMAP_URL).get(
         `track/${role?.id ? role.id : 1}`
@@ -115,7 +110,7 @@ const RoadmapPage = () => {
       setNodesDataList(response.data);
     };
     getRoadMap();
-  }, [role])
+  }, [role]);
 
   const handleCheckbox = () => {
     setCheckbox(!checkbox);
@@ -125,52 +120,44 @@ const RoadmapPage = () => {
   // 2. 각 메인 노드 및 해당 메인 노드에 연결된 서브 노드
 
   return (
-    <div className="w-screen h-screen">
-      {/* 드롭다운 컴포넌트들 */}
-      <div className="flex justify-center">
-        <div className="w-96 mr-2">
-          <Dropdown
-            items={roleList}
-            selectedItem={role}
-            setSelectedItem={setRole}
-          />
-        </div>
-        <div className="w-96 ml-2">
-          <Dropdown
-            items={situationList}
-            selectedItem={situation}
-            setSelectedItem={setSituation}
-          />
-        </div>
-      </div>
-      <ReactFlowRoadmap nodesDataList={nodesDataList} loadNodeDetail={loadNodeDetail}/>
-      <Modal
-        id={reqData.id}
-        data={reqData}
-        isVisible={showModal}
-        onClose={() => setShowModal(false)}
-      >
-        <div className="p-6">
-          <div className=" flex justify-between">
-            <h3 className="text-xl font-semibold text-gray-900 mb-5">
-              {reqData.title}
-            </h3>
-            <input
-              className="w-5 h-5 ml-2"
-              type="checkbox"
-              onClick={handleCheckbox}
+    <div className="bg-dark">
+      <div className="w-screen h-screen">
+        {/* 드롭다운 컴포넌트들 */}
+        <div className="flex justify-center">
+          <div className="w-96 mr-2">
+            <Dropdown
+              items={roleList}
+              selectedItem={role}
+              setSelectedItem={setRole}
             />
           </div>
-          <div className="justify-items-end">
-            <button className=" bg-blue-200 px-3 py-1 rounded text-xs">
-              POST
-            </button>
+          <div className="w-96 ml-2">
+            <Dropdown
+              items={situationList}
+              selectedItem={situation}
+              setSelectedItem={setSituation}
+            />
           </div>
-          <WhatWhy reqData={reqData} />
-          <Links reqData={reqData} />
-          <Review reqData={reqData} nodeId={nodeId} />
         </div>
-      </Modal>
+        <ReactFlowRoadmap
+          nodesDataList={nodesDataList}
+          loadNodeDetail={loadNodeDetail}
+        />
+        <Modal
+          id={reqData.id}
+          data={reqData}
+          isVisible={showModal}
+          onClose={() => setShowModal(false)}
+        >
+          <div className="">
+            <div className=" rounded-lg">
+              <WhatWhy reqData={reqData} handleCheckbox={handleCheckbox} className=""/>
+              <Links reqData={reqData} />
+              <Review reqData={reqData} nodeId={nodeId} />
+            </div>
+          </div>
+        </Modal>
+      </div>
     </div>
   );
 };
