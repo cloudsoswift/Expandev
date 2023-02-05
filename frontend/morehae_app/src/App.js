@@ -14,6 +14,8 @@ import BlogWritePage from "@/pages/Blog/BlogWritePage";
 import UserMainPage from "@/pages/User/UserMainPage";
 
 import "@/style/basic.css";
+import "@toast-ui/editor/dist/toastui-editor.css";
+import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
 
 
 function App() {
@@ -29,6 +31,7 @@ function App() {
         <Route path="blog" element={<Outlet />}>
           <Route index element={<BlogListPage />} />
           <Route path="recent" element={<BlogListPage />} />
+          <Route path="tag/:tagId" element={<BlogListPage />} />
           <Route path="post/:postId" element={<Outlet />}>
             <Route index element={<BlogPostPage />} />
             <Route path="edit" element={<BlogEditPage />} />

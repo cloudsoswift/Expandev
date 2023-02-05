@@ -39,8 +39,8 @@ const TagCombobox = ({onAddTag, tagList}) => {
       }
       onAddTag((prevTagList)=>{
         let newTagList = [...prevTagList];
-        if(!prevTagList.includes(selectedTag)){
-          newTagList.push(selectedTag);
+        if(!prevTagList.find(tag => tag.tag === selectedTag)){
+          newTagList.push({ tag: selectedTag, articles_count: 0});
         }
         console.log(newTagList);
         return newTagList;
@@ -52,7 +52,7 @@ const TagCombobox = ({onAddTag, tagList}) => {
   return (
     <Combobox value={selectedTag} onChange={setSelectedTag}>
       <Combobox.Input
-        className={"px-3 py-2 bg-white text-md border border-slate-300 rounded-md shadow-sm placeholder-slate-40 w-full"}
+        className={"px-3 py-2 bg-white text-md border border-slate-300 rounded-md shadow-sm placeholder-slate-40 w-full text-black"}
         onChange={(event) => setQuery(event.target.value)}
         placeholder="태그를 입력해주세요"
         onKeyDown={handleOnKeyDown}
@@ -75,7 +75,7 @@ const TagCombobox = ({onAddTag, tagList}) => {
             </Combobox.Option>
           )}
           {filteredTag.map((tag) => (
-            <Combobox.Option key={tag} value={tag} className={({active})=>`${active ? "text-white bg-blue-500" : ""}`}>
+            <Combobox.Option key={tag} value={tag} className={({active})=>`${active ? "text-white bg-blue-500" : "text-black"}`}>
               {/* {({selected, active}) => {
                 <span className={`${selected ? "text-white bg-blue-500" : ""}`}>{tag}</span>
               }} */}
