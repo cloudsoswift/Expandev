@@ -27,7 +27,7 @@ const InputTitle = ({onChange, value, setValid}) => {
         <br />
       </span>
       <input
-        className="px-3 py-2 bg-white text-2xl rounded-md shadow-sm placeholder-slate-40 w-full"
+        className="px-3 py-2 text-black bg-white text-2xl rounded-md shadow-sm placeholder-slate-40 w-full"
         type="text"
         placeholder="제목을 입력하세요"
         value={value}
