@@ -83,7 +83,7 @@ const BlogWritePage = () => {
       <PostEditor onMount={setEditor} />
       <div className="btn-area grid place-items-end mt-4">
         <button
-          className="border rounded-lg p-2 px-6 bg-blue-500 text-white"
+          className="rounded-lg p-2 px-6 bg-green-500 font-semibold text-white"
           onClick={handleSendPost}
         >
           등록

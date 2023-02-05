@@ -152,7 +152,7 @@ const BlogPostPage = () => {
             <TagList tagList={post.tags} />
           }
         </div>
-        <div className="btn-area ">
+        <div className="btn-area space-x-1">
           <button className="px-2 py-2 border rounded-xl" onClick={handleLike}>
             {post.liked ? (
               <AiFillHeart className="inline" />
@@ -168,12 +168,12 @@ const BlogPostPage = () => {
                 <Link
                   to={`/blog/post/${params.postId}/edit`}
                   state={post}
-                  className="px-6 py-3 border rounded-xl"
+                  className="px-6 py-3 mr-1 font-semibold bg-green-500 rounded-xl"
                 >
                   수정
                 </Link>
                 <button
-                  className="px-6 py-2 border rounded-xl"
+                  className="px-6 py-2 font-semibold bg-red-500 rounded-xl"
                   onClick={handleDeletePost}
                 >
                   삭제
