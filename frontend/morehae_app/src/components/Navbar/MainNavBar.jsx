@@ -79,7 +79,7 @@ const MainNavBar = () => {
               <Menu.Button>
                 <BsPerson size="25" />
               </Menu.Button>
-              <Menu.Items className="absolute top-full bg-slate-100 shadow-md rounded-md mt-2 w-56 flex flex-col focus:outline-none py-2 border">
+              <Menu.Items className="absolute top-full bg-gray-500 shadow-md rounded-md mt-2 w-56 flex flex-col focus:outline-none py-2 border">
                 <Menu.Item>
                   <div className="w-full h-28 border-y grid grid-cols-2">
                     <div className="flex justify-center self-center">
@@ -93,7 +93,7 @@ const MainNavBar = () => {
                 </Menu.Item>
                 <Menu.Item>
                   <Link
-                    className="flex px-2 py-2 border-b hover:bg-slate-200"
+                    className="flex px-2 py-2 border-b hover:bg-gray-300"
                     to={userLink}
                   >
                     <span className="text-xl">마이 페이지</span>
@@ -101,7 +101,7 @@ const MainNavBar = () => {
                 </Menu.Item>
                 <Menu.Item>
                   <button
-                    className="flex px-2 py-2 border-b hover:bg-slate-200"
+                    className="flex px-2 py-2 border-b hover:bg-gray-300"
                     onClick={logoutHandler}
                   >
                     <span className="text-xl">Logout</span>

@@ -1,4 +1,3 @@
-import "@toast-ui/editor/dist/toastui-editor.css";
 import { useState } from "react";
 import httpWithURL from "@/utils/http";
 import TagCombobox from "@/components/Blog/TagCombobox";
@@ -22,8 +21,8 @@ const BlogWritePage = () => {
   //
   const [tags, setTags] = useState([]);
   const [editor, setEditor] = useState();
-  // const request = httpWithURL(process.env.REACT_APP_BLOG_URL);
-  const request = httpWithURL("http://i8d212.p.ssafy.io:8000/blogs");
+  const request = httpWithURL(process.env.REACT_APP_BLOG_URL);
+  // const request = httpWithURL("http://i8d212.p.ssafy.io:8000/blogs");
 
   // 게시물 등록 이벤트 핸들러
   const handleSendPost = () => {
@@ -41,7 +40,7 @@ const BlogWritePage = () => {
       body.append("thumnail", thumbnail);
     }
     for (let tag of tags) {
-      body.append("tags", tag);
+      body.append("tags", tag.tag);
     }
     console.log(request.defaults);
     request
@@ -78,13 +77,13 @@ const BlogWritePage = () => {
           <TagCombobox onAddTag={setTags} tagList={tags} />
         </div>
         <div className="h-full my-1">
-          <TagList TagList={tags} onDelete={setTags} />
+          <TagList tagList={tags} onDelete={setTags} />
         </div>
       </div>
       <PostEditor onMount={setEditor} />
       <div className="btn-area grid place-items-end mt-4">
         <button
-          className="border rounded-lg p-2 px-6 bg-blue-500 text-white"
+          className="rounded-lg p-2 px-6 bg-green-500 font-semibold text-white"
           onClick={handleSendPost}
         >
           등록
