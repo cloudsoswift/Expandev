@@ -10,7 +10,8 @@ const PostEditor = ({ content, onMount }) => {
   const editorRef = useRef();
   const [editor, setEditor] = useState();
   // const [isEditorRendered, setisEditorRendered] = useState(false);
-  const request = httpWithURL("http://i8d212.p.ssafy.io:9000/blogs");
+  // const request = httpWithURL("http://i8d212.p.ssafy.io:9000/blogs");
+  const request = httpWithURL(process.env.REACT_APP_BLOG_URL);
 
   const hookMap = {
     addImageBlobHook: (blob, callback) => {
@@ -56,6 +57,8 @@ const PostEditor = ({ content, onMount }) => {
     if (editor) {
       return;
     }
+    // 버튼 아이콘이 tailwind css 기본 설정 때문에 사라지는거 임시 해결.
+    document.styleSheets[2].cssRules[17].style.backgroundImage = ''
     setEditor(() => {
       const editor = new Editor({
         el: editorRef.current,
