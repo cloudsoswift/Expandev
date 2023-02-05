@@ -13,7 +13,7 @@ const UserMainPage = () => {
 
   useEffect(() => {
     axios
-      .get(`http://i8d212.p.ssafy.io:9000/accounts/user/jina/profile`)
+      .get(`http://i8d212.p.ssafy.io:8000/accounts/user/jina/profile`)
       .then((res) =>
         setUserProfile(() => {
           // console.log(res.data, "data");
@@ -23,7 +23,7 @@ const UserMainPage = () => {
       .catch((err) => console.log(err));
 
     axios
-      .get(`http://i8d212.p.ssafy.io:9000/accounts/user/jina/roadmaps`)
+      .get(`http://i8d212.p.ssafy.io:8000/accounts/user/jina/roadmaps`)
       .then((res) =>
         setUserRoadmap(() => {
           // console.log(res.data, "roadmap");
@@ -33,7 +33,7 @@ const UserMainPage = () => {
       .catch((err) => console.log(err));
 
     axios
-      .get(`http://i8d212.p.ssafy.io:9000/accounts/user/jina/blogs`)
+      .get(`http://i8d212.p.ssafy.io:8000/accounts/user/jina/blogs`)
       .then((res) =>
         setUserBlog(() => {
           // console.log(res.data, "blog");
@@ -49,14 +49,15 @@ const UserMainPage = () => {
   const profile_img = `http://i8d212.p.ssafy.io:9000${userProfile?.profile_image}`;
 
   return (
-    <div className="flex w-auto h-full justify-center m-8 rounded-lg bg-white ">
-      <div className="w-2/3 h-auto p-4 shadow-lg rounded-lg ">
+    <div className="flex w-auto h-full justify-center bg-dark  ">
+      <div className="m-8 w-2/3 h-auto p-4 shadow-lg rounded-lg bg-[rgb(32,37,42)] border border-[rgb(71,79,88)] drop-shadow-sm">
         <div>
-          <div className="relative grid grid-cols-3 h-20 bg-white  justify-center">
+          <div className="relative grid grid-cols-3 h-20 bbg-[rgb(32,37,42)] justify-center d">
             <div>
               <img
-                className=" h-40 w-40 rounded-full p-1 m-auto shadow-md "
-                src={profile_img}
+                className=" h-40 w-40 rounded-full p-1 m-auto drop-shadow-md "
+                // src={profile_img}
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
                 alt="img"
               />
             </div>
@@ -67,13 +68,13 @@ const UserMainPage = () => {
               </span>
             </div>
             <div className="mt-9 m-2 text-right">
-              <button className="px-3 py-1 rounded-md shadow-md text-xs text-white bg-blue-400 hover:bg-blue-500 ">
+              <button className="px-3 py-1 rounded-md shadow-md text-xs text-white bg-purple-700 hover:bg-purple-900 ">
                 회원정보수정
               </button>
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-3  bg-blue-300 shadow-md rounded-md h-auto p-3">
+        <div className="grid grid-cols-3  bg-purple-700 shadow-md rounded-md h-auto p-3 ">
           <div className="empty"></div>
           <div className="col-span-2 ">
             <div className=" bg-white m-2 p-2 rounded-md shadow-md max-h-48 text-sm">
