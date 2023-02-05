@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import Reply from "@/components/Blog/Reply";
+import MainReply from "@/components/Blog/MainReply";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import httpWithURL from "@/utils/http";
-import PostViewer from "../../components/Blog/PostViewer";
-import TagPill from "../../components/Blog/TagPill";
+import PostViewer from "@/components/Blog/PostViewer";
+import TagPill from "@/components/Blog/TagPill";
 import { useSelector } from "react-redux";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import TagList from "../../components/Blog/TagList";
 
 const dummyReplies = [
   {
@@ -58,7 +59,6 @@ const BlogPostPage = () => {
       .get(postID)
       .then((Response) => {
         // console.log("게시글 상세정보:", Response.data);
-        console.log(Response);
         setPost((oldState) => {
           if (Response?.data !== undefined) {
             return Response.data;
@@ -148,11 +148,11 @@ const BlogPostPage = () => {
         <div></div>
         <PostViewer content={post.content} />
         <div>
-          {post.tags?.map((tag) => (
-            <TagPill key={tag.id} title={tag.tag} />
-          ))}
+          {
+            <TagList tagList={post.tags} />
+          }
         </div>
-        <div className="btn-area ">
+        <div className="btn-area space-x-1">
           <button className="px-2 py-2 border rounded-xl" onClick={handleLike}>
             {post.liked ? (
               <AiFillHeart className="inline" />
@@ -168,12 +168,12 @@ const BlogPostPage = () => {
                 <Link
                   to={`/blog/post/${params.postId}/edit`}
                   state={post}
-                  className="px-6 py-3 border rounded-xl"
+                  className="px-6 py-3 mr-1 font-semibold bg-green-500 rounded-xl"
                 >
                   수정
                 </Link>
                 <button
-                  className="px-6 py-2 border rounded-xl"
+                  className="px-6 py-2 font-semibold bg-red-500 rounded-xl"
                   onClick={handleDeletePost}
                 >
                   삭제
@@ -183,7 +183,7 @@ const BlogPostPage = () => {
           }
         </div>
         {replies.map((reply) => (
-          <Reply key={reply.id} reply={reply} />
+          <MainReply key={reply.id} reply={reply} />
         ))}
       </div>
     </div>
