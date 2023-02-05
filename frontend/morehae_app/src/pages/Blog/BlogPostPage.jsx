@@ -6,6 +6,7 @@ import PostViewer from "@/components/Blog/PostViewer";
 import TagPill from "@/components/Blog/TagPill";
 import { useSelector } from "react-redux";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import TagList from "../../components/Blog/TagList";
 
 const dummyReplies = [
   {
@@ -147,9 +148,9 @@ const BlogPostPage = () => {
         <div></div>
         <PostViewer content={post.content} />
         <div>
-          {post.tags?.map((tag) => (
-            <TagPill key={tag.id} title={tag.tag} />
-          ))}
+          {
+            <TagList tagList={post.tags} />
+          }
         </div>
         <div className="btn-area ">
           <button className="px-2 py-2 border rounded-xl" onClick={handleLike}>

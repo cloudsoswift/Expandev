@@ -40,7 +40,7 @@ const PostEditor = ({ content, onMount }) => {
         .then((data) => {
           // callback(`${process.env.REACT_APP_SERVER_URL}${data.image}`, blob.name);
           callback(
-            `${"http://i8d212.p.ssafy.io:9000"}${data.image}`,
+            `${process.env.REACT_APP_SERVER_URL}${data.image}`,
             blob.name
           );
         })

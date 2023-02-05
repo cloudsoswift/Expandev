@@ -31,6 +31,7 @@ function App() {
         <Route path="blog" element={<Outlet />}>
           <Route index element={<BlogListPage />} />
           <Route path="recent" element={<BlogListPage />} />
+          <Route path="tag/:tagId" element={<BlogListPage />} />
           <Route path="post/:postId" element={<Outlet />}>
             <Route index element={<BlogPostPage />} />
             <Route path="edit" element={<BlogEditPage />} />

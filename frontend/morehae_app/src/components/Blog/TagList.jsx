@@ -9,7 +9,7 @@ const TagList = ({tagList, onDelete}) => {
   }, [tagList])
   return (
     <div className="h-full space-x-1">
-      {tags.map((tag)=><TagPill key={tag.tag} title={tag.tag} count={tag.articles_count} onDelete={onDelete}/>)}
+      {tags.map((tag)=><TagPill key={tag.tag} title={tag.tag} count={tag.articles_count} id={tag.id ? tag.id : ""} onDelete={onDelete}/>)}
     </div>
   )
 }
