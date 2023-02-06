@@ -23,7 +23,7 @@ const InputOverview = ({ onChange, value, setValid }) => {
         <br />
       </span>
       <textarea
-        className="px-3 py-2 border text-black bg-white text-2xl rounded-md shadow-sm placeholder-slate-40 w-full h-full resize-none"
+        className="px-3 py-2 bg-slate-800 rounded-md shadow-sm placeholder-slate-40 w-full h-full resize-none"
         placeholder="글 요약을 입력해주세요."
         value={value}
         onChange={handleOverviewChange}
