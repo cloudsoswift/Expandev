@@ -33,7 +33,7 @@ const elkLayout = (
   height = 384
 ) => {
   const nodesForElk = nodes.map((node) => {
-    console.log(node);
+    // console.log(node);
     return {
       id: node.id,
       width: width,
@@ -51,10 +51,8 @@ const elkLayout = (
     children: nodesForElk,
     edges: edges,
   };
-  console.log(graph);
   return elk.layout(graph);
 };
-elk.knownLayoutOptions().then(response=>{console.log(response);})
 const ReactFlowRoadmapComponent = ({
   nodesDataList,
   loadNodeDetail,
@@ -175,13 +173,13 @@ const ReactFlowRoadmapComponent = ({
       const mainEdges = initialEdges.filter((edge) =>
         mainNodes.map((node) => node.id).includes(edge.target)
       );
-      console.log(mainNodes, mainEdges);
+      // console.log(mainNodes, mainEdges);
       // 먼저 메인 노드, 엣지에 대하여 Elk를 통한 Position 계산
       const outerFunction = async () => {
         const tempFunction = async () => {
           const graph = await elkLayout(mainNodes, mainEdges, "DOWN", "mrtree");
-          console.log("1. 그래프 계산");
-          console.log(graph);
+          // console.log("1. 그래프 계산");
+          // console.log(graph);
           // Main Node에만 계산한 position 값 추가 반경, 이외에는 그냥 원래 노드값만.
           let count = 0;
           let diff = -600;
@@ -215,7 +213,7 @@ const ReactFlowRoadmapComponent = ({
                   },
                 }),
             };
-            console.log(count, diff);
+            // console.log(count, diff);
             return newNode;
           });
           // Main Edge에만 계산한 위치값(selection) 추가 반경, 이외에는 그냥 원래 노드값만.
@@ -228,7 +226,7 @@ const ReactFlowRoadmapComponent = ({
           });
           // 각 메인 노드들에 대해 해당 메인 노드와 서브 노드에 대해 ELk를 통한 Position 계산
           for (let mainNode of mainNodes) {
-            console.log(mainNode);
+            // console.log(mainNode);
             // 루트 노드("웹 공통" 같은 것)의 경우 스킵
             if (mainNode.id === "0") {
               continue;
@@ -243,7 +241,7 @@ const ReactFlowRoadmapComponent = ({
               (edge) =>
                 edge.data?.parent === mainNode.id && edge.data.depth === 2
             );
-            console.log(subNodes, subEdges);
+            // console.log(subNodes, subEdges);
             const subGraph = await elkLayout(
               subNodes,
               subEdges,
@@ -252,7 +250,7 @@ const ReactFlowRoadmapComponent = ({
               68,
               68
             );
-            console.log("돌았다");
+            // console.log("돌았다");
             // 현재 메인 노드 및 서브노드에만 계산한 position 값 추가 반경, 이외에는 그냥 원래 노드값만.
             initialNodes = initialNodes.map((node) => {
               const calcedNode = subGraph.children.find(
@@ -283,8 +281,8 @@ const ReactFlowRoadmapComponent = ({
         await tempFunction();
         setNodes(initialNodes);
         setEdges(initialEdges);
-        console.log(initialNodes);
-        console.log(initialEdges);
+        // console.log(initialNodes);
+        // console.log(initialEdges);
       };
       outerFunction();
     };
@@ -315,11 +313,11 @@ const ReactFlowRoadmapComponent = ({
       if (eventNode.data.depth === undefined) {
         return;
       }
-      console.log(eventNode, "이벤트 노드 바뀜.");
+      // console.log(eventNode, "이벤트 노드 바뀜.");
       // setClickedNode(eventNode);
       // 노드 클릭시, 해당 노드가 메인 노드라면 해당 메인 노드의 서브 노드들의 Visible Toggle.
       if (eventNode.data.depth === 2) {
-        console.log(eventNode.id);
+        // console.log(eventNode.id);
         loadNodeDetail(eventNode.id);
         return;
       }
@@ -333,10 +331,10 @@ const ReactFlowRoadmapComponent = ({
   );
   const handleMouseMoveEnd = useCallback(
     (event, viewport) => {
-      console.log("END", event, viewport);
+      // console.log("END", event, viewport);
       if (event.type === "wheel") {
-        console.log(viewport.zoom);
-        console.log(hoveredNode);
+        // console.log(viewport.zoom);
+        // console.log(hoveredNode);
         setZoomLevel(viewport.zoom);
       }
     },
@@ -447,7 +445,7 @@ const ReactFlowRoadmap = ({ nodesDataList, loadNodeDetail }) => {
     setIsOpenAll((prevState) => !prevState);
   };
   return (
-    <div className="w-full h-4/5 relative z-10">
+    <div className="w-full h-4/5 relative z-10 mt-40">
       <button onClick={handleOpenAll}>전체 열기</button>
       <ReactFlowProvider>
         <ReactFlowRoadmapComponent
