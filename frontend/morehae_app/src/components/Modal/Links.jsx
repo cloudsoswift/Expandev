@@ -10,7 +10,7 @@ const Links = ({ reqData }) => {
     <div className="p-6">
       <div>
         <div className=" flex justify-between">
-          <h2 className="text-md my-1 text-white underline underline-offset-8">
+          <h2 className="text-xl my-1 text-white ">
             블로그
           </h2>
           <button className="rounded text-xs  text-[rgb(71,79,88)] hover:text-white">more..</button>
@@ -28,13 +28,13 @@ const Links = ({ reqData }) => {
         </div>
       </div>
       <div className="mb-5">
-        <h2 className="text-md my-4  text-white underline underline-offset-8">
+        <h2 className="text-xl my-4  text-white">
           인터뷰
         </h2>
         <Carousel reqData={reqData} />
       </div>
       <div className="my-3">
-        <h2 className="text-md my-1 text-white  underline underline-offset-8">
+        <h2 className="text-xl my-1 text-white ">
           추천 컨텐츠
         </h2>
         <div className="grid grid-cols-3 gap-3 justify-items-center text-center p-3">

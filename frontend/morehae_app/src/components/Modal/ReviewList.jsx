@@ -2,7 +2,7 @@ import React from "react";
 import ReviewListItem from "@/components/Modal/ReviewListItem";
 import { FaStar } from "react-icons/fa";
 
-const ReviewList = ({ reviewList, onDelete, onEdit }) => {
+const ReviewList = ({ reviewList, onDelete, onEdit, reviewLike }) => {
   const getAvgImp = (list) => {
     if (list.length === 0) return 0;
     let sum = 0;
@@ -21,14 +21,11 @@ const ReviewList = ({ reviewList, onDelete, onEdit }) => {
     return Math.round(sum / list.length);
   };
 
-  console.log(reviewList);
   return (
     <div className="px-3 pt-3 drop-shadow-lg">
       <div className=" bg-[rgb(48,54,61)] p-3 rounded-t-lg">
         <div>
-          <div className="text-md mt-2 mb-5 text-white underline underline-offset-8 ">
-            REVIEW
-          </div>
+          <div className="text- mt-2 mb-5 text-white  ">REVIEW</div>
           <div className="flex">
             <div className="mr-2 mb-2 text-sm flex">
               <span className="text-white mr-1 ">중요도</span>
@@ -48,7 +45,6 @@ const ReviewList = ({ reviewList, onDelete, onEdit }) => {
                 <FaStar key={idx} className="text-sm text-gray-300 mt-0.5" />
               ))}
             </div>
-            
           </div>
 
           <div className="bg-[rgb(32,37,42)] py-2 rounded-lg drop-shadow-lg">
@@ -58,6 +54,7 @@ const ReviewList = ({ reviewList, onDelete, onEdit }) => {
                 {...item}
                 onDelete={onDelete}
                 onEdit={onEdit}
+                reviewLike={reviewLike}
               />
             ))}
           </div>

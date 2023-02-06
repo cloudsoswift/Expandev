@@ -151,13 +151,13 @@ const ReviewEditor = ({ onCreate }) => {
             placeholder="내용"
             value={state.content}
             onChange={handleChangeState}
-            className="rounded-md p-1 mb-3 w-full h-[100px] text-sm bg-[rgb(161,173,185)] text-white"
+            className="rounded-md p-1 mb-3 w-full h-[100px] text-sm bg-[rgb(32,37,42)] text-white"
           />
         </div>
         <div className="flex justify-end">
           <button
             onClick={handleSubmit}
-            className="px-3 py-1 rounded-md bg-[rgb(42,42,50)] hover:bg-[rgb(50,50,50)] cursor-pointer text-white text-xs drop-shadow-md"
+            className="px-3 py-1 rounded-md bg-[rgb(42,42,50)] hover:bg-[rgb(50,50,50)] cursor-pointer text-white text-xs hover:text-green-500 drop-shadow-md border-2 hover:border-green-500 border-white"
           >
             저장
           </button>

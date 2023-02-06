@@ -18,8 +18,6 @@ const RoadmapPage = () => {
   const [nodeId, setNodeId] = useState(null);
   const [check, setCheck] = useState(false);
 
-  const [checkbox, setCheckbox] = useState(false);
-
   /* 드롭다운 메뉴 관련 state들 */
   const [role, setRole] = useState({ id: 0, content: "포지션을 선택해주세요" }); // 직군
   const [situation, setSituation] = useState({
@@ -68,23 +66,24 @@ const RoadmapPage = () => {
   // 로드맵 상세 모달 데이터 가져오기
   const loadNodeDetail = (id) => {
     setNodeId(() => id);
-    console.log(check);
+    // console.log(check);
     setCheck((prevCheck) => !prevCheck);
   };
   // 노드 데이터 가져오기?
   const getData = useCallback(async () => {
     await HttpWithURL(process.env.REACT_APP_ROADMAP_URL)
       .get(`node/${nodeId}`)
-      .then((res) => setReqData(res.data));
-    // fetch 썼을 때
-    // const res = await fetch(
-    //   `http://i8d212.p.ssafy.io:8000/roadmaps/node/${nodeId}`
-    // ).then((res) => res.json());
-    // setReqData(res);
-
+      .then((res) => setReqData(() => res.data));
     setShowModal(() => !showModal);
     // eslint-disable-next-line
   }, [check]);
+
+  const getData2 = () => {
+    HttpWithURL(process.env.REACT_APP_ROADMAP_URL)
+      .get(`node/${nodeId}`)
+      .then((res) => setReqData(() => res.data));
+  };
+
 
   useEffect(() => {
     getData();
@@ -112,9 +111,6 @@ const RoadmapPage = () => {
     getRoadMap();
   }, [role]);
 
-  const handleCheckbox = () => {
-    setCheckbox(!checkbox);
-  };
   // Component 첫 Rendering시 Initialize
   // 1. 메인 노드들 Elkjs를 이용해 위치 계산
   // 2. 각 메인 노드 및 해당 메인 노드에 연결된 서브 노드
@@ -151,9 +147,9 @@ const RoadmapPage = () => {
         >
           <div className="">
             <div className=" rounded-lg">
-              <WhatWhy reqData={reqData} handleCheckbox={handleCheckbox} className=""/>
+              <WhatWhy reqData={reqData} nodeId={nodeId} />
               <Links reqData={reqData} />
-              <Review reqData={reqData} nodeId={nodeId} />
+              <Review reqData={reqData} nodeId={nodeId} getData2={getData2}/>
             </div>
           </div>
         </Modal>
