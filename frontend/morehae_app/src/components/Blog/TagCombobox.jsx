@@ -52,7 +52,7 @@ const TagCombobox = ({onAddTag, tagList}) => {
   return (
     <Combobox value={selectedTag} onChange={setSelectedTag}>
       <Combobox.Input
-        className={"px-3 py-2 bg-white text-md border border-slate-300 rounded-md shadow-sm placeholder-slate-40 w-full text-black"}
+        className={"px-3 py-2 bg-white text-md rounded-md shadow-sm placeholder-slate-40 w-full bg-slate-800"}
         onChange={(event) => setQuery(event.target.value)}
         placeholder="태그를 입력해주세요"
         onKeyDown={handleOnKeyDown}
