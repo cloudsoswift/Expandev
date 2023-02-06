@@ -31,23 +31,24 @@ const Carousel = ({ reqData }) => {
         </div>
         <div
           id="slider"
-          className="w-full h-full overflow-x-scroll scrollbar-hide flex-nowrap scroll-smooth "
+          className="w-full h-full overflow-x-scroll scrollbar-hide whitespace-nowrap scroll-smooth "
         >
           {reqData.interview.map((item, slideIdx) => (
             <div
               id="slide"
               key={slideIdx}
-              className="w-[160px] h-[180px] rounded-lg inline-block border border-[rgb(71,79,88)] p-2 mx-1 cursor-pointer hover:scale-105 ease-in-out duration-300 bg-[rgb(48,54,61)] "
+              className="w-[163px] h-[180px] rounded-lg inline-block border p-2 mx-1 cursor-pointer hover:scale-105 ease-in-out duration-300 border-[rgb(71,79,88)]  bg-[rgb(48,54,61)] "
             >
               <div>
-                <p className=" w-[150px] h-[140px] text-[rgb(161,173,185)] text-sm">
+                <div className=" w-[150px] h-[140px] text-[rgb(161,173,185)] text-sm">
                   {item.content}
-                </p>
+                </div>
                 <div className="flex justify-end">
                   <div className="text-xs text-[rgb(161,173,185)] ">
                     {item.interviewee}
                   </div>
                 </div>
+                
               </div>
             </div>
           ))}
