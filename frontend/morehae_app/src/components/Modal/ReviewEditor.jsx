@@ -1,21 +1,17 @@
-
-import React, {  useRef, useState } from "react";
-// import { FaStar } from "react-icons/fa";
-
-
+import React, { useRef, useState, useEffect } from "react";
+import { FaStar } from "react-icons/fa";
 
 const ReviewEditor = ({ onCreate }) => {
   const contentInput = useRef();
 
+  const [imClicked, setImClicked] = useState([false, false, false, false, false]);
+  const [diClicked, setDiClicked] = useState([false, false, false, false, false]);
+
   const [state, setState] = useState({
-    user: "",
     content: "",
     importance: 5,
     difficulty: 5,
   });
-
-  
-
 
   const handleChangeState = (e) => {
     setState({
@@ -24,70 +20,118 @@ const ReviewEditor = ({ onCreate }) => {
     });
   };
 
-
-
   const handleSubmit = (e) => {
     if (state.content.length < 5) {
       contentInput.current.focus();
-      alert("5글자 이상 입력해주세요")
-      return
+      alert("5글자 이상 입력해주세요");
+      return;
     }
-    onCreate(state.user, state.content, state.importance, state.difficulty);
+    onCreate( state.content, state.importance, state.difficulty);
     console.log(state);
     alert("작성 완료");
     setState({
-      user: "",
+
       content: "",
       importance: 5,
       difficulty: 5,
     });
   };
 
+  // importance
+  const ARRAY1 = [0, 1, 2, 3, 4];
+
+  const handleImStarClick = (idx) => {
+    let clickStates = [...imClicked];
+    for (let i = 0; i < 5; i++) {
+      clickStates[i] = i <= idx ? true : false;
+    }
+    setImClicked(clickStates);
+  };
+
+  useEffect(() => {
+    sendImportance();
+    // eslint-disable-next-line
+  }, [imClicked]);
+
+  const sendImportance = () => {
+    let importanceScore = imClicked.filter(Boolean).length;
+    // console.log(importanceScore, "importance");
+    setState({ ...state, importance: importanceScore });
+  };
+
+
+  // difficulty
+  const ARRAY2 = [0, 1, 2, 3, 4];
+
+  const handleDiStarClick = (idx) => {
+    let clickStates = [...diClicked];
+    for (let i = 0; i < 5; i++) {
+      clickStates[i] = i <= idx ? true : false;
+    }
+    setDiClicked(clickStates);
+  };
+
+  useEffect(() => {
+    sendDifficulty();
+    // eslint-disable-next-line
+  }, [diClicked]);
+
+  const sendDifficulty= () => {
+    let difficultyScore = diClicked.filter(Boolean).length;
+    // console.log(difficultyScore, "difficulty" );
+    setState({ ...state, difficulty: difficultyScore  });
+  };
+
   return (
     <div className="p-3 bg-slate-100">
       <h2 className="mb-2">리뷰 작성</h2>
 
-      
       <div className="mb-1">
-        <span>중요도</span>
-        <select
-          name="importance"
-          value={state.importance}
-          onChange={handleChangeState}
-          className="mx-2 rounded-md"
-        >
-          <option value={1}>1</option>
-          <option value={2}>2</option>
-          <option value={3}>3</option>
-          <option value={4}>4</option>
-          <option value={5}>5</option>
-        </select>
+        <div className="flex">
+          <span className="mr-2">중요도</span>
+          {ARRAY1.map((el, idx) => {
+            return (
+              <FaStar
+                key={idx}
+                onClick={() => handleImStarClick(el)}
+                className={
+                  imClicked[el]
+                    ? "mt-0.5 text-yellow-300 text-lg"
+                    : "mt-0.5 text-gray-200 text-lg"
+                }
+              />
+            );
+          })}
+        </div>
       </div>
 
-      <div className="mb-2">
-        <span>난이도</span>
-        <select
-          name="difficulty"
-          value={state.difficulty}
-          onChange={handleChangeState}
-          className="mx-2 rounded-md"
-        >
-          <option value={1}>1</option>
-          <option value={2}>2</option>
-          <option value={3}>3</option>
-          <option value={4}>4</option>
-          <option value={5}>5</option>
-        </select>
+      <div className="mb-1">
+        <div className="flex">
+          <span className="mr-2">난이도</span>
+          {ARRAY2.map((el, idx) => {
+            return (
+              <FaStar
+                key={idx}
+                onClick={() => handleDiStarClick(el)}
+                className={
+                  diClicked[el]
+                    ? "mt-0.5 text-yellow-300 text-lg"
+                    : "mt-0.5 text-gray-200 text-lg"
+                }
+              />
+            );
+          })}
+        </div>
       </div>
 
       <div>
-        <input
+        {/* <input
           name="user"
           placeholder="이름"
           value={state.user}
           onChange={handleChangeState}
           className=" rounded-md p-1 mb-3 w-[100px] text-sm"
-        />
+        /> */}
       </div>
       <div>
         <textarea
@@ -107,7 +151,6 @@ const ReviewEditor = ({ onCreate }) => {
           저장
         </button>
       </div>
-
     </div>
   );
 };
