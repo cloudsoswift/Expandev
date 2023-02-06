@@ -21,7 +21,7 @@ def tag_list(request, search_tag=None):  # articles_count 수로 정렬
 
 @api_view(['GET'])
 def tag_articles(request):  # 태그 게시글 조회 (hit으로 정렬)
-    select_tags = request.data.getlist('tags')
+    select_tags = request.GET.getlist('tags')
     temp_articles = []
     for search_tag in select_tags:
         try:  # 태그 없으면 넘어가도록 함
