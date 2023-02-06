@@ -4,6 +4,7 @@ const SubNode = ({subNodeData, xpos, yposObj, dy, handleClickButton}) => {
   const subFill = "lightgray"
 
   function clickHandler() {
+    console.log(handleClickButton);
     console.log("서브 노드 클릭됨:", subNodeData.title);
     handleClickButton(subNodeData.id);
   }
