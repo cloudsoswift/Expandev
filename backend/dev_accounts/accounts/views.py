@@ -1,3 +1,4 @@
+from django.views import View
 from .models import User, Profile
 from .serializers import UserSerializer, UserProfileSerializer
 from blogs.models import Article, Comment
@@ -111,3 +112,49 @@ def get_user_roadmaps(request, nickname):
         'favorite_roadmpas': favorite_roadmpas.data
     }
     return Response(data, status=status.HTTP_200_OK)
+
+
+from django.shortcuts import redirect 
+import urllib 
+
+# code 요청
+def kakao_login(request):
+    app_rest_api_key = '9dc0cc4073c88973eefa99bb2f1f9bcc'
+    redirect_uri = "http://127.0.0.1:8000/accounts/login/kakao/callback/"
+    return redirect(
+        f"https://kauth.kakao.com/oauth/authorize?client_id={app_rest_api_key}&redirect_uri={redirect_uri}&response_type=code"
+    )
+    
+    
+# access token 요청
+def kakao_callback(request):                          
+    print('옴?')                                        
+    params = urllib.parse.urlencode(request.GET)      
+    print(params)                                
+    return redirect(f'http://127.0.0.1:8000/accounts/login/kakao/callback?{params}')   
+
+
+import requests                       
+
+
+class KakaoView(View):
+    def get(self, request):
+        kakao_api = 'https://kauth.kakao.com/oauth/authorize?response_type=code'
+        redirect_uri = 'http://127.0.0.1:8000/accounts/kakao/callback/'
+        client_id = '9dc0cc4073c88973eefa99bb2f1f9bcc'
+
+        return redirect(f'{kakao_api}&client_id={client_id}&redirect_uri={redirect_uri}')
+
+
+class KakaoCallBackView(View):
+    def get(self, request):
+        data = {
+            'grant_type': 'authorization_code',
+            'client_id': '9dc0cc4073c88973eefa99bb2f1f9bcc',
+            'redirect_uri': 'http://127.0.0.1:8000/accounts/kakao/callback/',
+            'code': request.GET['code'],
+            'client_secret': 'LjHYtkcMbEVnEUcjeHh2aXjwkD2IvKK0',
+        }
+        kakao_token_api = 'https://kauth.kakao.com/oauth/token'
+        access_token = requests.post(kakao_token_api, data=data).json()
+        return redirect('http://i8d212.p.ssafy.io/')

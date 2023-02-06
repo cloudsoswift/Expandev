@@ -110,7 +110,9 @@ def article(request, article_id=None):  # 게시글 디테일
         if serializer.is_valid():
             serializer.save(tags=tags, user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-
+        else:
+            print(serializer.errors)
+            return Response()
 
 # 댓글
 @api_view(['GET'])
