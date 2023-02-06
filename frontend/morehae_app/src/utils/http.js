@@ -1,4 +1,5 @@
 import axios from "axios";
+import store from "@/utils/store/store";
 
 const http = axios.create({
   headers: {
@@ -6,7 +7,7 @@ const http = axios.create({
   },
 });
 
-export const setAccessToken = (token) => {
+export const setAxiosAccessToken = (token) => {
   if (token) {
     http.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   } else {
@@ -20,6 +21,9 @@ http.interceptors.request.use(
 );
 
 const httpWithURL = (URL) => {
+  const state = store.getState();
+  const accessToken = state.user.access_token;
+  setAxiosAccessToken(accessToken);
   http.defaults.baseURL = URL;
   return http;
 };
