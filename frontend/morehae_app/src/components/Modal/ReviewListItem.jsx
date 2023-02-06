@@ -9,6 +9,8 @@ const ReviewListItem = ({
   onEdit,
   reviewLike,
 
+  likedUser,
+
   id,
   user,
   content,
@@ -16,9 +18,10 @@ const ReviewListItem = ({
   user_profile_image,
   like_users,
 }) => {
-
   const [isEdit, setIsEdit] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
+
+  const [isLiked, setIsLiked] = useState(false)
+
 
   const toggleIsEdit = () => {
     setIsEdit(!isEdit);
@@ -40,23 +43,22 @@ const ReviewListItem = ({
     toggleIsEdit();
   };
 
-  const toggleHeart = ()=> {
-    setIsLiked(!isLiked);
+
+  const toggleIsLiked = ()=> {
+    setIsLiked(!isLiked)
   }
 
-  const handleLike = () => {
+  const handleLike = (id) => {
+
+    console.log(id)
     reviewLike(id);
+    toggleIsLiked()
     
-    toggleHeart()
-    console.log(isLiked, "ans")
-  
-
+    console.log(isLiked, "isLiked state")
   };
-  console.log(isLiked,"out")
-
-
-
+  console.log(likedUser, "likedUser out")
  
+
   return (
     <div>
       <div className="rounded mb-3 p-3 ">
@@ -98,21 +100,23 @@ const ReviewListItem = ({
               <div className="text-xs px-2 pb-2   text-[rgb(161,173,185)]">
                 작성일자 {new Date(created_at).toLocaleString()}
               </div>
-              {isLiked ? (
-                <>
-                  <div className="text-xs mr-3 flex">
-                    <FaHeart className="text-red-600 mt-0.5 cursor-pointer" onClick={handleLike} />
-                    <div className="ml-1">{like_users.length}</div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="text-xs mr-3 flex">
-                    <FaHeart className="text-white mt-0.5 cursor-pointer " onClick={handleLike} />
-                    <div className="ml-1">{like_users.length}</div>
-                  </div>
-                </>
-              )}
+              <div>
+                {likedUser ? (
+                  <>
+                    <div className="text-xs mr-3 flex">
+                      <FaHeart className="text-red-600 mt-0.5 cursor-pointer" onClick={()=>handleLike(id)} />
+                      <div className="ml-1">{like_users?.length}</div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="text-xs mr-3 flex">
+                      <FaHeart className="text-white mt-0.5 cursor-pointer hover:text-red-600" onClick={()=>handleLike(id)} />
+                      <div className="ml-1">{like_users?.length}</div>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
 
             {isEdit ? (
