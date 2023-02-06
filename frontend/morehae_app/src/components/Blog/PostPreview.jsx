@@ -21,7 +21,7 @@ const PostPreview = ({post}) => {
       
       {/* 카드 내용 */}
       <div className="pl-4 pr-4 pb-4">
-        <p className="truncate text-2xl font-bold mb-2">{post.title}</p>
+        <p className="truncate text-2xl font-bold my-2">{post.title}</p>
         <p className="flex justify-end text-xs mb-2 text-gray-400">{dateString}</p>
         <p className="h-16 line-clamp-4 text-xs">{post.content}</p>
         {/* <p>{post.tags.map(e => <div>{e.tag}</div>)}</p> */}

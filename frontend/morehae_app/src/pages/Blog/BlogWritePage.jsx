@@ -63,33 +63,35 @@ const BlogWritePage = () => {
       });
   };
   return (
-    <div className="min-h-screen h-full mx-1">
-      <div className="text-2xl mb-4 text-center">글 쓰기</div>
-      <div className="input-form">
-        <div>
+    <div className="flex justify-center">
+      <div className="h-full w-1/2">
+        <div className="text-2xl mb-4 text-center">글 쓰기</div>
+        <div className="input-form">
           <InputTitle onChange={setTitle} value={title} setValid={setTitleIsValid}/>
-          <div className="grid grid-cols-2 border rounded-lg p-1">
+          <div className="grid grid-cols-2">
             <InputThumbnail onChange={setThumbnail} value={thumbnail}/>
             <InputOverview onChange={setOverview} setValid={setOverviewIsValid} value={overview}/>
           </div>
+          <div className="mt-8">
+            <TagCombobox onAddTag={setTags} tagList={tags} />
+          </div>
+          <div className="h-full my-1">
+            <TagList tagList={tags} onDelete={setTags} />
+          </div>
         </div>
-        <div>
-          <TagCombobox onAddTag={setTags} tagList={tags} />
+        <PostEditor onMount={setEditor} />
+        <div className="btn-area grid place-items-end mt-4">
+          <button
+            className="rounded-lg p-2 px-6 bg-green-500 font-semibold text-white"
+            onClick={handleSendPost}
+          >
+            등록
+          </button>
         </div>
-        <div className="h-full my-1">
-          <TagList tagList={tags} onDelete={setTags} />
-        </div>
-      </div>
-      <PostEditor onMount={setEditor} />
-      <div className="btn-area grid place-items-end mt-4">
-        <button
-          className="rounded-lg p-2 px-6 bg-green-500 font-semibold text-white"
-          onClick={handleSendPost}
-        >
-          등록
-        </button>
       </div>
     </div>
+    
+
   );
 };
 
