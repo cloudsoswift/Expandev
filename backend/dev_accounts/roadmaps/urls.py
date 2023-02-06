@@ -4,7 +4,7 @@ from django.urls import path
 
 urlpatterns = [
     path('track/<int:track_id>', views.get_track),
-    path('track/<int:track_id>/favorite', views.favorite_roadmaps),
+    # path('track/<int:track_id>/favorite', views.favorite_roadmaps),
     path('node/<int:node_id>', views.get_node),
     path('node/<int:node_id>/clear', views.clear_node),
     path('review', views.node_review),
