@@ -33,7 +33,7 @@ const BlogWritePage = () => {
     let body = new FormData();
     body.append("title", title.trim());
     body.append("content", editor.getMarkdown());
-    if (!overviewIsValid) {
+    if (overviewIsValid) {
       body.append("overview", overview);
     }
     if (!thumbnail) {
