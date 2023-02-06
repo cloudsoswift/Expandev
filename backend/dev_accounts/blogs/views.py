@@ -21,7 +21,8 @@ def tag_list(request, search_tag=None):  # articles_count 수로 정렬
 
 @api_view(['GET'])
 def tag_articles(request):  # 태그 게시글 조회 (hit으로 정렬)
-    select_tags = request.data.getlist('tags')
+    select_tags = request.GET.getlist('tags')
+    count = int(request.GET.get('count'))  # 페이지 번호
     temp_articles = []
     for search_tag in select_tags:
         try:  # 태그 없으면 넘어가도록 함
@@ -41,7 +42,9 @@ def tag_articles(request):  # 태그 게시글 조회 (hit으로 정렬)
                 instance=article, context={'user': request.user})
             sort_article.append(serializer.data)
         sort_article = sorted(sort_article, key=lambda x: -x['hit'])
-        return Response(sort_article)
+        filter_count = 12
+        articles = sort_article[(count-1)*filter_count:count*filter_count]
+        return Response(articles)
 
 
 # 게시글
@@ -119,9 +122,13 @@ def recomment(request):
     recomments = Comment.objects.filter(parent_comment_id=parent_id)
     if recomments:
         recomments = recomments.order_by('-created_at')
-    serializer = CommentSerializer(
+    recomments = CommentSerializer(
         instance=recomments, many=True, context={'user': request.user})
-    return Response(serializer.data)
+    data = {
+        'recomments_count': len(recomments.data),
+        'recomments': recomments.data
+    }
+    return Response(data)
 
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
@@ -135,7 +142,7 @@ def comment(request, article_id=None, parent_id=None, comment_id=None):  # 댓�
         parent_comment = Comment.objects.get(pk=parent_id)
 
     if request.method == 'GET':  # 게시글에 달린 댓글 전체 조회
-        comments = Comment.objects.filter(article=article).filter(parent_id=None)
+        comments = Comment.objects.filter(article=article).filter(comment_parent_id=None)
         if comments:
             comments = comments.order_by('-created_at')
         serializer = CommentSerializer(
