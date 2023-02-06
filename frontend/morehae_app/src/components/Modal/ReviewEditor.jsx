@@ -157,7 +157,7 @@ const ReviewEditor = ({ onCreate }) => {
         <div className="flex justify-end">
           <button
             onClick={handleSubmit}
-            className="px-3 py-1 rounded-md bg-[rgb(42,42,50)] hover:bg-[rgb(50,50,50)] cursor-pointer text-white text-xs hover:text-green-500 drop-shadow-md border-2 hover:border-green-500 border-white"
+            className="px-3 py-1 rounded-md bg-[rgb(42,42,50)] hover:bg-[rgb(50,50,50)] cursor-pointer text-[rgb(131,132,139)] text-xs hover:text-green-500 drop-shadow-md border-2 hover:border-green-500 border-[rgb(131,132,139)]"
           >
             저장
           </button>
