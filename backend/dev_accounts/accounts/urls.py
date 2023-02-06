@@ -12,4 +12,5 @@ urlpatterns = [
     path('user/<str:nickname>/profile', views.get_user_profile),
     path('user/<str:nickname>/blogs', views.get_user_blogs),
     path('user/<str:nickname>/roadmaps', views.get_user_roadmaps),
+    path('verify/token/refresh/cookie', views.verify_refresh_token_in_cookie),
 ]
