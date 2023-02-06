@@ -9,12 +9,14 @@ const TagPill = ({ title, onDelete, count, id }) => {
       return prevTagList.filter((tag) => tag.tag !== title);
     });
   };
+
+  const pillStyle = "transition-color duration-300 rounded-full px-4 py-3 bg-purple-700 text-white text-sm inline-block hover:bg-purple-500"
   return (
     <div className="inline">
       {!onDelete && (
         <Link to={`/blog/tag/${id}`}>
           <span
-            className="rounded-full p-2 py-2 mt-1 mx-1 bg-blue-500 text-white inline-block"
+            className={pillStyle}
             title={`등록된 게시물 수 : ${count}`}
           >
             {title}
@@ -23,7 +25,7 @@ const TagPill = ({ title, onDelete, count, id }) => {
       )}
       {onDelete && (
         <span
-          className="rounded-full p-2 py-2 mt-1 mx-1 bg-blue-500 text-white inline-block"
+          className={pillStyle}
           title={`등록된 게시물 수 : ${count}`}
         >
           {title}
