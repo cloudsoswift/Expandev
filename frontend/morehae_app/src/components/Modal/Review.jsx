@@ -1,12 +1,12 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import ReviewEditor from "@/components/Modal/ReviewEditor";
 import ReviewList from "@/components/Modal/ReviewList";
 import httpWithURL from "../../utils/http";
 
-const Review = ({ reqData, nodeId, getData2 }) => {
+const Review = ({ reqData, nodeId }) => {
   const [data, setData] = useState(reqData.review);
-  const dataId = useRef(reqData.review.length + 1);
+  // const dataId = useRef(reqData.review.length + 1);
   const [likedUser, setLikedUser] = useState(false);
 
   const userInfo = useSelector((state) => state.user.user);
@@ -28,7 +28,7 @@ const Review = ({ reqData, nodeId, getData2 }) => {
           id: res.data.id,
           user_profile_image: res.data.user_profile_image,
         };
-        setData({ ...data, newItem });
+        setData([ ...data, newItem ]);
       })
       .catch((err) => console.log(err));
   };
@@ -66,17 +66,22 @@ const Review = ({ reqData, nodeId, getData2 }) => {
       })
       .catch((err) => console.log(err));
   };
-  useEffect(() => {
-    reviewLike();
-  }, []);
+
+
+    // useEffect(()=>{
+    //   const upDateLike = async ()=> {
+    //     const res = likedUser
+    //   }
+    // },[])
 
   const reviewLike = (targetId) => {
+    console.log(targetId)
     httpWithURL(process.env.REACT_APP_ROADMAP_URL)
       .post(`review/${targetId}/like`, { withCredentials: true })
       .then((res) => {
-        // console.log(res);
-        setLikedUser(!likedUser);
-        console.log(likedUser);
+        console.log(res);
+        setLikedUser(()=> !likedUser);
+        console.log(likedUser, "likedUser state");
       })
       .catch((err) => console.log(err));
   };
@@ -88,6 +93,7 @@ const Review = ({ reqData, nodeId, getData2 }) => {
           reviewList={data}
           onDelete={onDelete}
           onEdit={onEdit}
+          likedUser={likedUser}
           reviewLike={reviewLike}
         />
         <ReviewEditor onCreate={onCreate} />

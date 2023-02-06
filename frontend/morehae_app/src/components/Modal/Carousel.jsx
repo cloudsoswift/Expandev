@@ -37,14 +37,14 @@ const Carousel = ({ reqData }) => {
             <div
               id="slide"
               key={slideIdx}
-              className="w-[163px] h-[180px] rounded-lg inline-block border p-2 mx-1 cursor-pointer hover:scale-105 ease-in-out duration-300 border-[rgb(71,79,88)]  bg-[rgb(48,54,61)] "
+              className=" w-[163px] h-[180px] rounded-lg inline-block whitespace-normal border p-2 mx-1 cursor-pointer hover:scale-105 ease-in-out duration-300 border-[rgb(71,79,88)]  bg-[rgb(48,54,61)] "
             >
               <div>
-                <div className=" w-[150px] h-[140px] text-[rgb(161,173,185)] text-sm">
+                <p className=" w-[150px] h-[140px] text-[rgb(161,173,185)] hover:text-white text-sm">
                   {item.content}
-                </div>
+                </p>
                 <div className="flex justify-end">
-                  <div className="text-xs text-[rgb(161,173,185)] ">
+                  <div className="text-xs text-[rgb(161,173,185)]  ">
                     {item.interviewee}
                   </div>
                 </div>

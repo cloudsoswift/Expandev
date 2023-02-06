@@ -14,13 +14,10 @@ const WhatWhy = ({ reqData, nodeId }) => {
       .post(`node/${nodeId}/clear`, { withCredentials: true })
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
-
-      
   };
 
   useEffect(()=>{
     setCheckbox(reqData.isComplete)
-
   },[reqData.isComplete])
 
   return (
@@ -34,7 +31,7 @@ const WhatWhy = ({ reqData, nodeId }) => {
             </div>
             <Link
               to="/blog/write"
-              className="bg-[rgb(42,42,50)] hover:bg-[rgb(50,50,50)] px-3 py-1 rounded-full text-xs font-bold text-[rgb(131,132,139)] hover:text-green-500 drop-shadow-md border-2 hover:border-green-500"
+              className="bg-[rgb(42,42,50)] hover:bg-[rgb(50,50,50)] px-3 py-1 rounded-full text-xs font-bold text-[rgb(131,132,139)] hover:text-green-500 drop-shadow-md border-2 border-[rgb(131,132,139)] hover:border-green-500"
             >
               POST
             </Link>

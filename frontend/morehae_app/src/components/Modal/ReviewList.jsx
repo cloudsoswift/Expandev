@@ -2,7 +2,9 @@ import React from "react";
 import ReviewListItem from "@/components/Modal/ReviewListItem";
 import { FaStar } from "react-icons/fa";
 
-const ReviewList = ({ reviewList, onDelete, onEdit, reviewLike }) => {
+const ReviewList = ({ reviewList, onDelete, onEdit, reviewLike, likedUser }) => {
+
+  console.log(reviewList)
   const getAvgImp = (list) => {
     if (list.length === 0) return 0;
     let sum = 0;
@@ -55,6 +57,7 @@ const ReviewList = ({ reviewList, onDelete, onEdit, reviewLike }) => {
                 onDelete={onDelete}
                 onEdit={onEdit}
                 reviewLike={reviewLike}
+                likedUser={likedUser}
               />
             ))}
           </div>
