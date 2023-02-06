@@ -15,6 +15,9 @@ from django.shortcuts import get_list_or_404, get_object_or_404
 
 import re
 import requests
+from pprint import pprint
+import json
+from ast import literal_eval
 
 
 @api_view(['GET'])
@@ -121,11 +124,30 @@ def verify_refresh_token_in_cookie(request):
         if 'refresh-token' in cookie:
             refresh_token = cookie.split('=')[1][:-1]
 
-    url = 'http://i8d212.p.ssafy.io/accounts/token/verify/'
+    url = 'http://i8d212.p.ssafy.io:8000/accounts/token/verify/'
     data = {
         'token': refresh_token
     }
     response = requests.post(url=url, data=data)
+    if response.status_code == 200:
+        return Response(status=status.HTTP_200_OK)   
+    else:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)   
+
+@api_view(['POST'])
+def include_refresh_token_in_cookie(request):
+    url = 'http://i8d212.p.ssafy.io:8000/accounts/login/'
+    response = requests.post(url=url, data=request.data)
+    print('--------------------------------------')
+    print('--------------------------------------')
+    pprint(type(response._content))
+    pprint(response._content.__dict__)
+    #pprint(response = response._content.decode("utf-8"))
+    #pprint(response)
+    #my_dict = literal_eval(response._content.decode('utf-8'))
+    #pprint(my_dict)
+    print('--------------------------------------')
+    print('--------------------------------------')
     if response.status_code == 200:
         return Response(status=status.HTTP_200_OK)   
     else:
