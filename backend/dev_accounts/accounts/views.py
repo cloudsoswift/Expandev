@@ -156,5 +156,5 @@ class KakaoCallBackView(View):
             'client_secret': 'LjHYtkcMbEVnEUcjeHh2aXjwkD2IvKK0',
         }
         kakao_token_api = 'https://kauth.kakao.com/oauth/token'
-        access_token = requests.post(kakao_token_api, data=data).json()
+        id_token = requests.post(kakao_token_api, data=data).json().get('id_token')
         return redirect('http://i8d212.p.ssafy.io/')
