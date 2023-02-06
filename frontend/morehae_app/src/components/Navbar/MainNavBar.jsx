@@ -5,7 +5,8 @@ import { VscBell } from "react-icons/vsc";
 import { Link, useNavigate } from "react-router-dom";
 import NotificationList from "@/components/Navbar/NotificationList";
 import { useDispatch, useSelector } from "react-redux";
-import { userLogout } from "@/utils/store/user-slice";
+import httpWithURL from "@/utils/http";
+import { userActions } from "@/utils/store/user-slice";
 
 // 블로그 url 구조 나오면 블로그 글 작성 페이지로 to 설정 필요.
 
@@ -23,7 +24,26 @@ const MainNavBar = () => {
    *
    */
   const logoutHandler = () => {
-    dispatch(userLogout(navigate));
+    httpWithURL(process.env.REACT_APP_USER_URL)
+      .post(process.env.REACT_APP_USER_URL + "logout/")
+      .then((response) => {
+        switch (response.status) {
+          case 200:
+          default:
+            // Axios Default Header에 설정된 Access Token 삭제
+            // setAccessToken();
+            dispatch(userActions.setUser({}));
+            // 로그아웃 후 로드맵 페이지로 이동
+            navigate("/roadmap");
+        }
+      })
+      .catch((e) => {
+        // Axios Default Header에 설정된 Access Token 삭제
+        // setAccessToken();
+        dispatch(userActions.setUser({}));
+        // 로그아웃 후 로드맵 페이지로 이동
+        navigate("/roadmap");
+      });
   };
 
   const userLink = `/user/${user.nickname}`
