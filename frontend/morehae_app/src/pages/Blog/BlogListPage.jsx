@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import axios from 'axios'
 import PostPreview from "@/components/Blog/PostPreview";
-import { BsSearch } from 'react-icons/bs'
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import httpWithURL from "@/utils/http";
 
 const tabData = [
@@ -25,7 +24,7 @@ const BlogListPage = () => {
   const [recentPage, setRecentPage] = useState(1);  // 최신 탭의 스크롤 페이지 번호
   const [activeTabIndex, setActiveTabIndex] = useState(0);  // 활성화된 탭 인덱스
   const searchBoxRef = useRef(null);
-  const param = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   // 트렌드 탭의 게시글 리스트 가져오기
   const getTrendPostList = () => {
     axios
@@ -67,17 +66,19 @@ const BlogListPage = () => {
   // 태그 검색시 게시글 리스트 가져오기
   const getTagPostList = () => {
     httpWithURL(process.env.REACT_APP_BLOG_URL).get("tag-articles", {
+      params: {
+        tags: searchParams.get("tag"),
+        count: searchParams.get("count"),
+      },
       headers: {
         "Content-Type": "multipart/form-data",
-      }, data: {
-        "tags" : param.tagId
-      }
+      },
     }).then((Response) => {
       setPostListTrend((oldState) => {
         if (Response?.data?.articles) {
           return [ ...Response.data.articles];
         } else {
-          return oldState;
+          return [];
         }
       });
     })
@@ -97,9 +98,10 @@ const BlogListPage = () => {
     // 초기 데이터 로딩
     getTrendPostList();
     getRecentPostList();
-    if(param?.tagId){
+    if(searchParams.get("tag")){
       getTagPostList();
     }
+    
   }, [])
 
   const handleFocus = () => {
