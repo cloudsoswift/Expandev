@@ -142,9 +142,9 @@ const BlogListPage = () => {
             )}
           </div>
           {/* 검색 상자 UI */}
-          <div ref={searchBoxRef} className="border-b-4 border-slate-700">
+          <div ref={searchBoxRef} className="transition-colors duration-300 border-b-4 border-slate-700">
             <input placeholder="검색어 입력..." onFocus={handleFocus} onBlur={handleBlur} onKeyDown={handleKeyDown} className="h-full bg-dark" />
-            <button onClick={clickSearch} className="transition mx-2 hover:text-green-300">검색</button>
+            <button onClick={clickSearch} className="transition-colors mx-2 hover:text-green-300">검색</button>
           </div>
           {/* <div ref={searchBoxRef} className="transition rounded-md h-10 flex items-center text-sm border border-gray-400 p-2">
             <input type="text" placeholder="검색어 입력" onFocus={handleFocus} onBlur={handleBlur} onKeyDown={handleKeyDown} className="h-full border-none" />
