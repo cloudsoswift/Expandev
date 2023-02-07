@@ -18,7 +18,7 @@ import requests
 from pprint import pprint
 import json
 from ast import literal_eval
-
+from django.http import JsonResponse
 
 @api_view(['GET'])
 def userlist(request):
@@ -137,18 +137,8 @@ def verify_refresh_token_in_cookie(request):
 @api_view(['POST'])
 def include_refresh_token_in_cookie(request):
     url = 'http://i8d212.p.ssafy.io:8000/accounts/login/'
-    response = requests.post(url=url, data=request.data)
-    print('--------------------------------------')
-    print('--------------------------------------')
-    pprint(type(response._content))
-    pprint(response._content.__dict__)
-    #pprint(response = response._content.decode("utf-8"))
-    #pprint(response)
-    #my_dict = literal_eval(response._content.decode('utf-8'))
-    #pprint(my_dict)
-    print('--------------------------------------')
-    print('--------------------------------------')
-    if response.status_code == 200:
-        return Response(status=status.HTTP_200_OK)   
-    else:
-        return Response(status=status.HTTP_401_UNAUTHORIZED)   
+    response = requests.post(url=url, data=request.data).json()
+    refresh_token = response['refresh_token']
+    response = JsonResponse(response)
+    response.set_cookie(key='refresh_token', value=refresh_token)
+    return response
