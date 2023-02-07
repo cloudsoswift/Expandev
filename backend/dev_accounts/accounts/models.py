@@ -7,6 +7,7 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
+    username = None
     password = None
     nickname = models.CharField(max_length=10)
     login_type = models.CharField(max_length=10)
