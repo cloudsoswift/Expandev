@@ -10,8 +10,7 @@ const InputOverview = ({ onChange, value, setValid }) => {
   const overviewIsEmpty = value.trim() === "";
   const overviewMaxLengthValid = value.trim().length < 150;
   // overview는 입력되지 않거나(선택 사항이므로) 입력하되, 150자 이하여야 함.
-  const overviewIsValid =
-    overviewIsEmpty || (!overviewIsEmpty && overviewMaxLengthValid);
+  const overviewIsValid = !overviewIsEmpty && overviewMaxLengthValid;
   // 입력한 overview가 부모 state에 반영될 떄 마다 유효성 검사.
   useEffect(() => {
     setValid(overviewIsValid);
@@ -19,7 +18,7 @@ const InputOverview = ({ onChange, value, setValid }) => {
   return (
     <div className="h-60 py-2 ">
       <span className="text-sm text-gray-500">
-        (선택)글 요약
+        글 요약
         <br />
       </span>
       <textarea

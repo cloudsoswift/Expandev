@@ -63,15 +63,15 @@ const RoadmapPage = () => {
       });
   };
 
-  // 노드 디테일 가져오기
+  // 로드맵 상세 모달 데이터 가져오기
   const loadNodeDetail = async (id) => {
-    setNodeId(() => id);
+    // setNodeId(() => id);
+    // console.log(check);
     await HttpWithURL(process.env.REACT_APP_ROADMAP_URL)
       .get(`node/${id}`)
       .then((res) => setReqData(() => res.data));
     setShowModal(() => !showModal);
   };
-
 
   // 페이지가 로딩될 때 직군 리스트를 가져온다
   useEffect(() => {
@@ -134,7 +134,7 @@ const RoadmapPage = () => {
             <div className=" rounded-lg">
               <WhatWhy reqData={reqData} nodeId={nodeId} />
               <Links reqData={reqData} />
-              <Review reqData={reqData} nodeId={nodeId}/>
+              <Review reqData={reqData} nodeId={nodeId} />
             </div>
           </div>
         </Modal>

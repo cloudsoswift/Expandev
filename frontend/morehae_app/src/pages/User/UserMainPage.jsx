@@ -4,6 +4,7 @@ import HttpWithURL from "@/utils/http";
 import { Link } from "react-router-dom";
 
 import { useSelector } from "react-redux";
+import httpWithURL from "@/utils/http";
 
 const UserMainPage = () => {
   const [userProfile, setUserProfile] = useState();

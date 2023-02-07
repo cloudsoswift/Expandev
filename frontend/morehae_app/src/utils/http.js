@@ -1,31 +1,35 @@
 import axios from "axios";
 import store from "@/utils/store/store";
+import { userActions } from "./store/user-slice";
 
-const http = axios.create({
-  headers: {
-    "Content-Type": "application/json;charset=utf-8",
-  },
-});
+// const http = axios.create({
+//   baseURL: process.env.REACT_APP_SERVER_URL,
+//   headers: {
+//     "Content-Type": "application/json;charset=utf-8",
+//   },
+// });
 
-export const setAxiosAccessToken = (token) => {
-  if (token) {
-    http.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-  } else {
-    delete http.defaults.headers.common["Authorization"];
-  }
-};
-
-http.interceptors.request.use(
+axios.interceptors.request.use(
   (response) => response,
   (error) => error,
 );
 
 const httpWithURL = (URL) => {
   const state = store.getState();
+  const user = state.user.user;
   const accessToken = state.user.access_token;
-  setAxiosAccessToken(accessToken);
-  http.defaults.baseURL = URL;
-  return http;
+  if(!(user && accessToken)) {
+    // 유저, AccessToken 둘 중 하나만 존재 => 유효하지 않은 로그인 상태
+    store.dispatch(userActions.setUser({}));
+    store.dispatch(userActions.setAccessToken(""));
+  }
+  return axios.create({
+    baseURL: URL,
+    headers: {
+      "Content-Type": "application/json;charset=utf-8",
+      ...(accessToken ? {"Authorization": `Bearer ${accessToken}`} : {} ),
+    },
+  });
 };
 
 export default httpWithURL;
