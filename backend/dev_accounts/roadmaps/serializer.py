@@ -110,7 +110,8 @@ class TrackSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Track
-        fields = ('title', 'content', 'purpose', 'nodesData', 'favorites_count')
+        fields = ('title', 'content', 'purpose', 'nodesData', 'favorites_count', 'favorites')
+
 
         read_only_fields = ('nodes',  'favorites_count')
 

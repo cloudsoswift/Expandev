@@ -14,6 +14,7 @@ from django.core.exceptions import ValidationError
 from django.shortcuts import get_list_or_404, get_object_or_404
 
 import re
+import requests
 
 
 @api_view(['GET'])
@@ -111,3 +112,21 @@ def get_user_roadmaps(request, nickname):
         'favorite_roadmpas': favorite_roadmpas.data
     }
     return Response(data, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+def verify_refresh_token_in_cookie(request):
+    cookies = request.META.get('HTTP_COOKIE').split()
+    for cookie in cookies:
+        if 'refresh-token' in cookie:
+            refresh_token = cookie.split('=')[1][:-1]
+
+    url = 'http://i8d212.p.ssafy.io/accounts/token/verify/'
+    data = {
+        'token': refresh_token
+    }
+    response = requests.post(url=url, data=data)
+    if response.status_code == 200:
+        return Response(status=status.HTTP_200_OK)   
+    else:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)   
