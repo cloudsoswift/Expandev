@@ -2,9 +2,9 @@ import React from "react";
 import ReviewListItem from "@/components/Modal/ReviewListItem";
 import { FaStar } from "react-icons/fa";
 
-const ReviewList = ({ reviewList, onDelete, onEdit, reviewLike, likedUser }) => {
+const ReviewList = ({ reviewList, onDelete, onEdit, reviewLike, userInfo}) => {
 
-  console.log(reviewList)
+  // console.log(reviewList)
   const getAvgImp = (list) => {
     if (list.length === 0) return 0;
     let sum = 0;
@@ -23,6 +23,7 @@ const ReviewList = ({ reviewList, onDelete, onEdit, reviewLike, likedUser }) => 
     return Math.round(sum / list.length);
   };
 
+  
   return (
     <div className="px-3 pt-3 drop-shadow-lg">
       <div className=" bg-[rgb(48,54,61)] p-3 rounded-t-lg">
@@ -57,7 +58,8 @@ const ReviewList = ({ reviewList, onDelete, onEdit, reviewLike, likedUser }) => 
                 onDelete={onDelete}
                 onEdit={onEdit}
                 reviewLike={reviewLike}
-                likedUser={likedUser}
+                userInfo={userInfo}
+
               />
             ))}
           </div>

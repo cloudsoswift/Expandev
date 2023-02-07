@@ -96,15 +96,15 @@ export default function Tabs({ userRoadmap, userBlog }) {
             <div className="mb-12">
               <div className="m-3">클리어한 노드</div>
               <div className="h-[230px] bg-white border-2 rounded-lg p-4 overflow-y-auto ">
-                {/* {userRoadmap?.clear_nodes.map((post) => (
+                {userRoadmap?.clear_nodes.map((post) => (
                   <span
                     key={post?.id}
                     className="inline-block text-xs py-1 px-3 mx-1 my-1 bg-green-500 text-white hover:bg-green-700 rounded-full"
                   >
                     {post?.content}
                   </span>
-                ))} */}
-                <span className="inline-block text-xs py-1 px-3 mx-1 my-1 bg-green-500 text-white hover:bg-green-700 rounded-full ">css</span>
+                ))}
+                {/* <span className="inline-block text-xs py-1 px-3 mx-1 my-1 bg-green-500 text-white hover:bg-green-700 rounded-full ">css</span>
                 <span className="inline-block text-xs py-1 px-3 mx-1 my-1 bg-green-500 text-white hover:bg-green-700 rounded-full ">인터넷은 왜</span>
                 <span className="inline-block text-xs py-1 px-3 mx-1 bg-green-500 text-white hover:bg-green-700 rounded-full ">인터넷은 왜</span>
                 <span className="inline-block text-xs py-1 px-3 mx-1 bg-green-500 text-white hover:bg-green-700 rounded-full ">인터넷은 왜</span>
@@ -114,13 +114,13 @@ export default function Tabs({ userRoadmap, userBlog }) {
                 <span className="inline-block text-xs py-1 px-3 mx-1 bg-green-500 text-white hover:bg-green-700 rounded-full ">인터넷은 왜</span>
                 <span className="inline-block text-xs py-1 px-3 mx-1 bg-green-500 text-white hover:bg-green-700 rounded-full ">인터넷은 왜</span>
                 <span className="inline-block text-xs py-1 px-3 mx-1 bg-green-500 text-white hover:bg-green-700 rounded-full ">인터넷은 왜</span>
-                <span className="inline-block text-xs py-1 px-3 mx-1 bg-green-500 text-white hover:bg-green-700 rounded-full ">인터넷은 왜</span>
+                <span className="inline-block text-xs py-1 px-3 mx-1 bg-green-500 text-white hover:bg-green-700 rounded-full ">인터넷은 왜</span> */}
               </div>
             </div>
 
-            <div>
+            {/* <div>
               <div className="m-3">작성한 리뷰</div>
-              <div className="h-[230px]  bg-white border-2 rounded-lg  p-4 overflow-y-auto">
+              <div className="h-[230px] bg-white border-2 rounded-lg p-4 overflow-y-auto">
                 {userRoadmap?.reviews.map((post) => (
                   <div
                     key={post?.id}
@@ -172,7 +172,7 @@ export default function Tabs({ userRoadmap, userBlog }) {
                   </div>
                 ))}
               </div>
-            </div>
+            </div> */}
           </Tab.Panel>
 
           <Tab.Panel className={classNames("p-2 m-2")}>

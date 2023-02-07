@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 
 import Modal from "@/components/Modal/Modal";
 import WhatWhy from "@/components/Modal/WhatWhy";
@@ -16,7 +16,7 @@ const RoadmapPage = () => {
 
   const [reqData, setReqData] = useState([]);
   const [nodeId, setNodeId] = useState(null);
-  const [check, setCheck] = useState(false);
+
 
   /* 드롭다운 메뉴 관련 state들 */
   const [role, setRole] = useState({ id: 0, content: "포지션을 선택해주세요" }); // 직군
@@ -63,36 +63,21 @@ const RoadmapPage = () => {
       });
   };
 
-  // 로드맵 상세 모달 데이터 가져오기
-  const loadNodeDetail = (id) => {
+  // 노드 디테일 가져오기
+  const loadNodeDetail = async (id) => {
     setNodeId(() => id);
-    // console.log(check);
-    setCheck((prevCheck) => !prevCheck);
-  };
-  // 노드 데이터 가져오기?
-  const getData = useCallback(async () => {
     await HttpWithURL(process.env.REACT_APP_ROADMAP_URL)
-      .get(`node/${nodeId}`)
+      .get(`node/${id}`)
       .then((res) => setReqData(() => res.data));
     setShowModal(() => !showModal);
-    // eslint-disable-next-line
-  }, [check]);
-
-  const getData2 = () => {
-    HttpWithURL(process.env.REACT_APP_ROADMAP_URL)
-      .get(`node/${nodeId}`)
-      .then((res) => setReqData(() => res.data));
   };
 
-
-  useEffect(() => {
-    getData();
-  }, [getData]);
 
   // 페이지가 로딩될 때 직군 리스트를 가져온다
   useEffect(() => {
     getRoleList();
   }, []);
+
 
   // 직군 선택될 때마다 상황 리스트를 가져온다
   useEffect(() => {
@@ -149,7 +134,7 @@ const RoadmapPage = () => {
             <div className=" rounded-lg">
               <WhatWhy reqData={reqData} nodeId={nodeId} />
               <Links reqData={reqData} />
-              <Review reqData={reqData} nodeId={nodeId} getData2={getData2}/>
+              <Review reqData={reqData} nodeId={nodeId}/>
             </div>
           </div>
         </Modal>
