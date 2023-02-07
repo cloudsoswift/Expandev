@@ -18,14 +18,14 @@ export default function Tabs({ userRoadmap, userBlog }) {
     <div className="w-full px-2 py-16 sm:px-0 ">
       <Tab.Group>
         {/* 탭 카테고리 리스트 */}
-        <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/20 p-1">
+        <Tab.List className="flex space-x-1 rounded-xl bg-green-900/20 p-1">
           {Object.keys(categories).map((category) => (
             <Tab
               key={category}
               className={({ selected }) =>
                 classNames(
-                  "w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700",
-                  "ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2",
+                  "w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-green-700",
+                  "ring-white ring-opacity-60 ring-offset-2 ring-offset-green-400 focus:outline-none focus:ring-2",
                   selected
                     ? "bg-white shadow"
                     : "text-blue-100 hover:bg-white/[0.12] hover:text-white"
@@ -46,7 +46,47 @@ export default function Tabs({ userRoadmap, userBlog }) {
                   <div className="mt-1 flex space-x-1 text-xs font-normal leading-4 text-gray-500">
                     <img src="" alt="" />
                   </div>
-                  <h3 className="text-xs font-medium text-center leading-5">
+                  <h3 className="text-xs font-medium text-center leading-5 text-black">
+                    프론트엔드
+                  </h3>
+                </div>
+                <div className="rounded-xl h-[90px] w-[90px] bg-white p-3 m-2 border-2 ">
+                  <div className="mt-1 flex space-x-1 text-xs font-normal leading-4 text-gray-500">
+                    <img src="" alt="" />
+                  </div>
+                  <h3 className="text-xs font-medium text-center leading-5 text-black">
+                    일단 데이터 없음
+                  </h3>
+                </div>
+                <div className="rounded-xl h-[90px] w-[90px] bg-white p-3 m-2 border-2 ">
+                  <div className="mt-1 flex space-x-1 text-xs font-normal leading-4 text-gray-500">
+                    <img src="" alt="" />
+                  </div>
+                  <h3 className="text-xs font-medium text-center leading-5 text-black">
+                    일단 데이터 없음
+                  </h3>
+                </div>
+                <div className="rounded-xl h-[90px] w-[90px] bg-white p-3 m-2 border-2 ">
+                  <div className="mt-1 flex space-x-1 text-xs font-normal leading-4 text-gray-500">
+                    <img src="" alt="" />
+                  </div>
+                  <h3 className="text-xs font-medium text-center leading-5 text-black">
+                    일단 데이터 없음
+                  </h3>
+                </div>
+                <div className="rounded-xl h-[90px] w-[90px] bg-white p-3 m-2 border-2 ">
+                  <div className="mt-1 flex space-x-1 text-xs font-normal leading-4 text-gray-500">
+                    <img src="" alt="" />
+                  </div>
+                  <h3 className="text-xs font-medium text-center leading-5 text-black">
+                    일단 데이터 없음
+                  </h3>
+                </div>
+                <div className="rounded-xl h-[90px] w-[90px] bg-white p-3 m-2 border-2 ">
+                  <div className="mt-1 flex space-x-1 text-xs font-normal leading-4 text-gray-500">
+                    <img src="" alt="" />
+                  </div>
+                  <h3 className="text-xs font-medium text-center leading-5 text-black">
                     일단 데이터 없음
                   </h3>
                 </div>
@@ -56,14 +96,25 @@ export default function Tabs({ userRoadmap, userBlog }) {
             <div className="mb-12">
               <div className="m-3">클리어한 노드</div>
               <div className="h-[230px] bg-white border-2 rounded-lg p-4 overflow-y-auto ">
-                {userRoadmap?.clear_nodes.map((post) => (
+                {/* {userRoadmap?.clear_nodes.map((post) => (
                   <span
                     key={post?.id}
-                    className="text-xs py-1 px-3 m-1 bg-blue-300 text-white hover:bg-blue-500 rounded-full "
+                    className="inline-block text-xs py-1 px-3 mx-1 my-1 bg-green-500 text-white hover:bg-green-700 rounded-full"
                   >
                     {post?.content}
                   </span>
-                ))}
+                ))} */}
+                <span className="inline-block text-xs py-1 px-3 mx-1 my-1 bg-green-500 text-white hover:bg-green-700 rounded-full ">css</span>
+                <span className="inline-block text-xs py-1 px-3 mx-1 my-1 bg-green-500 text-white hover:bg-green-700 rounded-full ">인터넷은 왜</span>
+                <span className="inline-block text-xs py-1 px-3 mx-1 bg-green-500 text-white hover:bg-green-700 rounded-full ">인터넷은 왜</span>
+                <span className="inline-block text-xs py-1 px-3 mx-1 bg-green-500 text-white hover:bg-green-700 rounded-full ">인터넷은 왜</span>
+                <span className="inline-block text-xs py-1 px-3 mx-1 bg-green-500 text-white hover:bg-green-700 rounded-full ">인터넷은 왜</span>
+                <span className="inline-block text-xs py-1 px-3 mx-1 bg-green-500 text-white hover:bg-green-700 rounded-full ">인터넷은 왜</span>
+                <span className="inline-block text-xs py-1 px-3 mx-1 bg-green-500 text-white hover:bg-green-700 rounded-full ">인터넷은 왜</span>
+                <span className="inline-block text-xs py-1 px-3 mx-1 bg-green-500 text-white hover:bg-green-700 rounded-full ">인터넷은 왜</span>
+                <span className="inline-block text-xs py-1 px-3 mx-1 bg-green-500 text-white hover:bg-green-700 rounded-full ">인터넷은 왜</span>
+                <span className="inline-block text-xs py-1 px-3 mx-1 bg-green-500 text-white hover:bg-green-700 rounded-full ">인터넷은 왜</span>
+                <span className="inline-block text-xs py-1 px-3 mx-1 bg-green-500 text-white hover:bg-green-700 rounded-full ">인터넷은 왜</span>
               </div>
             </div>
 

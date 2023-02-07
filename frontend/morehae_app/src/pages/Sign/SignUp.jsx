@@ -4,6 +4,7 @@
 import { useState, useRef } from "react"
 import axios from 'axios'
 import Dropdown from "@/components/Dropdown/Dropdown"
+import httpWithURL from "@/utils/http"
 
 const dummyItems = [
   {id: 0, content: "None"},
@@ -26,8 +27,8 @@ const SignUp = () => {
 
   const textStyle = "text-sm text-gray-500";
   const textWarningStyle = "text-xs text-red-500";
-  const inputStyle = "transition duration-300 box-border rounded-lg border w-full h-12 p-2 outline-none hover:border-blue-300 focus:border-blue-500";
-  const buttonStyle = "transition bg-white w-36 h-12 rounded-lg ml-2 bg-blue-500 text-white hover:bg-blue-300";
+  const inputStyle = "transition bg-dark duration-300 box-border rounded-lg border-2 border-slate-700 w-full h-12 p-2 outline-none hover:border-green-500 focus:border-green-300";
+  const buttonStyle = "transition w-36 h-12 rounded-lg ml-2 bg-green-500 text-white hover:bg-green-400";
 
   // 이메일 입력 처리하는 핸들러
   const handleEmail = (e) => {
@@ -117,7 +118,7 @@ const SignUp = () => {
     */
     console.log("제출!!");
     console.log(emailRef.current, passwordRef.current, passwordMatchRef.current, nicknameRef.current, position.content);
-    axios.post('http://i8d212.p.ssafy.io:8000/accounts/registration', {
+    httpWithURL(process.env.REACT_APP_USER_URL).post('registration', {
       email: emailRef.current,
       password1: passwordRef.current,
       password2: passwordMatchRef.current,
@@ -134,7 +135,7 @@ const SignUp = () => {
 
   return (
     <div className="flex justify-center mt-20">
-      <div className="flex-column w-[36rem] p-4 rounded-lg border">
+      <div className="flex-column bg-[#171b21] w-[36rem] p-4 rounded-lg border border-slate-700">
         <h1 className="text-2xl flex justify-center mb-8">회원 가입</h1>
         <form>
           {/* 아이디 입력 박스 */}
@@ -180,7 +181,7 @@ const SignUp = () => {
           </div>
 
           {/* 제출 버튼 */}
-          <button onClick={handleSubmit} className="transition bg-white w-full h-12 rounded-lg bg-blue-500 text-white hover:bg-blue-300">등록하기!</button>
+          <button onClick={handleSubmit} className="transition w-full h-12 rounded-lg bg-green-500 text-white hover:bg-green-400">등록하기!</button>
         </form>
       </div>
     </div>
