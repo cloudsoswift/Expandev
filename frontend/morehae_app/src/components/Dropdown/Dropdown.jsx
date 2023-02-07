@@ -69,18 +69,18 @@ function Dropdown({items, selectedItem, setSelectedItem}) {
 
   return (
     <div className="flex-col relative w-full" ref={menuRef}>
-      <button onClick={handleOpen} disabled={isDisable} className="transition bg-white w-full p-4 rounded-lg border hover:border-blue-500 flex justify-between font-extralight items-center">
+      <button onClick={handleOpen} disabled={isDisable} className="transition bg-white w-full p-4 rounded-lg border border-slate-700 hover:border-green-500 flex justify-between font-extralight items-center bg-dark">
         <div>{selectedItem.content}</div>
         <div><BsChevronDown/></div>
       </button>
       { isOpen && 
-      <ul className="overflow-y-auto max-h-48 bg-white absolute w-full rounded-lg p-2 mt-2 border" style={{boxShadow: '1px 2px 9px rgba(0, 0, 0, 0.07)'}}>
+      <ul className="overflow-y-auto max-h-48 bg-dark absolute w-full rounded-lg p-2 mt-2 border border-slate-700" style={{boxShadow: '1px 2px 9px rgba(0, 0, 0, 0.07)'}}>
         {items.map((item, index) => {
           let style = "transition p-4 rounded-lg cursor-pointer font-extralight";
           if (item.id === selectedItem.id) {
-            style += " bg-blue-500 text-white"
+            style += " bg-green-500 text-white"
           } else {
-            style += " hover:bg-gray-100"
+            style += " hover:bg-slate-800"
           }
           return <li
             value={index}

@@ -7,26 +7,36 @@ const Links = ({ reqData }) => {
   };
 
   return (
-    <div>
+    <div className="p-6">
       <div>
         <div className=" flex justify-between">
-          <h2>Blog</h2>
-          <button className="rounded text-xs">
-            more..
-          </button>
+          <h2 className="text-xl my-1 text-white ">
+            블로그
+          </h2>
+          <button className="rounded text-xs  text-[rgb(71,79,88)] hover:text-white">more..</button>
         </div>
         <div className="grid grid-cols-3 gap-3 justify-items-center text-center p-3">
-          <div className="bg-blue-100 w-36 h-36">01</div>
-          <div className="bg-blue-100 w-36 h-36">02</div>
-          <div className="bg-blue-100 w-36 h-36">03</div>
+          <div className="bg-[rgb(36,41,47)] rounded-lg border border-[rgb(71,79,88)]  w-36 h-36 mr-3">
+            01
+          </div>
+          <div className="bg-[rgb(36,41,47)] rounded-lg border border-[rgb(71,79,88)] w-36 h-36 mr-3">
+            02
+          </div>
+          <div className="bg-[rgb(36,41,47)] rounded-lg border  border-[rgb(71,79,88)] w-36 h-36 mr-4">
+            03
+          </div>
         </div>
       </div>
-      <div>
-        <h2>Interview</h2>
+      <div className="mb-5">
+        <h2 className="text-xl my-4  text-white">
+          인터뷰
+        </h2>
         <Carousel reqData={reqData} />
       </div>
       <div className="my-3">
-        <h2>RECOMMEND Contents</h2>
+        <h2 className="text-xl my-1 text-white ">
+          추천 컨텐츠
+        </h2>
         <div className="grid grid-cols-3 gap-3 justify-items-center text-center p-3">
           {reqData.recommend_content.map((item) => (
             <div
@@ -34,7 +44,7 @@ const Links = ({ reqData }) => {
               onClick={() => {
                 openLink(item.url);
               }}
-              className="bg-blue-100 w-xs h-xs"
+              className="bg-[rgb(36,41,47)] border border-[rgb(71,79,88)] w-xs h-xs"
             >
               <img src={item.img_url} alt="img" />
               <div>{item.title}</div>

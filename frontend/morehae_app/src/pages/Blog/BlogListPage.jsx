@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react"
 import axios from 'axios'
 import PostPreview from "@/components/Blog/PostPreview";
-import { BsSearch } from 'react-icons/bs'
-import { Link } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
+import httpWithURL from "@/utils/http";
 
 const tabData = [
   {
@@ -24,7 +24,8 @@ const BlogListPage = () => {
   const [recentPage, setRecentPage] = useState(1);  // 최신 탭의 스크롤 페이지 번호
   const [activeTabIndex, setActiveTabIndex] = useState(0);  // 활성화된 탭 인덱스
   const searchBoxRef = useRef(null);
-
+  const params = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   // 트렌드 탭의 게시글 리스트 가져오기
   const getTrendPostList = () => {
     axios
@@ -62,6 +63,29 @@ const BlogListPage = () => {
         console.log(Error);
       });
   }
+
+  // 태그 검색시 게시글 리스트 가져오기
+  const getTagPostList = () => {
+    axios
+      .get(`${process.env.REACT_APP_BLOG_URL}tag-articles`, {
+      params: {
+        tags: params.tagName,
+        count: searchParams.get("count"),
+      },
+    }).then((Response) => {
+      setPostListTrend((oldState) => {
+        if (Response?.data) {
+          return [ ...Response.data];
+        } else {
+          return [];
+        }
+      });
+    })
+    .catch((Error) => {
+      console.log(Error);
+    });
+  }
+
   
   useEffect(() => {
     // url 링크 파싱하여 적절한 탭으로 이동
@@ -69,18 +93,23 @@ const BlogListPage = () => {
     if (urlStringList.includes("recent")) {
       setActiveTabIndex(1);
     }
-    
+    // 태그 검색일 경우 태그 검색 결과만 반영
+    if(params.tagName){
+      getTagPostList();
+      return;
+    }
     // 초기 데이터 로딩
     getTrendPostList();
     getRecentPostList();
-  }, [])
+    
+  }, [searchParams, params])
 
   const handleFocus = () => {
-    searchBoxRef.current.classList.replace('border-gray-400', 'border-blue-500');
+    searchBoxRef.current.classList.replace('border-slate-700', 'border-green-500');
   };
 
   const handleBlur = () => {
-    searchBoxRef.current.classList.replace('border-blue-500', 'border-gray-400');
+    searchBoxRef.current.classList.replace('border-green-500', 'border-slate-700');
   };
 
   const handleKeyDown = (e) => {
@@ -99,30 +128,35 @@ const BlogListPage = () => {
     <div className="flex flex-col items-center min-w-[80rem] mt-8">
       <div>
         {/* 탭 UI */}
-        <div className="ml-2 mr-2 border-b-2 flex justify-between">
+        <div className="ml-2 mr-2 border-b-2 border-slate-700 flex justify-between">
           <div>
-            {tabData.map((data, index) => 
+            {!params.tagName && tabData.map((data, index) => 
               <Link to={"/blog" + data.link} key={data.id} >
                 <button
                   onClick={() => setActiveTabIndex(index)}
                   className={`border-b-4 transition-colors duration-300 p-2
-                  ${activeTabIndex === index ? 'font-bold border-blue-500' : 'font-normal border-none'}`
+                  ${activeTabIndex === index ? 'font-bold border-green-500' : 'font-normal border-none'}`
                   }
                 >
                   {data.title}
                 </button>
               </Link>
             )}
+            {params.tagName && <div><span className="border p-1 rounded-3xl transition-color duration-300 bg-purple-700 text-white inline-block hover:bg-purple-500">#{params.tagName}</span> 에 대한 검색 결과</div>}
           </div>
           {/* 검색 상자 UI */}
-          <div ref={searchBoxRef} className="transition rounded-md h-10 flex items-center text-sm border border-gray-400 p-2">
+          <div ref={searchBoxRef} className="transition-colors duration-300 border-b-4 border-slate-700">
+            <input placeholder="검색어 입력..." onFocus={handleFocus} onBlur={handleBlur} onKeyDown={handleKeyDown} className="h-full bg-dark" />
+            <button onClick={clickSearch} className="transition-colors mx-2 hover:text-green-300">검색</button>
+          </div>
+          {/* <div ref={searchBoxRef} className="transition rounded-md h-10 flex items-center text-sm border border-gray-400 p-2">
             <input type="text" placeholder="검색어 입력" onFocus={handleFocus} onBlur={handleBlur} onKeyDown={handleKeyDown} className="h-full border-none" />
             <button onClick={clickSearch} className="w-8 h-full pl-4"><BsSearch/></button>
-          </div>
+          </div> */}
         </div>
         
         {/* 게시글 리스트 UI */}
-        <div className="flex flex-wrap w-[76rem]">
+        <div className="flex flex-wrap w-[76rem] mt-4">
           {activeTabIndex === 0 ?
             (postListTrend.length === 0 ? <div>트렌드 글 없음</div> : postListTrend.map(post => <Link key={post.id} to={`/blog/post/${post.id}`}><PostPreview post={post}/></Link>) ):
             (postListTrend.length === 0 ? <div>최신 글 없음</div> : postListRecent.map(post => <Link key={post.id} to={`/blog/post/${post.id}`}><PostPreview post={post}/></Link>) )

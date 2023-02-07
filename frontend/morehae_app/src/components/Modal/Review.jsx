@@ -1,23 +1,17 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import ReviewEditor from "@/components/Modal/ReviewEditor";
 import ReviewList from "@/components/Modal/ReviewList";
-// import axios from "axios";
 import httpWithURL from "../../utils/http";
 
 const Review = ({ reqData, nodeId }) => {
   const [data, setData] = useState(reqData.review);
-  const dataId = useRef(reqData.review.length + 1);
+  // const dataId = useRef(reqData.review.length + 1);
+  const [likedUser, setLikedUser] = useState(false);
 
-  const onCreate = ( content, importance, difficulty) => {
-    const created_date = new Date().getTime();
-    const newItem = {
+  const userInfo = useSelector((state) => state.user.user);
 
-      content,
-      importance,
-      difficulty,
-      created_date,
-      id: dataId.current,
-    };
+  const onCreate = (content, importance, difficulty) => {
     httpWithURL(process.env.REACT_APP_ROADMAP_URL)
       .post(
         "review",
@@ -25,11 +19,18 @@ const Review = ({ reqData, nodeId }) => {
         { withCredentials: true }
       )
       .then((res) => {
-        console.log(res);
+        const newItem = {
+          user: userInfo.nickname,
+          content: res.data.content,
+          importance: res.data.importance,
+          difficulty: res.data.difficulty,
+          created_at: res.data.created_at,
+          id: res.data.id,
+          user_profile_image: res.data.user_profile_image,
+        };
+        setData([ ...data, newItem ]);
       })
       .catch((err) => console.log(err));
-    // 생성 즉시 반영
-    setData([...data, newItem]);
   };
 
   const onDelete = (targetId) => {
@@ -37,14 +38,14 @@ const Review = ({ reqData, nodeId }) => {
       httpWithURL(process.env.REACT_APP_ROADMAP_URL)
         .delete(`review/${targetId}`, { withCredentials: true })
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           alert("리뷰가 삭제되었습니다");
+          // 즉시 삭제
+          const afterDeleteList = data.filter((item) => item.id !== targetId);
+          setData(afterDeleteList);
         })
         .catch((err) => console.log(err));
     }
-    // 일단 바로 삭제 되도록
-    const afterDeleteList = data.filter((item) => item.id !== targetId);
-    setData(afterDeleteList);
   };
 
   const onEdit = (targetId, newContent, importance, difficulty) => {
@@ -55,21 +56,46 @@ const Review = ({ reqData, nodeId }) => {
         { withCredentials: true }
       )
       .then((res) => {
-        console.log(res);
+        // console.log(res);
+        // 즉시 수정
+        setData(
+          data.map((item) =>
+            item.id === targetId ? { ...item, content: newContent } : item
+          )
+        );
       })
       .catch((err) => console.log(err));
-    // 일단 바로 수정 되도록
-    setData(
-      data.map((item) =>
-        item.id === targetId ? { ...item, content: newContent } : item
-      )
-    );
+  };
+
+
+    // useEffect(()=>{
+    //   const upDateLike = async ()=> {
+    //     const res = likedUser
+    //   }
+    // },[])
+
+  const reviewLike = (targetId) => {
+    console.log(targetId)
+    httpWithURL(process.env.REACT_APP_ROADMAP_URL)
+      .post(`review/${targetId}/like`, { withCredentials: true })
+      .then((res) => {
+        console.log(res);
+        setLikedUser(()=> !likedUser);
+        console.log(likedUser, "likedUser state");
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
     <div>
-      <div className="border-2 rounded-md">
-        <ReviewList reviewList={data} onDelete={onDelete} onEdit={onEdit} />
+      <div>
+        <ReviewList
+          reviewList={data}
+          onDelete={onDelete}
+          onEdit={onEdit}
+          likedUser={likedUser}
+          reviewLike={reviewLike}
+        />
         <ReviewEditor onCreate={onCreate} />
       </div>
     </div>
