@@ -33,14 +33,16 @@ const MainNavBar = () => {
             // Axios Default Header에 설정된 Access Token 삭제
             // setAccessToken();
             dispatch(userActions.setUser({}));
+            dispatch(userActions.setAccessToken(""));
             // 로그아웃 후 로드맵 페이지로 이동
             navigate("/roadmap");
-        }
-      })
-      .catch((e) => {
-        // Axios Default Header에 설정된 Access Token 삭제
-        // setAccessToken();
-        dispatch(userActions.setUser({}));
+          }
+        })
+        .catch((e) => {
+          // Axios Default Header에 설정된 Access Token 삭제
+          // setAccessToken();
+          dispatch(userActions.setUser({}));
+          dispatch(userActions.setAccessToken(""));
         // 로그아웃 후 로드맵 페이지로 이동
         navigate("/roadmap");
       });
