@@ -14,41 +14,38 @@ from django.core.exceptions import ValidationError as DjangoValidationError
 import os
 from pathlib import Path
 
+from allauth.account.adapter import get_adapter
+from allauth.account.utils import setup_user_email
+
 
 class CustomRegisterSerializer(RegisterSerializer):
-    # username = None
     password1 = None
     password2 = None
-    # phone_number = serializers.CharField(max_length=13, required=False)
-    # nickname = serializers.CharField(min_length = 1, required= True)
-    nickname = serializers.CharField(max_length=30)
-    login_type = serializers.CharField(required = False)
-    # stat = serializers.CharField(required = False)
-    # svc_use_pcy_agmt_yn = serializers.BooleanField(required = False)
-    # ps_info_proc_agmt_yn = serializers.BooleanField(required = False)
-    # mkt_info_recv_agmt_yn = serializers.BooleanField(required = False)
-    # news_feed_push_yn = serializers.BooleanField(required = False)
-    # noti_push_yn = serializers.BooleanField(required = False)
-    # position = serializers.CharField(required = True)
+    nickname = serializers.CharField(max_length=10)
+    login_type = serializers.CharField(max_length=10)
     sns_service_id = serializers.CharField(max_length=100)
-
 
     def get_cleaned_data(self):
         data = super().get_cleaned_data()
-        data['phone_number'] = self.validated_data.get('phone_number','')
         data['nickname'] = self.validated_data.get('nickname','Ghost')
+        data['email'] = self.validated_data.get('email')
+        data['sns_service_id'] = self.validated_data.get('sns_service_id')
         data['login_type'] = self.validated_data.get('login_type')
-        data['stat'] = self.validated_data.get('stat')
-        data['svc_use_pcy_agmt_yn'] = self.validated_data.get('svc_use_pcy_agmt_yn')
-        data['ps_info_proc_agmt_yn'] = self.validated_data.get('ps_info_proc_agmt_yn')
-        data['mkt_info_recv_agmt_yn'] = self.validated_data.get('mkt_info_recv_agmt_yn')
-        data['news_feed_push_yn'] = self.validated_data.get('news_feed_push_yn')
-        data['noti_push_yn'] = self.validated_data.get('noti_push_yn')
-        data['position'] = self.validated_data.get('position')
         return data
 
-    
+    def save(self, request):
+        adapter = get_adapter()
+        user = adapter.new_user(request)
+        self.cleaned_data = self.get_cleaned_data()
+        user = adapter.save_user(request, user, self, commit=False)
+        user.sns_service_id = self.validated_data.get('sns_service_id')
+        user.save()
+        self.custom_signup(request, user)
+        setup_user_email(request, user, [])
+        return user
 
+    def validate(self, data):
+        return data
 
 
 # 유저 디테일 시리얼라이저

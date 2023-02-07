@@ -1,9 +1,10 @@
-from django.views import View
 from .models import User
-from .serializers import UserSerializer, UserProfileSerializer
+from roadmaps.models import Review
+from backend.settings import get_secret
 from blogs.models import Article, Comment
+from .serializers import CustomRegisterSerializer
+from .serializers import UserSerializer, UserProfileSerializer
 from blogs.serializers import ArticleSimpleSerializer, CommentSimpleSerializer
-from roadmaps.models import Review, Node
 from roadmaps.serializer import ReviewSimpleSerializer, NodeSimpleserializer, TrackSimpleSerializer
 
 from rest_framework import status
@@ -15,7 +16,6 @@ from django.core.exceptions import ValidationError
 from django.shortcuts import get_list_or_404, get_object_or_404, redirect 
 
 import re
-import urllib 
 import requests                       
 
 
@@ -119,23 +119,20 @@ def get_user_roadmaps(request, nickname):
 @api_view(['GET'])
 def kakao_login(request):
     kakao_api = 'https://kauth.kakao.com/oauth/authorize?response_type=code'
-    redirect_uri = 'http://127.0.0.1:8000/accounts/login/kakao/callback'
-    client_id = '9dc0cc4073c88973eefa99bb2f1f9bcc'
-
+    redirect_uri = 'http://i8d212.p.ssafy.io/accounts/login/kakao/callback/'
+    client_id = get_secret('client_id')
     return redirect(f'{kakao_api}&client_id={client_id}&redirect_uri={redirect_uri}')
 
 
-
-from .serializers import CustomRegisterSerializer
 @api_view(['GET'])
 def kakao_call_back(request):
     # 로그인 후 응답받은 code 를 통해 카카오 서버로 데이터 요청
     data = {
         'grant_type': 'authorization_code',
-        'client_id': '9dc0cc4073c88973eefa99bb2f1f9bcc',
-        'redirect_uri': 'http://127.0.0.1:8000/accounts/login/kakao/callback',
+        'client_id': get_secret('client_id'),
+        'redirect_uri': 'http://i8d212.p.ssafy.io/accounts/login/kakao/callback/',
         'code': request.GET['code'],
-        'client_secret': 'LjHYtkcMbEVnEUcjeHh2aXjwkD2IvKK0',
+        'client_secret': get_secret('client_secret'),
     }
     kakao_token_api = 'https://kauth.kakao.com/oauth/token'
     id_token = requests.post(kakao_token_api, data=data).json().get('id_token')
@@ -146,10 +143,10 @@ def kakao_call_back(request):
     nickname = user_info.get('nickname')
     email = user_info.get('email')
     sns_service_id = user_info.get('sub')
-    print(nickname, email, sns_service_id)
 
     # 회원가입 유무 판단
     # 0. 카카오 인지 네이버 인지 확인 해야함, 근데 일단 스킵
+    login_type = 'kakao' # or 'naver
     # 1. 해당 회원번호가 등록되어있는지 확인
     if get_user_model().objects.filter(sns_service_id=sns_service_id).exists():
         # 0. 존재
@@ -158,37 +155,13 @@ def kakao_call_back(request):
     else:
         # 0. 존재하지 않음
         # 1. 회원가입
-        # user = get_user_model().objects.create(
-        #     platform='kakao',
-        #     nickname=nickname,
-        #     email=email,
-        # )
         data = {
             'nickname': nickname,
             'email': email,
             'sns_service_id': sns_service_id,
+            'login_type': login_type,
         }
         serialzier = CustomRegisterSerializer(data=data)
         if serialzier.is_valid():
-            serialzier.save()
-        else:
-            print(serialzier.errors)
+            serialzier.save(request)
     return redirect('http://i8d212.p.ssafy.io/')
-    # if SocialAuthentication.objects.filter(sns_service_id=sub).exists():
-    #     return redirect('http://i8d212.p.ssafy.io/')
-    # else:
-    #     user = get_user_model().objects.create(
-    #         email=email, 
-    #         password='123',
-    #         nickname=nickname,
-    #         login_type=1,
-    #         stat=1,
-    #         phone_number=1,
-    #         position=1,
-    #         )
-    #     social_user = SocialAuthentication.objects.create(
-    #         user=user,
-    #         platform='kakao',
-    #         sns_service_id=sub,
-    #     )
-    return Response(status=status.HTTP_201_CREATED)
