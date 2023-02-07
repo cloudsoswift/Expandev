@@ -9,9 +9,21 @@ import { userActions } from "./store/user-slice";
 //   },
 // });
 
-axios.interceptors.request.use(
+axios.interceptors.response.use(
   (response) => response,
-  (error) => error,
+  (error) => {
+    console.log(error);
+    switch(error.response.status){
+      case 401:
+        //Unauthorized
+        // axios.post("http://i8d212.p.ssafy.io:8000/accounts/token/refresh/", )
+        console.log("토큰이 만료되었읍니다.");
+        break;
+      default:
+        break;
+    }
+    return Promise.reject(error);
+  },
 );
 
 const httpWithURL = (URL) => {
