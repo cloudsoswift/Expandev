@@ -8,7 +8,7 @@ urlpatterns = [
     path('check-nickname/<str:nickname>', views.check_duplicate_nickname),
     path('userlist', views.userlist),
     path('userchange', views.userchange),
-    path('profile/image', views.set_profile_image),
+    path('profile', views.set_profile),
     path('user/<str:nickname>/profile', views.get_user_profile),
     path('user/<str:nickname>/blogs', views.get_user_blogs),
     path('user/<str:nickname>/roadmaps', views.get_user_roadmaps),
