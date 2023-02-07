@@ -5,9 +5,11 @@ from blogs.models import Article, Comment
 from .serializers import CustomRegisterSerializer
 from .serializers import UserSerializer, UserProfileSerializer
 from blogs.serializers import ArticleSimpleSerializer, CommentSimpleSerializer
+from .serializers import UserSerializer, ProfileImageSerializer, ProfileSerializer
 from roadmaps.serializer import ReviewSimpleSerializer, NodeSimpleserializer, TrackSimpleSerializer
 
 from rest_framework import status
+from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.contrib.auth import get_user_model
@@ -16,7 +18,10 @@ from django.core.exceptions import ValidationError
 from django.shortcuts import get_list_or_404, get_object_or_404, redirect 
 
 import re
+import json
 import requests                       
+from pprint import pprint
+from ast import literal_eval
 
 
 @api_view(['GET'])
@@ -36,18 +41,16 @@ def userchange(request):
 
 
 @api_view(['PUT'])
-def set_profile_image(request):
+def set_profile(request):
     user = request.user
     data = request.data
+    serializer = ProfileImageSerializer(user, data=data)
+    if serializer.is_valid():
+        serializer.save(user=user)
+        return Response(status=status.HTTP_201_CREATED)
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
-    # profile = Profile.objects.get_or_create(user=user)[0]
-    # serializer = UserProfileSerializer(profile, data=data)
-    # if serializer.is_valid():
-    #     serializer.save(user=user)
-    #     return Response(status=status.HTTP_201_CREATED)
-    # else:
-    #     return Response(status=status.HTTP_400_BAD_REQUEST)
-    pass
 
 @api_view(['GET'])
 def check_duplicate_email(request, email):
@@ -76,9 +79,8 @@ def check_duplicate_nickname(request, nickname):
 
 @api_view(['GET'])
 def get_user_profile(request, nickname):
-    user = get_object_or_404(User, nickname=nickname)
-    profile_user = get_object_or_404(Profile, user=user)
-    serializer = UserProfileSerializer(profile_user)
+    profile_user = get_object_or_404(User, nickname=nickname)
+    serializer = ProfileSerializer(profile_user)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -165,3 +167,31 @@ def kakao_call_back(request):
         if serialzier.is_valid():
             serialzier.save(request)
     return redirect('http://i8d212.p.ssafy.io/')
+
+
+@api_view(['POST'])
+def verify_refresh_token_in_cookie(request):
+    cookies = request.META.get('HTTP_COOKIE').split()
+    for cookie in cookies:
+        if 'refresh-token' in cookie:
+            refresh_token = cookie.split('=')[1][:-1]
+
+    url = 'http://i8d212.p.ssafy.io:8000/accounts/token/verify/'
+    data = {
+        'token': refresh_token
+    }
+    response = requests.post(url=url, data=data)
+    if response.status_code == 200:
+        return Response(status=status.HTTP_200_OK)   
+    else:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)   
+
+
+@api_view(['POST'])
+def include_refresh_token_in_cookie(request):
+    url = 'http://i8d212.p.ssafy.io:8000/accounts/login/'
+    response = requests.post(url=url, data=request.data).json()
+    refresh_token = response['refresh_token']
+    response = JsonResponse(response)
+    response.set_cookie(key='refresh_token', value=refresh_token)
+    return response

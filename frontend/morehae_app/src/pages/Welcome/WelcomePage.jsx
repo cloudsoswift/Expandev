@@ -1,6 +1,7 @@
 /* 웰컴 페이지는 정적으로 제작하였음 */
 
 import Card from "@/components/Welcome/Card";
+import { Link } from "react-router-dom";
 
 const WelcomePage = () => {
   return (
@@ -27,7 +28,9 @@ const WelcomePage = () => {
         <Card />
       </div>
       <div className="flex justify-center">
-        <button className="m-8 px-32 py-8 rounded-full transition bg-blue-100 text-2xl font-bold text-blue-600 hover:bg-blue-500 hover:text-white shadow-[0px_0px_24px_rgba(149,157,165,0.2)]">로드맵 탐색하기</button>
+        <Link to="/roadmap">
+          <button className="m-8 px-32 py-8 rounded-full transition bg-blue-100 text-2xl font-bold text-blue-600 hover:bg-blue-500 hover:text-white shadow-[0px_0px_24px_rgba(149,157,165,0.2)]">로드맵 탐색하기</button>
+        </Link>
       </div>
     </div>
   )

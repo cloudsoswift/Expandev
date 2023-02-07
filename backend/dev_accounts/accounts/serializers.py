@@ -61,27 +61,28 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id','email','nickname', 'login_type', 'stat', 'phone_number', 'svc_use_pcy_agmt_yn', 'ps_info_proc_agmt_yn', 'mkt_info_recv_agmt_yn', 'news_feed_push_yn', 'noti_push_yn', 'position')
 
 
-class UserProfileSerializer(serializers.ModelSerializer):
-#     profile_image = serializers.ImageField(use_url=True)
-#     nickname = serializers.CharField(source='user.nickname', read_only=True)
-#     position = serializers.CharField(source='user.position', read_only=True)
-#     clear_nodes_count = serializers.IntegerField(source='user.clear_nodes.count', read_only=True)
-#     like_articles_count = serializers.IntegerField(source='user.like_articles.count', read_only=True)
-#     post_articles_count= serializers.IntegerField(source='user.articles.count', read_only=True)
-#     post_reviews_count= serializers.IntegerField(source='user.review.count', read_only=True)
+class ProfileImageSerializer(serializers.ModelSerializer):
 
-#     class Meta:
-#         model = Profile
-#         exclude = ('user','id')
-#         read_only_fields = ('user',)
+    class Meta:
+        model = User
+        fields = ('profile_image','introduce')
 
-#     def update(self, instance, validated_data):
-#         BASE_DIR = Path(__file__).resolve().parent.parent
-#         if os.path.exists(f'{BASE_DIR}/media/{instance.profile_image}'):
-#             os.remove(f'{BASE_DIR}/media/{instance.profile_image}')
+    def update(self, instance, validated_data):
+        BASE_DIR = Path(__file__).resolve().parent.parent
+        if os.path.exists(f'{BASE_DIR}/media/{instance.profile_image}'):
+            os.remove(f'{BASE_DIR}/media/{instance.profile_image}')
 
-#         instance.introduce = validated_data.get('introduce', instance.introduce)
-#         instance.profile_image = validated_data.get('profile_image', instance.profile_image)
-#         instance.save()
-#         return instance
-    pass
+        instance.introduce = validated_data.get('introduce', instance.introduce)
+        instance.profile_image = validated_data.get('profile_image', instance.profile_image)
+        instance.save()
+        return instance
+
+class ProfileSerializer(serializers.ModelSerializer):
+    clear_nodes_count = serializers.IntegerField(source='clear_nodes.count', read_only=True)
+    like_articles_count = serializers.IntegerField(source='like_articles.count', read_only=True)
+    post_articles_count= serializers.IntegerField(source='articles.count', read_only=True)
+    post_reviews_count= serializers.IntegerField(source='review.count', read_only=True)
+
+    class Meta:
+        model = User
+        fields = ('id','nickname','position','introduce', 'clear_nodes_count','like_articles_count','post_articles_count','post_reviews_count', 'profile_image', )
