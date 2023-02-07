@@ -51,8 +51,8 @@ const BlogEditPage = () => {
     let body = new FormData();
     body.append("title", title.trim());
     body.append("content", editor.getMarkdown());
-    if (!overviewIsValid) {
-      body.append("overview", "");
+    if (overviewIsValid) {
+      body.append("overview", overview);
     }
     if (!thumbnail) {
       body.append("thumnail", thumbnail);
