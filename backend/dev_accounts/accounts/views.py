@@ -1,9 +1,9 @@
 from .models import User
 from roadmaps.models import Review
+from .serializers import UserSerializer
 from backend.settings import get_secret
 from blogs.models import Article, Comment
 from .serializers import CustomRegisterSerializer
-from .serializers import UserSerializer, UserProfileSerializer
 from blogs.serializers import ArticleSimpleSerializer, CommentSimpleSerializer
 from .serializers import UserSerializer, ProfileImageSerializer, ProfileSerializer
 from roadmaps.serializer import ReviewSimpleSerializer, NodeSimpleserializer, TrackSimpleSerializer
