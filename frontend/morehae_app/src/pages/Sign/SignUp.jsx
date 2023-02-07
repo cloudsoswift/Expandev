@@ -4,6 +4,7 @@
 import { useState, useRef } from "react"
 import axios from 'axios'
 import Dropdown from "@/components/Dropdown/Dropdown"
+import httpWithURL from "@/utils/http"
 
 const dummyItems = [
   {id: 0, content: "None"},
@@ -117,7 +118,7 @@ const SignUp = () => {
     */
     console.log("제출!!");
     console.log(emailRef.current, passwordRef.current, passwordMatchRef.current, nicknameRef.current, position.content);
-    axios.post('http://i8d212.p.ssafy.io:8000/accounts/registration', {
+    httpWithURL(process.env.REACT_APP_USER_URL).post('registration', {
       email: emailRef.current,
       password1: passwordRef.current,
       password2: passwordMatchRef.current,

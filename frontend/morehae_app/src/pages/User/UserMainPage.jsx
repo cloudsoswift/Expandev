@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Tabs from "@/components/Tab/Tab";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import httpWithURL from "@/utils/http";
 
 const UserMainPage = () => {
   const [userProfile, setUserProfile] = useState();
@@ -12,8 +13,8 @@ const UserMainPage = () => {
   const userNickname = userInfo.nickname;
 
   useEffect(() => {
-    axios
-      .get(`http://i8d212.p.ssafy.io:8000/accounts/user/jina/profile`)
+    httpWithURL(process.env.REACT_APP_USER_URL)
+      .get(`user/jina/profile`)
       .then((res) =>
         setUserProfile(() => {
           // console.log(res.data, "data");
@@ -22,8 +23,8 @@ const UserMainPage = () => {
       )
       .catch((err) => console.log(err));
 
-    axios
-      .get(`http://i8d212.p.ssafy.io:8000/accounts/user/jina/roadmaps`)
+    httpWithURL(process.env.REACT_APP_USER_URL)
+      .get(`user/jina/roadmaps`)
       .then((res) =>
         setUserRoadmap(() => {
           // console.log(res.data, "roadmap");
@@ -32,8 +33,8 @@ const UserMainPage = () => {
       )
       .catch((err) => console.log(err));
 
-    axios
-      .get(`http://i8d212.p.ssafy.io:8000/accounts/user/jina/blogs`)
+    httpWithURL(process.env.REACT_APP_USER_URL)
+      .get(`user/jina/blogs`)
       .then((res) =>
         setUserBlog(() => {
           // console.log(res.data, "blog");
@@ -43,8 +44,7 @@ const UserMainPage = () => {
       .catch((err) => console.log(err));
   }, []);
 
-
-  console.log(userInfo)
+  console.log(userInfo);
   const profile_img = `http://i8d212.p.ssafy.io:9000${userProfile?.profile_image}`;
 
   return (
