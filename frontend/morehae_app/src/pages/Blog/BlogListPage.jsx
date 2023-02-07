@@ -66,7 +66,8 @@ const BlogListPage = () => {
 
   // 태그 검색시 게시글 리스트 가져오기
   const getTagPostList = () => {
-    httpWithURL(process.env.REACT_APP_BLOG_URL).get("tag-articles", {
+    axios
+      .get(`${process.env.REACT_APP_BLOG_URL}tag-articles`, {
       params: {
         tags: params.tagName,
         count: searchParams.get("count"),

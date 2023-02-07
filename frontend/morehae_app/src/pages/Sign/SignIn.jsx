@@ -56,7 +56,7 @@ const SignIn = () => {
         const cookies = new Cookies();
         cookies.set("refresh_token", data.refresh_token, {
           path: "/",
-          // httpOnly: true,
+          httpOnly: true,
           maxAge: 86400,
         });
         console.log(cookies);
