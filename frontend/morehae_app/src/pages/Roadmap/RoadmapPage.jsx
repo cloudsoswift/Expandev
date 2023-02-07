@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 
 import Modal from "@/components/Modal/Modal";
 import WhatWhy from "@/components/Modal/WhatWhy";
@@ -16,7 +16,7 @@ const RoadmapPage = () => {
 
   const [reqData, setReqData] = useState([]);
   const [nodeId, setNodeId] = useState(null);
-  const [check, setCheck] = useState(false);
+
 
   /* 드롭다운 메뉴 관련 state들 */
   const [role, setRole] = useState({ id: 0, content: "포지션을 선택해주세요" }); // 직군
@@ -67,7 +67,6 @@ const RoadmapPage = () => {
   const loadNodeDetail = async (id) => {
     // setNodeId(() => id);
     // console.log(check);
-    setCheck((prevCheck) => !prevCheck);
     await HttpWithURL(process.env.REACT_APP_ROADMAP_URL)
       .get(`node/${id}`)
       .then((res) => setReqData(() => res.data));
@@ -78,6 +77,7 @@ const RoadmapPage = () => {
   useEffect(() => {
     getRoleList();
   }, []);
+
 
   // 직군 선택될 때마다 상황 리스트를 가져온다
   useEffect(() => {
