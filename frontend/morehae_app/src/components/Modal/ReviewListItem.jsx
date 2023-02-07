@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaHeart } from "react-icons/fa";
 
@@ -9,7 +9,8 @@ const ReviewListItem = ({
   onEdit,
   reviewLike,
 
-  likedUser,
+  userInfo,
+ 
 
   id,
   user,
@@ -18,9 +19,8 @@ const ReviewListItem = ({
   user_profile_image,
   like_users,
 }) => {
+  // 수정 관련
   const [isEdit, setIsEdit] = useState(false);
-
-  const [isLiked, setIsLiked] = useState(false)
 
 
   const toggleIsEdit = () => {
@@ -43,21 +43,33 @@ const ReviewListItem = ({
     toggleIsEdit();
   };
 
+  
 
-  const toggleIsLiked = ()=> {
-    setIsLiked(!isLiked)
-  }
+  // Reivew에서 가져와서 likedUser을 초기값으로 설정
+  const [isLiked, setIsLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(like_users.length);
 
-  const handleLike = (id) => {
+  // 좋아요 관련
+  // const toggleIsLiked = () => {
+  //   setIsLiked(() => !isLiked);
+  // };
 
-    console.log(id)
+  const handleLike = () => {
     reviewLike(id);
-    toggleIsLiked()
-    
-    console.log(isLiked, "isLiked state")
+    // toggleIsLiked();
   };
-  console.log(likedUser, "likedUser out")
- 
+
+  useEffect(() => {
+    // 맵핑된 아이템마다 같은 likedUser(boolean) 값을 내려주기 때문에
+    // 하트의 형태변화는 isLiked로 따로 관리
+    if (like_users.includes(userInfo.id)) {
+      setIsLiked(true);
+      setLikeCount(()=> likeCount);
+      // console.log(isLiked, "isLiked in useEffect")
+    }
+  }, [like_users])
+
+  console.log(like_users, "in item")
 
   return (
     <div>
@@ -101,21 +113,17 @@ const ReviewListItem = ({
                 작성일자 {new Date(created_at).toLocaleString()}
               </div>
               <div>
-                {likedUser ? (
-                  <>
-                    <div className="text-xs mr-3 flex">
-                      <FaHeart className="text-red-600 mt-0.5 cursor-pointer" onClick={()=>handleLike(id)} />
-                      <div className="ml-1">{like_users?.length}</div>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="text-xs mr-3 flex">
-                      <FaHeart className="text-white mt-0.5 cursor-pointer hover:text-red-600" onClick={()=>handleLike(id)} />
-                      <div className="ml-1">{like_users?.length}</div>
-                    </div>
-                  </>
-                )}
+                <div className="text-xs mr-3 flex">
+                  <FaHeart
+                    className={
+                      isLiked
+                        ? "text-red-600 mt-0.5 cursor-pointer hover:text-white "
+                        : "text-white mt-0.5 cursor-pointer hover:text-red-600"
+                    }
+                    onClick={handleLike}
+                  />
+                  <div className="ml-1">{likeCount}</div>
+                </div>
               </div>
             </div>
 
