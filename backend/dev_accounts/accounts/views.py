@@ -1,5 +1,5 @@
-from .models import User, Profile
-from .serializers import UserSerializer, UserProfileSerializer
+from .models import User
+from .serializers import UserSerializer, ProfileImageSerializer, ProfileSerializer
 from blogs.models import Article, Comment
 from blogs.serializers import ArticleSimpleSerializer, CommentSimpleSerializer
 from roadmaps.models import Review, Node
@@ -37,12 +37,10 @@ def userchange(request):
 
 
 @api_view(['PUT'])
-def set_profile_image(request):
+def set_profile(request):
     user = request.user
     data = request.data
-
-    profile = Profile.objects.get_or_create(user=user)[0]
-    serializer = UserProfileSerializer(profile, data=data)
+    serializer = ProfileImageSerializer(user, data=data)
     if serializer.is_valid():
         serializer.save(user=user)
         return Response(status=status.HTTP_201_CREATED)
@@ -77,9 +75,8 @@ def check_duplicate_nickname(request, nickname):
 
 @api_view(['GET'])
 def get_user_profile(request, nickname):
-    user = get_object_or_404(User, nickname=nickname)
-    profile_user = get_object_or_404(Profile, user=user)
-    serializer = UserProfileSerializer(profile_user)
+    profile_user = get_object_or_404(User, nickname=nickname)
+    serializer = ProfileSerializer(profile_user)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 

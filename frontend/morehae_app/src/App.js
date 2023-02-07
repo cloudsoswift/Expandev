@@ -3,7 +3,6 @@ import MainNavBar from "@/components/Navbar/MainNavBar";
 // import IndexPage from "@/pages/Index/IndexPage";
 import WelcomePage from "@/pages/Welcome/WelcomePage"
 import { Outlet, Route, Routes } from "react-router-dom";
-import MainPage from "@/pages/Main/MainPage";
 import RoadmapPage from "@/pages/Roadmap/RoadmapPage";
 import SignIn from "@/pages/Sign/SignIn";
 import SignUp from "@/pages/Sign/SignUp";
@@ -14,6 +13,8 @@ import BlogWritePage from "@/pages/Blog/BlogWritePage";
 import UserMainPage from "@/pages/User/UserMainPage";
 
 import "@/style/basic.css";
+import "@toast-ui/editor/dist/toastui-editor.css";
+import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
         <Route path="blog" element={<Outlet />}>
           <Route index element={<BlogListPage />} />
           <Route path="recent" element={<BlogListPage />} />
+          <Route path="tag/:tagName" element={<BlogListPage />} />
           <Route path="post/:postId" element={<Outlet />}>
             <Route index element={<BlogPostPage />} />
             <Route path="edit" element={<BlogEditPage />} />

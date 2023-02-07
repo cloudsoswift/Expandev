@@ -5,7 +5,8 @@ import { VscBell } from "react-icons/vsc";
 import { Link, useNavigate } from "react-router-dom";
 import NotificationList from "@/components/Navbar/NotificationList";
 import { useDispatch, useSelector } from "react-redux";
-import { userLogout } from "@/utils/store/user-slice";
+import httpWithURL from "@/utils/http";
+import { userActions } from "@/utils/store/user-slice";
 
 // 블로그 url 구조 나오면 블로그 글 작성 페이지로 to 설정 필요.
 
@@ -23,7 +24,28 @@ const MainNavBar = () => {
    *
    */
   const logoutHandler = () => {
-    dispatch(userLogout(navigate));
+    httpWithURL(process.env.REACT_APP_USER_URL)
+      .post(process.env.REACT_APP_USER_URL + "logout/")
+      .then((response) => {
+        switch (response.status) {
+          case 200:
+          default:
+            // Axios Default Header에 설정된 Access Token 삭제
+            // setAccessToken();
+            dispatch(userActions.setUser({}));
+            dispatch(userActions.setAccessToken(""));
+            // 로그아웃 후 로드맵 페이지로 이동
+            navigate("/roadmap");
+          }
+        })
+        .catch((e) => {
+          // Axios Default Header에 설정된 Access Token 삭제
+          // setAccessToken();
+          dispatch(userActions.setUser({}));
+          dispatch(userActions.setAccessToken(""));
+        // 로그아웃 후 로드맵 페이지로 이동
+        navigate("/roadmap");
+      });
   };
 
   const userLink = `/user/${user.nickname}`
@@ -31,7 +53,7 @@ const MainNavBar = () => {
   const buttonStyle = "border border-black rounded-full mr-2";
 
   return (
-    <nav className="h-20 bg-white sticky top-0 z-10 border-b">
+    <nav className="h-20 bg-dark sticky top-0 z-10">
       <div className="grid grid-cols-12 auto-cols-auto h-full items-center">
         <div className="logo col-span-3 pl-8 justify-items-center">
           <Link className="text-4xl font-bold" id="logo" to="/">
@@ -40,7 +62,7 @@ const MainNavBar = () => {
         </div>
         <div className="roadmapBtn col-span-3 justify-self-end">
           <Link
-            className="text-gray-500 hover:text-blue-500 rounded-xl p-2 px-8"
+            className="text-gray-500 hover:text-green-500 rounded-xl p-2 px-8"
             to="/roadmap"
           >
             로드맵
@@ -48,7 +70,7 @@ const MainNavBar = () => {
         </div>
         <div className="blogBtn col-span-3 justify-self-start">
           <Link
-            className="text-gray-500 hover:text-blue-500 rounded-xl p-2 px-8"
+            className="text-gray-500 hover:text-green-500 rounded-xl p-2 px-8"
             to="/blog"
           >
             블로그
@@ -57,7 +79,7 @@ const MainNavBar = () => {
         {!isLogin && (
           <div className="signInBtn col-span-3 justify-self-end pr-4">
             <Link
-              className="transition border-2 border-blue-400 rounded-lg hover:border-blue-600 text-blue-400 text-sm p-4"
+              className="transition rounded-lg border-2 border-green-600 text-green-500 hover:border-green-400 hover:text-green-300 text-sm p-4"
               to="/login"
             >
               로그인/회원가입
@@ -67,7 +89,7 @@ const MainNavBar = () => {
         {isLogin && (
           <div className="userProfile col-span-3 flex justify-self-center items-center">
             <Link to='/blog/write'>
-              <button className="transition bg-blue-100 p-2 px-4 rounded-full mr-4 text-sm text-blue-600 hover:bg-blue-500 hover:text-white" >글 작성하기</button>
+              <button className="transition bg-green-100 p-2 px-4 rounded-full mr-4 text-sm text-green-600 hover:bg-green-500 hover:text-white" >글 작성하기</button>
             </Link>
             <Menu>
               <Menu.Button>
@@ -79,7 +101,7 @@ const MainNavBar = () => {
               <Menu.Button>
                 <BsPerson size="25" />
               </Menu.Button>
-              <Menu.Items className="absolute top-full bg-slate-100 shadow-md rounded-md mt-2 w-56 flex flex-col focus:outline-none py-2 border">
+              <Menu.Items className="absolute top-full bg-gray-500 shadow-md rounded-md mt-2 w-56 flex flex-col focus:outline-none py-2 border">
                 <Menu.Item>
                   <div className="w-full h-28 border-y grid grid-cols-2">
                     <div className="flex justify-center self-center">
@@ -93,7 +115,7 @@ const MainNavBar = () => {
                 </Menu.Item>
                 <Menu.Item>
                   <Link
-                    className="flex px-2 py-2 border-b hover:bg-slate-200"
+                    className="flex px-2 py-2 border-b hover:bg-gray-300"
                     to={userLink}
                   >
                     <span className="text-xl">마이 페이지</span>
@@ -101,7 +123,7 @@ const MainNavBar = () => {
                 </Menu.Item>
                 <Menu.Item>
                   <button
-                    className="flex px-2 py-2 border-b hover:bg-slate-200"
+                    className="flex px-2 py-2 border-b hover:bg-gray-300"
                     onClick={logoutHandler}
                   >
                     <span className="text-xl">Logout</span>

@@ -22,25 +22,21 @@ const InputTitle = ({onChange, value, setValid}) => {
 
   return (
     <div>
-      <span className="text-sm text-gray-500">
-        제목
-        <br />
-      </span>
+      <div>
+        <span className="text-2xl">제목</span>
+        {!titleIsValid && titleTouched && (
+        <span className="text-xs text-red-500 ml-2">{titleIsEmpty ? "제목은 필수입니다." : "제목은 100자 이하여야 합니다."}</span>
+        )}
+      </div>
       <input
-        className="px-3 py-2 bg-white text-2xl rounded-md shadow-sm placeholder-slate-40 w-full"
+        className="px-3 py-2 text-white bg-slate-800 rounded-md shadow-sm placeholder-slate-40 w-full"
         type="text"
-        placeholder="제목을 입력하세요"
+        placeholder="제목을 입력해주세요"
         value={value}
         onChange={handleInputChange}
         onBlur={handleInputBlur}
       />
-      {!titleIsValid && titleTouched && (
-        <div className="text-xs text-red-500">
-          {titleIsEmpty
-            ? "제목은 필수입니다."
-            : "제목은 100자 이하여야 합니다."}
-        </div>
-      )}
+      
     </div>
   );
 };
