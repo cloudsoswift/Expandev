@@ -18,6 +18,7 @@ const PostViewer = ({ content }) => {
         viewer: true,
         initialValue: context,
         height: "600px",
+        theme: "dark",
       })
     );
   }, [content]);

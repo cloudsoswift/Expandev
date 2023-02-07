@@ -27,14 +27,14 @@ const InputThumbnail = ({onChange, value}) => {
         (선택)썸네일 파일 첨부
         <br />
       </span>
-      <div className="grid grid-cols-2 h-full border rounded-lg p-1">
+      <div className="grid grid-cols-2 h-full border border-slate-700 rounded-lg p-1">
         <input
           className="file:border-0 file:py-2 file:px-4 file:rounded-lg"
           type="file"
           onChange={handleThumbnailChange}
           accept="image/png, image/jpeg"
         />
-        <div className="h-full border overflow-hidden">
+        <div className="h-full border border-slate-700 overflow-hidden">
           {value && (
             <img
               className="w-full h-full object-contain"
