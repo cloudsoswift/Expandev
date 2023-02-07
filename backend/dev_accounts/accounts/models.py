@@ -21,7 +21,7 @@ class User(AbstractUser):
     noti_push_yn = models.BooleanField(default=False, null=True)
     position = models.CharField(null=True, max_length=50)
     REQUIRED_FIELDS = []
-
+    
     objects = UserManager()
 
     def __str__(self):
@@ -32,3 +32,10 @@ class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile")
     introduce = models.TextField(default='아직 자기소개가 없습니다.', blank=True, null=True)
     profile_image = models.ImageField(default='media/default.png')
+
+
+# 소셜 로그인 관련 데이터
+class SocialAuthentication(models.Model):  
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    platform = models.CharField(max_length=30)
+    sns_service_id = models.CharField(max_length=100, unique=True)
