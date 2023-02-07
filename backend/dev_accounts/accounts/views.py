@@ -121,7 +121,7 @@ def get_user_roadmaps(request, nickname):
 @api_view(['GET'])
 def kakao_login(request):
     kakao_api = 'https://kauth.kakao.com/oauth/authorize?response_type=code'
-    redirect_uri = 'http://i8d212.p.ssafy.io/accounts/login/kakao/callback/'
+    redirect_uri = 'http://i8d212.p.ssafy.io:8000/accounts/login/kakao/callback/'
     client_id = get_secret('client_id')
     return redirect(f'{kakao_api}&client_id={client_id}&redirect_uri={redirect_uri}')
 
@@ -132,7 +132,7 @@ def kakao_call_back(request):
     data = {
         'grant_type': 'authorization_code',
         'client_id': get_secret('client_id'),
-        'redirect_uri': 'http://i8d212.p.ssafy.io/accounts/login/kakao/callback/',
+        'redirect_uri': 'http://i8d212.p.ssafy.io:8000/accounts/login/kakao/callback/',
         'code': request.GET['code'],
         'client_secret': get_secret('client_secret'),
     }
