@@ -17,6 +17,10 @@ from datetime import timedelta
 
 from django.core.exceptions import ImproperlyConfigured
 
+import pymysql
+
+pymysql.install_as_MySQLdb()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -65,6 +69,9 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+
+    'allauth.socialaccount.providers.kakao',
+
     'dj_rest_auth.registration',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -180,32 +187,32 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mariadb',
-        'USER': 'root',
-        'PASSWORD': get_secret('PASSWORD'),
-        'HOST': get_secret('HOST'),
-        'PORT': get_secret('PORT')
-    },  
-    'test': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mariadb',
-        'USER': 'root',
-        'PASSWORD': get_secret('PASSWORD'),
-        'HOST': get_secret('HOST'),
-        'PORT': get_secret('TEST_PORT')
-    }
-}
-
-# TEST Sqlite DB
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'mariadb',
+#         'USER': 'root',
+#         'PASSWORD': get_secret('PASSWORD'),
+#         'HOST': get_secret('HOST'),
+#         'PORT': get_secret('PORT')
+#     },
+#     'test': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'mariadb',
+#         'USER': 'root',
+#         'PASSWORD': get_secret('PASSWORD'),
+#         'HOST': get_secret('HOST'),
+#         'PORT': get_secret('TEST_PORT')
 #     }
 # }
+
+# TEST Sqlite DB
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -260,7 +267,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES':(
-        #'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
@@ -277,3 +284,14 @@ SPECTACULAR_SETTINGS = {
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+SOCIALACCOUNT_PROVIDERS = {
+    'kakao': {
+        'APP': {
+            'client_id': '9dc0cc4073c88973eefa99bb2f1f9bcc', # REST API 키
+            'secret': 861258, # 앱 ID
+            'key': ''
+        }
+    }
+}
