@@ -27,5 +27,9 @@ urlpatterns = [
     path('roadmaps/', include('roadmaps.urls')),
     path('scema/', SpectacularAPIView.as_view(), name='scema'),
     path('swagger/', SpectacularSwaggerView.as_view(url_name='scema'), name='swagger-ui'),
+
+    path('test/', include('allauth.urls')),
+
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += staticfiles_urlpatterns()
