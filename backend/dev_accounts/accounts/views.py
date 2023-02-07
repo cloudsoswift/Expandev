@@ -15,7 +15,10 @@ from django.shortcuts import get_list_or_404, get_object_or_404
 
 import re
 import requests
-
+from pprint import pprint
+import json
+from ast import literal_eval
+from django.http import JsonResponse
 
 @api_view(['GET'])
 def userlist(request):
@@ -121,7 +124,7 @@ def verify_refresh_token_in_cookie(request):
         if 'refresh-token' in cookie:
             refresh_token = cookie.split('=')[1][:-1]
 
-    url = 'http://i8d212.p.ssafy.io/accounts/token/verify/'
+    url = 'http://i8d212.p.ssafy.io:8000/accounts/token/verify/'
     data = {
         'token': refresh_token
     }
@@ -130,3 +133,12 @@ def verify_refresh_token_in_cookie(request):
         return Response(status=status.HTTP_200_OK)   
     else:
         return Response(status=status.HTTP_401_UNAUTHORIZED)   
+
+@api_view(['POST'])
+def include_refresh_token_in_cookie(request):
+    url = 'http://i8d212.p.ssafy.io:8000/accounts/login/'
+    response = requests.post(url=url, data=request.data).json()
+    refresh_token = response['refresh_token']
+    response = JsonResponse(response)
+    response.set_cookie(key='refresh_token', value=refresh_token)
+    return response
