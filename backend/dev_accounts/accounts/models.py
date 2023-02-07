@@ -11,6 +11,8 @@ class User(AbstractUser):
     username = None
     email = models.EmailField(_('email address'), unique=True)
     nickname = models.CharField(max_length=50)
+    introduce = models.TextField(default='아직 자기소개가 없습니다.', blank=True, null=True)
+    profile_image = models.ImageField(default='media/default.png')
     login_type = models.CharField(null=True, max_length=10)
     stat = models.CharField(null=True, max_length=50)
     phone_number = models.CharField(null=True, max_length=13)
@@ -22,13 +24,14 @@ class User(AbstractUser):
     position = models.CharField(null=True, max_length=50)
     REQUIRED_FIELDS = []
 
+
     objects = UserManager()
 
     def __str__(self):
         return self.email
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile")
-    introduce = models.TextField(default='아직 자기소개가 없습니다.', blank=True, null=True)
-    profile_image = models.ImageField(default='media/default.png')
+# class Profile(models.Model):
+#     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile")
+#     introduce = models.TextField(default='아직 자기소개가 없습니다.', blank=True, null=True)
+#     profile_image = models.ImageField(default='media/default.png')

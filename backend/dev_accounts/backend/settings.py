@@ -65,9 +65,6 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-
-    'allauth.socialaccount.providers.naver',
-
     'dj_rest_auth.registration',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -121,8 +118,8 @@ REST_AUTH_SERIALIZERS = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
-    'REFRESH_TOKEN_LIFETIME': timedelta(hours=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
     'UPDATE_LAST_LOGIN': False,
@@ -148,8 +145,8 @@ SIMPLE_JWT = {
     'JTI_CLAIM': 'jti',
 
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
-    'SLIDING_TOKEN_LIFETIME': timedelta(hours=1),
-    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(hours=1),
+    'SLIDING_TOKEN_LIFETIME': timedelta(days=1),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 ##############################################################
 #
@@ -191,7 +188,7 @@ DATABASES = {
         'PASSWORD': get_secret('PASSWORD'),
         'HOST': get_secret('HOST'),
         'PORT': get_secret('PORT')
-    },
+    },  
     'test': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'mariadb',
@@ -201,6 +198,14 @@ DATABASES = {
         'PORT': get_secret('TEST_PORT')
     }
 }
+
+# TEST Sqlite DB
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
