@@ -10,7 +10,7 @@ class User(AbstractUser):
     USERNAME_FIELD = 'nickname'
     username = models.CharField(max_length=10, blank=True, null=True)
     password = None
-    nickname = models.CharField(max_length=10)
+    nickname = models.CharField(max_length=10, unique=True)
     login_type = models.CharField(max_length=10)
     email = models.EmailField(_('email address'), unique=True)
     profile_image = models.ImageField(default='media/default.png')
