@@ -1,5 +1,5 @@
 from django.views import View
-from .models import User, Profile
+from .models import User
 from .serializers import UserSerializer, UserProfileSerializer
 from blogs.models import Article, Comment
 from blogs.serializers import ArticleSimpleSerializer, CommentSimpleSerializer
@@ -40,14 +40,14 @@ def set_profile_image(request):
     user = request.user
     data = request.data
 
-    profile = Profile.objects.get_or_create(user=user)[0]
-    serializer = UserProfileSerializer(profile, data=data)
-    if serializer.is_valid():
-        serializer.save(user=user)
-        return Response(status=status.HTTP_201_CREATED)
-    else:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-
+    # profile = Profile.objects.get_or_create(user=user)[0]
+    # serializer = UserProfileSerializer(profile, data=data)
+    # if serializer.is_valid():
+    #     serializer.save(user=user)
+    #     return Response(status=status.HTTP_201_CREATED)
+    # else:
+    #     return Response(status=status.HTTP_400_BAD_REQUEST)
+    pass
 
 @api_view(['GET'])
 def check_duplicate_email(request, email):
@@ -125,8 +125,8 @@ def kakao_login(request):
     return redirect(f'{kakao_api}&client_id={client_id}&redirect_uri={redirect_uri}')
 
 
-from .models import SocialAuthentication
 
+from .serializers import CustomRegisterSerializer
 @api_view(['GET'])
 def kakao_call_back(request):
     # 로그인 후 응답받은 code 를 통해 카카오 서버로 데이터 요청
@@ -145,28 +145,50 @@ def kakao_call_back(request):
     user_info = requests.post(kakao_token_info_api).json()
     nickname = user_info.get('nickname')
     email = user_info.get('email')
-    sub = user_info.get('sub')
-    print(nickname, email, sub)
+    sns_service_id = user_info.get('sub')
+    print(nickname, email, sns_service_id)
 
     # 회원가입 유무 판단
-    # 1. 임의로 회원가입
-    # - 임의 이메일 (email_kakao)
-    # - 임의 닉네임 (nickname_kakao)
-    if SocialAuthentication.objects.filter(sns_service_id=sub).exists():
-        return redirect('http://i8d212.p.ssafy.io/')
+    # 0. 카카오 인지 네이버 인지 확인 해야함, 근데 일단 스킵
+    # 1. 해당 회원번호가 등록되어있는지 확인
+    if get_user_model().objects.filter(sns_service_id=sns_service_id).exists():
+        # 0. 존재
+        # 1. 토큰 담아서 전달
+        pass
     else:
-        user = get_user_model().objects.create(
-            email=email, 
-            password='123',
-            nickname=nickname,
-            login_type=1,
-            stat=1,
-            phone_number=1,
-            position=1,
-            )
-        social_user = SocialAuthentication.objects.create(
-            user=user,
-            platform='kakao',
-            sns_service_id=sub,
-        )
-        return Response(status=status.HTTP_201_CREATED)
+        # 0. 존재하지 않음
+        # 1. 회원가입
+        # user = get_user_model().objects.create(
+        #     platform='kakao',
+        #     nickname=nickname,
+        #     email=email,
+        # )
+        data = {
+            'nickname': nickname,
+            'email': email,
+            'sns_service_id': sns_service_id,
+        }
+        serialzier = CustomRegisterSerializer(data=data)
+        if serialzier.is_valid():
+            serialzier.save()
+        else:
+            print(serialzier.errors)
+    return redirect('http://i8d212.p.ssafy.io/')
+    # if SocialAuthentication.objects.filter(sns_service_id=sub).exists():
+    #     return redirect('http://i8d212.p.ssafy.io/')
+    # else:
+    #     user = get_user_model().objects.create(
+    #         email=email, 
+    #         password='123',
+    #         nickname=nickname,
+    #         login_type=1,
+    #         stat=1,
+    #         phone_number=1,
+    #         position=1,
+    #         )
+    #     social_user = SocialAuthentication.objects.create(
+    #         user=user,
+    #         platform='kakao',
+    #         sns_service_id=sub,
+    #     )
+    return Response(status=status.HTTP_201_CREATED)
