@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import axios from 'axios'
 import PostPreview from "@/components/Blog/PostPreview";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import httpWithURL from "@/utils/http";
 
 const tabData = [
@@ -24,6 +24,7 @@ const BlogListPage = () => {
   const [recentPage, setRecentPage] = useState(1);  // 최신 탭의 스크롤 페이지 번호
   const [activeTabIndex, setActiveTabIndex] = useState(0);  // 활성화된 탭 인덱스
   const searchBoxRef = useRef(null);
+  const params = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   // 트렌드 탭의 게시글 리스트 가져오기
   const getTrendPostList = () => {
@@ -67,16 +68,13 @@ const BlogListPage = () => {
   const getTagPostList = () => {
     httpWithURL(process.env.REACT_APP_BLOG_URL).get("tag-articles", {
       params: {
-        tags: searchParams.get("tag"),
+        tags: params.tagName,
         count: searchParams.get("count"),
-      },
-      headers: {
-        "Content-Type": "multipart/form-data",
       },
     }).then((Response) => {
       setPostListTrend((oldState) => {
-        if (Response?.data?.articles) {
-          return [ ...Response.data.articles];
+        if (Response?.data) {
+          return [ ...Response.data];
         } else {
           return [];
         }
@@ -94,15 +92,16 @@ const BlogListPage = () => {
     if (urlStringList.includes("recent")) {
       setActiveTabIndex(1);
     }
-    
+    // 태그 검색일 경우 태그 검색 결과만 반영
+    if(params.tagName){
+      getTagPostList();
+      return;
+    }
     // 초기 데이터 로딩
     getTrendPostList();
     getRecentPostList();
-    if(searchParams.get("tag")){
-      getTagPostList();
-    }
     
-  }, [])
+  }, [searchParams, params])
 
   const handleFocus = () => {
     searchBoxRef.current.classList.replace('border-slate-700', 'border-green-500');
@@ -130,7 +129,7 @@ const BlogListPage = () => {
         {/* 탭 UI */}
         <div className="ml-2 mr-2 border-b-2 border-slate-700 flex justify-between">
           <div>
-            {tabData.map((data, index) => 
+            {!params.tagName && tabData.map((data, index) => 
               <Link to={"/blog" + data.link} key={data.id} >
                 <button
                   onClick={() => setActiveTabIndex(index)}
@@ -142,6 +141,7 @@ const BlogListPage = () => {
                 </button>
               </Link>
             )}
+            {params.tagName && <div><span className="border p-1 rounded-3xl transition-color duration-300 bg-purple-700 text-white inline-block hover:bg-purple-500">#{params.tagName}</span> 에 대한 검색 결과</div>}
           </div>
           {/* 검색 상자 UI */}
           <div ref={searchBoxRef} className="transition-colors duration-300 border-b-4 border-slate-700">

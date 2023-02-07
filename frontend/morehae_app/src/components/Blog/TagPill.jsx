@@ -14,7 +14,7 @@ const TagPill = ({ title, onDelete, count, id }) => {
   return (
     <div className="inline">
       {!onDelete && (
-        <Link to={{pathname: '/blog/tag', search:`?tag=${id}&count=0`}} >
+        <Link to={{pathname: `/blog/tag/${title}`, search:`?count=1`}} >
           <span
             className={pillStyle}
             title={`등록된 게시물 수 : ${count}`}
