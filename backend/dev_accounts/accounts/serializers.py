@@ -19,6 +19,7 @@ from allauth.account.utils import setup_user_email
 
 
 class CustomRegisterSerializer(RegisterSerializer):
+    username = None
     password1 = None
     password2 = None
     nickname = serializers.CharField(max_length=10)
