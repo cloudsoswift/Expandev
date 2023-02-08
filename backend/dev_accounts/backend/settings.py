@@ -201,6 +201,7 @@ DATABASES = {
     }
 }
 
+
 # TEST Sqlite DB
 # DATABASES = {
 #     'default': {
