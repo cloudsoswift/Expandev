@@ -114,10 +114,11 @@ class MainNodeSerializer(serializers.ModelSerializer):
 class TrackSerializer(serializers.ModelSerializer):
     nodesData = serializers.SerializerMethodField()
     favorites_count = serializers.IntegerField(source = 'favorites.count', read_only=True)
+    favorite = serializers.SerializerMethodField()
 
     class Meta:
         model = Track
-        fields = ('title', 'content', 'purpose', 'nodesData', 'favorites_count', 'favorites')
+        fields = ('title', 'content', 'purpose', 'nodesData', 'favorites_count', 'favorites', 'favorite')
 
 
         read_only_fields = ('nodes',  'favorites_count')
@@ -130,6 +131,12 @@ class TrackSerializer(serializers.ModelSerializer):
                 temp_node.append(node)
         serializer = MainNodeSerializer(temp_node, many=True, context={'user': user})
         return serializer.data
+
+    def get_favorite(self, obj):
+        user = self.context['user']
+        if user.is_authenticated:
+            return user.favorite_roadmaps.filter(pk=obj.pk).exists()
+        return False
 
 
 class ReviewSerializer(serializers.ModelSerializer):
