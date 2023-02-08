@@ -34,6 +34,7 @@ const SignIn = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     console.log(email, password);
+    dispatch(userActions.setAccessToken(""));
     httpWithURL(process.env.REACT_APP_USER_URL)
       .post(
         "login/",

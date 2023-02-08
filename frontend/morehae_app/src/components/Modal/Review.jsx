@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState , useEffect} from "react";
 import { useSelector } from "react-redux";
 import ReviewEditor from "@/components/Modal/ReviewEditor";
 import ReviewList from "@/components/Modal/ReviewList";
@@ -7,7 +7,7 @@ import httpWithURL from "../../utils/http";
 const Review = ({ reqData, nodeId }) => {
   const [data, setData] = useState(reqData.review);
   // const dataId = useRef(reqData.review.length + 1);
-  const [likedUser, setLikedUser] = useState(false);
+  // const [likedUser, setLikedUser] = useState(false);
 
   const userInfo = useSelector((state) => state.user.user);
 
@@ -68,23 +68,27 @@ const Review = ({ reqData, nodeId }) => {
   };
 
 
-    // useEffect(()=>{
-    //   const upDateLike = async ()=> {
-    //     const res = likedUser
-    //   }
-    // },[])
+
 
   const reviewLike = (targetId) => {
     console.log(targetId)
     httpWithURL(process.env.REACT_APP_ROADMAP_URL)
       .post(`review/${targetId}/like`, { withCredentials: true })
       .then((res) => {
-        console.log(res);
-        setLikedUser(()=> !likedUser);
-        console.log(likedUser, "likedUser state");
+        console.log(res)
+        setData((prevData)=>{
+          const originalReview = prevData.find(r => r.id === targetId);
+          let newLike_users = originalReview.like_users.includes('유저 아이디'); 
+          // const is_included = prevData.find(r => r.id ===)
+          prevData.map((review)=>review.id === targetId ? {...review, } : review )
+        })
+        // setLikedUser(()=> !likedUser);
+        // console.log(likedUser, "likedUser in function")
       })
       .catch((err) => console.log(err));
   };
+  // console.log(likedUser, "likedUser in review")
+  console.log(data)
 
   return (
     <div>
@@ -93,8 +97,9 @@ const Review = ({ reqData, nodeId }) => {
           reviewList={data}
           onDelete={onDelete}
           onEdit={onEdit}
-          likedUser={likedUser}
           reviewLike={reviewLike}
+          userInfo={userInfo}
+    
         />
         <ReviewEditor onCreate={onCreate} />
       </div>

@@ -1,12 +1,9 @@
-import React ,{useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { GiRingedPlanet } from "react-icons/gi";
 import { Link } from "react-router-dom";
 import HttpWithURL from "@/utils/http";
 
-
 const WhatWhy = ({ reqData, nodeId }) => {
-  
-
   const [checkbox, setCheckbox] = useState(false);
 
   const handleCheckbox = () => {
@@ -16,9 +13,9 @@ const WhatWhy = ({ reqData, nodeId }) => {
       .catch((err) => console.log(err));
   };
 
-  useEffect(()=>{
-    setCheckbox(reqData.isComplete)
-  },[reqData.isComplete])
+  useEffect(() => {
+    setCheckbox(reqData.isComplete);
+  }, [reqData.isComplete]);
 
   return (
     <div>
@@ -40,7 +37,7 @@ const WhatWhy = ({ reqData, nodeId }) => {
             className="w-5 h-5 ml-2 mt-1 text-black"
             type="checkbox"
             onClick={handleCheckbox}
-            onChange={(e)=>setCheckbox()}
+            onChange={(e) => setCheckbox()}
             checked={checkbox}
           />
         </div>

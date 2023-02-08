@@ -15,14 +15,14 @@ const Links = ({ reqData }) => {
           </h2>
           <button className="rounded text-xs  text-[rgb(71,79,88)] hover:text-white">more..</button>
         </div>
-        <div className="grid grid-cols-3 gap-3 justify-items-center text-center p-3">
-          <div className="bg-[rgb(36,41,47)] rounded-lg border border-[rgb(71,79,88)]  w-36 h-36 mr-3">
+        <div className="grid grid-cols-3 justify-items-center text-center p-3">
+          <div className="bg-[rgb(36,41,47)] rounded-lg border border-[rgb(71,79,88)]  w-40 h-40 ">
             01
           </div>
-          <div className="bg-[rgb(36,41,47)] rounded-lg border border-[rgb(71,79,88)] w-36 h-36 mr-3">
+          <div className="bg-[rgb(36,41,47)] rounded-lg border border-[rgb(71,79,88)] w-40 h-40 ">
             02
           </div>
-          <div className="bg-[rgb(36,41,47)] rounded-lg border  border-[rgb(71,79,88)] w-36 h-36 mr-4">
+          <div className="bg-[rgb(36,41,47)] rounded-lg border border-[rgb(71,79,88)] w-40 h-40 ">
             03
           </div>
         </div>

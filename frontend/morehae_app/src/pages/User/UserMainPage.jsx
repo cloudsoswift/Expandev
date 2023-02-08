@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Tabs from "@/components/Tab/Tab";
-import axios from "axios";
+import HttpWithURL from "@/utils/http";
+import { Link } from "react-router-dom";
+
 import { useSelector } from "react-redux";
 import httpWithURL from "@/utils/http";
 
@@ -11,41 +13,55 @@ const UserMainPage = () => {
 
   const userInfo = useSelector((state) => state.user.user);
   const userNickname = userInfo.nickname;
+  console.log(userInfo);
 
   useEffect(() => {
-    httpWithURL(process.env.REACT_APP_USER_URL)
-      .get(`user/jina/profile`)
-      .then((res) =>
-        setUserProfile(() => {
-          // console.log(res.data, "data");
-          return res.data;
-        })
-      )
-      .catch((err) => console.log(err));
 
-    httpWithURL(process.env.REACT_APP_USER_URL)
-      .get(`user/jina/roadmaps`)
-      .then((res) =>
-        setUserRoadmap(() => {
-          // console.log(res.data, "roadmap");
-          return res.data;
-        })
-      )
-      .catch((err) => console.log(err));
+    const getProfile = () => {
+      HttpWithURL(process.env.REACT_APP_USER_URL)
+        .get(`user/${userNickname}/profile`)
+        .then((res) =>
+          setUserProfile(() => {
+            console.log(res.data, "data");
+            return res.data;
+          })
+        )
+        .catch((err) => console.log(err));
+    };
 
-    httpWithURL(process.env.REACT_APP_USER_URL)
-      .get(`user/jina/blogs`)
-      .then((res) =>
-        setUserBlog(() => {
-          // console.log(res.data, "blog");
-          return res.data;
-        })
-      )
-      .catch((err) => console.log(err));
+    const getRoadmapTab = () => {
+      HttpWithURL(process.env.REACT_APP_USER_URL)
+        .get(`user/${userNickname}/roadmaps`)
+        .then((res) =>
+          setUserRoadmap(() => {
+            // console.log(res.data, "roadmap");
+            return res.data;
+          })
+        )
+        .catch((err) => console.log(err));
+    };
+
+    const getBlogTab = () => {
+      HttpWithURL(process.env.REACT_APP_USER_URL)
+        .get(`user/${userNickname}/blogs`)
+        .then((res) =>
+          setUserBlog(() => {
+            // console.log(res.data, "roadmap");
+            return res.data;
+          })
+        )
+        .catch((err) => console.log(err));
+    };
+    getProfile();
+    getRoadmapTab();
+    getBlogTab();
   }, []);
 
-  console.log(userInfo);
-  const profile_img = `http://i8d212.p.ssafy.io:9000${userProfile?.profile_image}`;
+  console.log(userProfile);
+  console.log(userRoadmap)
+  console.log(userBlog)
+
+  // const profile_img = `http://i8d212.p.ssafy.io:9000${userProfile?.profile_image}`;
 
   return (
     <div className="flex w-auto h-full justify-center bg-dark ">
@@ -61,15 +77,18 @@ const UserMainPage = () => {
               />
             </div>
             <div className="mt-9 m-2">
-              <span className="mx-4 text-lg">{userProfile?.nickname}rgr</span>
+              <span className="mx-4 text-lg">{userProfile?.nickname}</span>
               <span className="mr-2 text-sm text-gray-400">
-                {userProfile?.position}dgsef
+                {userProfile?.position}
               </span>
             </div>
             <div className="mt-9 m-2 text-right">
-              <button className="px-3 py-1 rounded-md shadow-md text-xs text-white bg-green-500 hover:bg-green-700 drop-shadow-md">
+              <Link
+                to="/edit"
+                className="px-3 py-1 rounded-md shadow-md text-xs text-white bg-green-500 hover:bg-green-700 drop-shadow-md"
+              >
                 회원정보수정
-              </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -77,18 +96,17 @@ const UserMainPage = () => {
           <div className="empty"></div>
           <div className="col-span-2 ">
             <div className=" bg-white m-2 p-2 rounded-md shadow-md max-h-48 text-black text-sm">
-              {userProfile?.introduce}
-              안녕하세요
+              {userProfile?.introduce}           
             </div>
             <div className="grid grid-cols-2 text-black">
               <div className="flex justify-center text-center shadow-md bg-white m-2 p-2 rounded-md">
                 <div className="mx-1 w-full text-xs  ">
                   클리어한 노드
-                  <div>정보x</div>
+                  <div>{userProfile?.clear_nodes_count}</div>
                 </div>
                 <div className="mx-1 w-full text-xs">
                   로드맵 즐겨찾기
-                  <div>정보X</div>
+                  <div>X</div>
                 </div>
               </div>
               <div className="flex justify-center text-center shadow-md bg-white m-2  p-2 rounded-md">
