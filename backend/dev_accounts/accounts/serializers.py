@@ -62,6 +62,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         return user
 
 
+
 # 유저 디테일 시리얼라이저
 class CustomUserDetailSerializer(UserDetailsSerializer):
     class Meta(UserDetailsSerializer.Meta):
