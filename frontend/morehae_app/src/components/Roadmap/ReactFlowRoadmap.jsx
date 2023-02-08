@@ -18,8 +18,6 @@ import HttpWithURL from "@/utils/http";
 import MainNode from "@/components/Roadmap/nodes/MainNode";
 import SubNode from "@/components/Roadmap/nodes/SubNode";
 import galaxyImage from "@/img/galaxy.jpg";
-import { Disclosure, Transition } from "@headlessui/react";
-import { BsCaretDownSquare } from "react-icons/bs";
 import RoadmapPanel from "./RoadmapPanel";
 
 // Node Type 관련
@@ -457,7 +455,7 @@ const ReactFlowRoadmap = ({ loadNodeDetail }) => {
     getRoadMap();
   }
   return (
-    <div className="w-full h-4/5 relative">
+    <div className="w-full h-5/6 relative">
       <ReactFlowProvider>
         <ReactFlowRoadmapComponent
           nodesDataList={nodesDataList}
