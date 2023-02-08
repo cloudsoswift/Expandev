@@ -9,8 +9,6 @@ const IMAGE_TYPES = ["image/png", "image/jpeg"];
 const PostEditor = ({ content, onMount }) => {
   const editorRef = useRef();
   const [editor, setEditor] = useState();
-  // const [isEditorRendered, setisEditorRendered] = useState(false);
-  // const request = httpWithURL("http://i8d212.p.ssafy.io:9000/blogs");
   const request = httpWithURL(process.env.REACT_APP_BLOG_URL);
 
   const hookMap = {
@@ -38,7 +36,6 @@ const PostEditor = ({ content, onMount }) => {
         })
         .then((response) => response.data)
         .then((data) => {
-          // callback(`${process.env.REACT_APP_SERVER_URL}${data.image}`, blob.name);
           callback(
             `${process.env.REACT_APP_SERVER_URL}${data.image}`,
             blob.name
@@ -55,10 +52,16 @@ const PostEditor = ({ content, onMount }) => {
   useEffect(() => {
     // 컴포넌트 함수 재 호출(재 렌더링)시 editor 또 생성되는거 방지.
     if (editor) {
+      // 버튼 아이콘이 tailwind css 기본 설정 때문에 사라지는거 임시 해결.
       return;
     }
-    // 버튼 아이콘이 tailwind css 기본 설정 때문에 사라지는거 임시 해결.
-    document.styleSheets[2].cssRules[17].style.backgroundImage = ''
+    for(const sI in document.styleSheets) {
+      for(const cR in document.styleSheets[sI].cssRules){
+        if(document.styleSheets[sI].cssRules[cR].selectorText === `button, [type="button"], [type="reset"], [type="submit"]`){
+          document.styleSheets[sI].cssRules[cR].style.backgroundImage = "";
+        }
+      }
+    }
     setEditor(() => {
       const editor = new Editor({
         el: editorRef.current,
