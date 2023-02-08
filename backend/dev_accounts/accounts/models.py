@@ -7,19 +7,12 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    USERNAME_FIELD = 'nickname'
-    
+    USERNAME_FIELD = 'email'
     username = None
-    last_name = None
-    first_name = None
-    login_type = models.CharField(max_length=10)
-    sns_service_id = models.CharField(max_length=100)
-    nickname = models.CharField(max_length=10, unique=True)
-    email = models.EmailField(_('email address'), unique=True)
+    nickname = models.CharField(max_length=50)
+    email = models.EmailField(_('email address'), unique=True)    
+    login_type = models.CharField(null=True, max_length=10)
     profile_image = models.ImageField(default='media/default.png')
     introduce = models.TextField(default='아직 자기소개가 없습니다.', blank=True, null=True)
-
-    objects = UserManager()
-
     def __str__(self):
         return self.email
