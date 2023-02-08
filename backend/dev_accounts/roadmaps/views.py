@@ -41,7 +41,7 @@ def node_review(request, review_id=None):
     if review_id:
         review = Review.objects.get(id=review_id)
         if request.method == 'PUT':
-            serializer = ReviewSerializer(review, data=data)
+            serializer = ReviewSerializer(review, data=data, context={'user': user})
             if serializer.is_valid():
                 serializer.save(user=user)
         elif request.method == 'DELETE':
@@ -49,7 +49,7 @@ def node_review(request, review_id=None):
             return Response(status=status.HTTP_204_NO_CONTENT)
     else:
         if request.method == 'POST':    
-            serializer = ReviewSerializer(data=data)
+            serializer = ReviewSerializer(data=data, context={'user': user})
             if serializer.is_valid():
                 serializer.save(user=user)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
