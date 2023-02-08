@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import ReviewEditor from "@/components/Modal/ReviewEditor";
 import ReviewList from "@/components/Modal/ReviewList";
@@ -6,8 +6,8 @@ import httpWithURL from "../../utils/http";
 
 const Review = ({ reqData, nodeId }) => {
   const [data, setData] = useState(reqData.review);
-  // const dataId = useRef(reqData.review.length + 1);
   // const [likedUser, setLikedUser] = useState(false);
+ 
 
   const userInfo = useSelector((state) => state.user.user);
 
@@ -19,6 +19,7 @@ const Review = ({ reqData, nodeId }) => {
         { withCredentials: true }
       )
       .then((res) => {
+        console.log(res)
         const newItem = {
           user: userInfo.nickname,
           content: res.data.content,
