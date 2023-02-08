@@ -90,7 +90,7 @@ const MainNavBar = () => {
         {isLogin && (
           <div className="userProfile col-span-3 flex justify-self-center items-center">
             <Link to='/blog/write'>
-              <button className="transition bg-green-100 p-2 px-4 rounded-full mr-4 text-sm text-green-600 hover:bg-green-500 hover:text-white" >글 작성하기</button>
+              <button className="transition  p-2 px-4 rounded-full mr-4 text-sm bg-green-100 text-green-600 hover:bg-green-500 hover:text-white" >글 작성하기</button>
             </Link>
             {/* <Menu>
               <Menu.Button>

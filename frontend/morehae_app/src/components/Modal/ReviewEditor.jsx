@@ -107,8 +107,8 @@ const ReviewEditor = ({ onCreate }) => {
                   onClick={() => handleImStarClick(el)}
                   className={
                     imClicked[el]
-                      ? " text-yellow-300 text-md"
-                      : " text-gray-200 text-md"
+                      ? " text-yellow-300 text-md cursor-pointer"
+                      : " text-gray-200 text-md cursor-pointer"
                   }
                 />
               );
@@ -126,8 +126,8 @@ const ReviewEditor = ({ onCreate }) => {
                   onClick={() => handleDiStarClick(el)}
                   className={
                     diClicked[el]
-                      ? " text-yellow-300 text-md"
-                      : " text-gray-200 text-md"
+                      ? " text-yellow-300 text-md cursor-pointer"
+                      : " text-gray-200 text-md cursor-pointer"
                   }
                 />
               );
@@ -151,7 +151,7 @@ const ReviewEditor = ({ onCreate }) => {
             placeholder="내용"
             value={state.content}
             onChange={handleChangeState}
-            className="rounded-md p-1 mb-3 w-full h-[100px] text-sm bg-[rgb(32,37,42)] text-white"
+            className="rounded-md p-1 mb-3 w-full h-[100px] text-sm bg-[rgb(32,37,42)] text-white "
           />
         </div>
         <div className="flex justify-end">

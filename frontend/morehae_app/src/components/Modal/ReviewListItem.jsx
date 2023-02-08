@@ -42,12 +42,12 @@ const ReviewListItem = ({
     onEdit(id, localContent);
     toggleIsEdit();
   };
-
+  console.log(id, "item")
   
 
   // Reivew에서 가져와서 likedUser을 초기값으로 설정
   const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(like_users.length);
+  const [likeCount, setLikeCount] = useState(like_users);
 
   // 좋아요 관련
   // const toggleIsLiked = () => {
@@ -59,15 +59,15 @@ const ReviewListItem = ({
     // toggleIsLiked();
   };
 
-  useEffect(() => {
-    // 맵핑된 아이템마다 같은 likedUser(boolean) 값을 내려주기 때문에
-    // 하트의 형태변화는 isLiked로 따로 관리
-    if (like_users.includes(userInfo.id)) {
-      setIsLiked(true);
-      setLikeCount(()=> likeCount);
-      // console.log(isLiked, "isLiked in useEffect")
-    }
-  }, [like_users])
+  // useEffect(() => {
+  //   // 맵핑된 아이템마다 같은 likedUser(boolean) 값을 내려주기 때문에
+  //   // 하트의 형태변화는 isLiked로 따로 관리
+  //   if (like_users.includes(userInfo.id)) {
+  //     setIsLiked(true);
+  //     setLikeCount(()=> likeCount);
+  //     // console.log(isLiked, "isLiked in useEffect")
+  //   }
+  // }, [like_users])
 
   console.log(like_users, "in item")
 
@@ -79,7 +79,7 @@ const ReviewListItem = ({
             <img
               src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmOXESdHIQO3wJZ2Ct7hu56W7k2s_Li3SYXyqYvNJ0SOSxRAL7xKVswcUCAOJXTJWsMTI&usqp=CAU"
               alt="img"
-              className="w-16 h-16 rounded-full mt-2 mx-2 border-2 border-double border-green-500"
+              className="w-16 h-16 rounded-full mt-2 mx-2 border-2 border-green-500"
             />
           </div>
 
@@ -122,7 +122,7 @@ const ReviewListItem = ({
                     }
                     onClick={handleLike}
                   />
-                  <div className="ml-1">{likeCount}</div>
+                  {/* <div className="ml-1">{like_users.length}</div> */}
                 </div>
               </div>
             </div>
