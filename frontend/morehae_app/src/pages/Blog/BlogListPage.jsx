@@ -17,6 +17,42 @@ const tabData = [
   }
 ]
 
+const dummyTrend = {
+  "articles": [
+      {
+          "id": 1,
+          "username": "test1",
+          "like_users_count": 0,
+          "comments_count": 0,
+          "liked": false,
+          "tags": [],
+          "title": "dsa",
+          "content": "as",
+          "created_at": "2023-01-31T12:55:28.647060+09:00",
+          "updated_at": "2023-01-31T12:55:28.647103+09:00",
+          "hit": 1,
+          "user": 1,
+          "like_users": []
+      },
+      {
+          "id": 2,
+          "username": "test1",
+          "like_users_count": 0,
+          "comments_count": 0,
+          "liked": false,
+          "tags": [],
+          "title": "asdzx",
+          "content": "das",
+          "created_at": "2023-01-31T12:56:05.243007+09:00",
+          "updated_at": "2023-01-31T12:56:05.243041+09:00",
+          "hit": 1,
+          "user": 1,
+          "like_users": []
+      }
+  ],
+  "articles_count": 2
+}
+
 const BlogListPage = () => {
   const [postListTrend, setPostListTrend] = useState([]);  // 트렌드 탭의 게시글 리스트
   const [postListRecent, setPostListRecent] = useState([]);  // 최신 탭의 게시글 리스트
@@ -26,15 +62,18 @@ const BlogListPage = () => {
   const searchBoxRef = useRef(null);
   const params = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
+
   // 트렌드 탭의 게시글 리스트 가져오기
   const getTrendPostList = () => {
     axios
       .get(`${process.env.REACT_APP_BLOG_URL}?sort_type=hit&count=${trendPage}`)
       .then((Response) => {
-        console.log("트렌드 탭 게시글 리스트:", Response.data.articles);
+        // console.log("트렌드 탭 게시글 리스트:", Response.data.articles);
+        // console.log("트렌드 탭 게시글 리스트:", dummyTrend.articles);
         setPostListTrend((oldState) => {
           if (Response?.data?.articles) {
-            return [...oldState, ...Response.data.articles];
+            // return [...oldState, ...Response.data.articles];
+            return dummyTrend.articles;
           } else {
             return oldState;
           }
@@ -53,7 +92,8 @@ const BlogListPage = () => {
         console.log("최신 탭 게시글 리스트:", Response.data.articles);
         setPostListRecent((oldState) => {
           if (Response?.data?.articles) {
-            return [...oldState, ...Response.data.articles];
+            // return [...oldState, ...Response.data.articles];
+            return [...Response.data.articles];
           } else {
             return oldState;
           }
