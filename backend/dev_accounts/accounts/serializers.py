@@ -79,7 +79,8 @@ class ProfileSerializer(serializers.ModelSerializer):
     like_articles_count = serializers.IntegerField(source='like_articles.count', read_only=True)
     post_articles_count= serializers.IntegerField(source='articles.count', read_only=True)
     post_reviews_count= serializers.IntegerField(source='review.count', read_only=True)
+    favorite_roadmaps_count = serializers.IntegerField(source='favorite_roadmaps.count', read_only=True)
 
     class Meta:
         model = User
-        fields = ('id','nickname','position','introduce', 'clear_nodes_count','like_articles_count','post_articles_count','post_reviews_count', 'profile_image', )
+        fields = ('id','nickname','position','introduce', 'profile_image', 'clear_nodes_count','like_articles_count','post_articles_count','post_reviews_count', 'favorite_roadmaps_count', )
