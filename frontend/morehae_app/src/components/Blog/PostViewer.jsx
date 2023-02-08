@@ -28,7 +28,7 @@ const PostViewer = ({ content }) => {
     }
   }, [context]);
   return (
-    <div className="border my-4 p-4">
+    <div className="border border-slate-700 my-4 p-4">
       <div id="post-viewer" className="h-max" ref={viewerRef} />
     </div>
   );
