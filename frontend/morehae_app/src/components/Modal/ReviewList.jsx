@@ -4,7 +4,7 @@ import { FaStar } from "react-icons/fa";
 
 const ReviewList = ({ reviewList, onDelete, onEdit, reviewLike, userInfo}) => {
 
-  // console.log(reviewList)
+  console.log(reviewList)
   const getAvgImp = (list) => {
     if (list.length === 0) return 0;
     let sum = 0;
