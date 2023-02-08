@@ -182,26 +182,24 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mariadb',
-        'USER': 'root',
-        'PASSWORD': get_secret('PASSWORD'),
-        'HOST': get_secret('HOST'),
-        'PORT': get_secret('PORT')
-    },
-    'test': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mariadb',
-        'USER': 'root',
-        'PASSWORD': get_secret('PASSWORD'),
-        'HOST': get_secret('HOST'),
-        'PORT': get_secret('TEST_PORT')
-    }
-}
-
-
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'mariadb',
+#         'USER': 'root',
+#         'PASSWORD': get_secret('PASSWORD'),
+#         'HOST': get_secret('HOST'),
+#         'PORT': get_secret('PORT')
+#     },  
+#     'test': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'mariadb',
+#         'USER': 'root',
+#         'PASSWORD': get_secret('PASSWORD'),
+#         'HOST': get_secret('HOST'),
+#         'PORT': get_secret('TEST_PORT')
+#     }
+# }
 
 # TEST Sqlite DB
 DATABASES = {
