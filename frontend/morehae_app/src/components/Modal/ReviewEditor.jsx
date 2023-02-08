@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const ReviewEditor = ({ onCreate }) => {
   const contentInput = useRef();
@@ -20,10 +21,10 @@ const ReviewEditor = ({ onCreate }) => {
   ]);
 
   const [state, setState] = useState({
-    content: "",
-    importance: 5,
-    difficulty: 5,
+    content: ""
   });
+
+  const userInfo = useSelector((state) => state.user.user);
 
   const handleChangeState = (e) => {
     setState({
@@ -38,13 +39,16 @@ const ReviewEditor = ({ onCreate }) => {
       alert("5글자 이상 입력해주세요");
       return;
     }
-    onCreate(state.content, state.importance, state.difficulty);
-    console.log(state);
-    alert("작성 완료");
+    if (!userInfo.nickname) {
+      alert("리뷰를 작성하려면 로그인해주세요");
+      return;
+    }
+    onCreate(state.content, state.importance, state.difficulty)
+    // 변경된것, 아직 create 결과에 따라 state관련 삭제할지 if 걸어야 함
+    setImClicked([false, false, false, false, false])
+    setDiClicked([false, false, false, false, false])
     setState({
       content: "",
-      importance: 5,
-      difficulty: 5,
     });
   };
 

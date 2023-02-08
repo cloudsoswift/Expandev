@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { GiRingedPlanet } from "react-icons/gi";
-import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
 import HttpWithURL from "@/utils/http";
+
+import { GiRingedPlanet } from "react-icons/gi";
 
 const WhatWhy = ({ reqData, nodeId }) => {
   const [checkbox, setCheckbox] = useState(false);
+  const [showCheckbox, setShowCheckbox] = useState(false);
+  const userInfo = useSelector((state) => state.user.user);
+  let navigate = useNavigate()
 
   const handleCheckbox = () => {
     HttpWithURL(process.env.REACT_APP_ROADMAP_URL)
@@ -13,9 +19,23 @@ const WhatWhy = ({ reqData, nodeId }) => {
       .catch((err) => console.log(err));
   };
 
+  const handleWritePost = () => {
+    if (!userInfo?.nickname) {
+      alert("로그인이 필요합니다.");
+      navigate("/login");
+    } else {
+      navigate("/blog/write");
+    }
+  };
   useEffect(() => {
     setCheckbox(reqData.isComplete);
   }, [reqData.isComplete]);
+
+  useEffect(() => {
+    if (userInfo?.nickname) {
+      setShowCheckbox(true);
+    }
+  }, [userInfo]);
 
   return (
     <div>
@@ -26,20 +46,22 @@ const WhatWhy = ({ reqData, nodeId }) => {
               <GiRingedPlanet className="mt-0.5 mr-1 text-2xl" />
               {reqData.title}
             </div>
-            <Link
-              to="/blog/write"
+            <div
+              onClick={handleWritePost}
               className="bg-[rgb(42,42,50)] hover:bg-[rgb(50,50,50)] px-3 py-1 rounded-full text-xs font-bold text-[rgb(131,132,139)] hover:text-green-500 drop-shadow-md border-2 border-[rgb(131,132,139)] hover:border-green-500"
             >
               POST
-            </Link>
+            </div>
           </div>
-          <input
-            className="w-5 h-5 ml-2 mt-1 text-black"
-            type="checkbox"
-            onClick={handleCheckbox}
-            onChange={(e) => setCheckbox()}
-            checked={checkbox}
-          />
+          {showCheckbox ? (
+            <input
+              className="w-5 h-5 ml-2 mt-1 text-black"
+              type="checkbox"
+              onClick={handleCheckbox}
+              onChange={(e) => setCheckbox()}
+              checked={checkbox}
+            />
+          ) : <></>}
         </div>
         <div className="flex justify-end"></div>
       </div>

@@ -60,8 +60,8 @@ export default function Tabs({ userRoadmap, userBlog }) {
                     </div>
                   </div>
                 </div>
-                <div className="relative rounded-xl h-32 basis-72 bg-[rgb(45,51,59)] p-3 m-1 border border-[rgb(131,132,139)] drop-shadow-md hover:border-white transition hover:-translate-y-2 ">
-                  <div className="text-md font-medium leading-5 mb-2 mt-1">
+                <div className="relative rounded-xl h-32 basis-72 bg-[rgb(45,51,59)] p-3 m-1 border border-[rgb(131,132,139)] drop-shadow-md transition hover:-translate-y-2 hover:border-green-400  hover:shadow-sm hover:shadow-green-200/50 ">
+                  <div className="text-sm font-medium leading-5 mb-2 mt-1">
                     {/* {post?.title} */}웹 공통 어쩌구
                   </div>
                   <div className="text-sm h-11 text-[rgb(191,192,194)] mb-4 text-ellipsis line-clamp-2 border-b border-[rgb(131,132,139)]">
@@ -297,13 +297,13 @@ export default function Tabs({ userRoadmap, userBlog }) {
           <Tab.Panel className={classNames("p-2 m-2")}>
             <div className="mb-12">
               <div className="m-3">작성한 게시글</div>
-              <div className="h-60 bg-[rgb(48,54,61)] border rounded-l-lg drop-shadow-md flex flex-wrap gap-1 p-4 overflow-y-auto  ">
-                <div className="relative rounded-xl h-32 basis-72 bg-[rgb(45,51,59)] p-3 m-1 border border-[rgb(131,132,139)] drop-shadow-md hover:border-white transition hover:-translate-y-2">
-                  <div className="text-md font-medium leading-5 mb-2 mt-1">
-                    {/* {post?.title} */}웹 공통 어쩌구
+              <div className="h-80 bg-[rgb(48,54,61)] border rounded-l-lg drop-shadow-md flex flex-wrap gap-1 p-4 overflow-y-auto  ">
+                <div className="relative h-70 basis-72 rounded-xl bg-[rgb(45,51,59)] m-1 border border-[rgb(131,132,139)] drop-shadow-md hover:border-white transition hover:-translate-y-2">
+                  <div className="text-md font-medium leading-5 pt-3 px-3 pb-2 border-b border-[rgb(131,132,139)]">
+                    {/* {post?.title} */}제목
                   </div>
-                  <div className="text-sm h-11 text-[rgb(191,192,194)] mb-4 text-ellipsis line-clamp-2 border-b border-[rgb(131,132,139)]">
-                    콘텐츠 설명 어쩌구저쩌구
+                  <div className="text-sm h-50 text-[rgb(191,192,194)] p-3 text-ellipsis line-clamp-2 border-b border-[rgb(131,132,139)]">
+                    OVERVIEW 설명 어쩌구저쩌구
                   </div>
 
                   <div className="absolute bottom-2.5 right-2.5 border-[rgb(131,132,139)]">
@@ -315,9 +315,9 @@ export default function Tabs({ userRoadmap, userBlog }) {
                     </div>
                   </div>
                 </div>
-                <div className="relative rounded-xl h-32 basis-72 bg-[rgb(45,51,59)] p-3 m-1 border border-[rgb(131,132,139)] drop-shadow-md hover:border-white transition hover:-translate-y-2 ">
+                {/* <div className="relative rounded-xl h-32 basis-72 bg-[rgb(45,51,59)] p-3 m-1 border border-[rgb(131,132,139)] drop-shadow-md hover:border-white transition hover:-translate-y-2 ">
                   <div className="text-md font-medium leading-5 mb-2 mt-1">
-                    {/* {post?.title} */}웹 공통 어쩌구
+                    웹 공통 어쩌구
                   </div>
                   <div className="text-sm h-11 text-[rgb(191,192,194)] mb-4 text-ellipsis line-clamp-2 border-b border-[rgb(131,132,139)]">
                     콘텐츠 설명 어쩌구저쩌구 콘텐츠 설명 어쩌구저쩌구콘텐츠 설명
@@ -334,9 +334,9 @@ export default function Tabs({ userRoadmap, userBlog }) {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
 
-                {userRoadmap?.favorite_roadmpas.map((post) => (
+                {/* {userRoadmap?.favorite_roadmpas.map((post) => (
                   <div
                     key={post?.id}
                     className="rounded-xl h-[90px] w-[90px] bg-white p-3 m-2 border-2 "
@@ -348,7 +348,7 @@ export default function Tabs({ userRoadmap, userBlog }) {
                       {post?.title}
                     </h3>
                   </div>
-                ))}
+                ))} */}
               </div>
             </div>
 
