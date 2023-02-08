@@ -190,7 +190,7 @@ DATABASES = {
         'PASSWORD': get_secret('PASSWORD'),
         'HOST': get_secret('HOST'),
         'PORT': get_secret('PORT')
-    },
+    },  
     'test': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'mariadb',
