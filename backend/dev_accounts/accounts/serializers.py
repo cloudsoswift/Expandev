@@ -65,14 +65,14 @@ class CustomRegisterSerializer(RegisterSerializer):
 # 유저 디테일 시리얼라이저
 class CustomUserDetailSerializer(UserDetailsSerializer):
     class Meta(UserDetailsSerializer.Meta):
-        fields = ('id','email', 'nickname', 'login_type', 'is_active',)
+        fields = ('id','email', 'nickname', 'login_type', 'is_active', 'sns_service_id')
         read_only_fields = ('email', 'password',)
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id','email', 'nickname', 'login_type', 'is_active',)
+        fields = ('id','email', 'nickname', 'login_type', 'is_active', 'sns_service_id')
 
 
 class ProfileImageSerializer(serializers.ModelSerializer):
