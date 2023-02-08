@@ -5,8 +5,8 @@ from backend.settings import get_secret
 from blogs.models import Article, Comment
 from .serializers import CustomRegisterSerializer
 from blogs.serializers import ArticleSimpleSerializer, CommentSimpleSerializer
-from .serializers import UserSerializer, ProfileImageSerializer, ProfileSerializer
 from roadmaps.serializer import ReviewSimpleSerializer, NodeSimpleserializer, TrackSimpleSerializer
+from .serializers import UserSerializer, ProfileImageSerializer, ProfileSerializer, CustomJWTSerializer
 
 from rest_framework import status
 from django.http import JsonResponse
@@ -142,35 +142,55 @@ def kakao_call_back(request):
         'client_secret': get_secret('client_secret'),
     }
     kakao_token_api = 'https://kauth.kakao.com/oauth/token'
-    id_token = requests.post(kakao_token_api, data=data).json().get('id_token')
+    token_info = requests.post(kakao_token_api, data=data).json()   
+    id_token = token_info.get('id_token')
+    access_token = token_info.get('access_token')
+    refresh_token = token_info.get('refresh_token')
 
     # 회원정보 조회
     kakao_token_info_api = f'https://kauth.kakao.com/oauth/tokeninfo?id_token={id_token}'
+    
     user_info = requests.post(kakao_token_info_api).json()
     nickname = user_info.get('nickname')
     email = user_info.get('email')
     sns_service_id = user_info.get('sub')
+    login_type = 'kakao' # or 'naver
+
+    data = {
+        'nickname': nickname,
+        'email': email,
+        'sns_service_id': sns_service_id,
+        'login_type': login_type,
+        'password1': '1q2w3e4r!',
+        'password2': '1q2w3e4r!'
+    }
 
     # 회원가입 유무 판단
     # 0. 카카오 인지 네이버 인지 확인 해야함, 근데 일단 스킵
-    login_type = 'kakao' # or 'naver
     # 1. 해당 회원번호가 등록되어있는지 확인
     if get_user_model().objects.filter(sns_service_id=sns_service_id).exists():
         # 0. 존재
+        print('존재함')
         # 1. 토큰 담아서 전달
-        pass
+        exists_user_data = {
+            'access_token': access_token,
+            'refresh_token': refresh_token,
+        }
+        user = get_user_model().objects.get(sns_service_id=sns_service_id)
+        serializer = CustomJWTSerializer(data=exists_user_data, context={'user': user})
+        if serializer.is_valid():
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        else:
+            print(serializer.errors)
     else:
+        print('존재하지 않음')
         # 0. 존재하지 않음
         # 1. 회원가입
-        data = {
-            'nickname': nickname,
-            'email': email,
-            'sns_service_id': sns_service_id,
-            'login_type': login_type,
-        }
-        serialzier = CustomRegisterSerializer(data=data)
-        if serialzier.is_valid():
-            serialzier.save(request)
+        serializer = CustomRegisterSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save(request)
+        else:
+            print(serializer.errors)
     return redirect('http://i8d212.p.ssafy.io/')
 
 
