@@ -182,32 +182,32 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'mariadb',
-#         'USER': 'root',
-#         'PASSWORD': get_secret('PASSWORD'),
-#         'HOST': get_secret('HOST'),
-#         'PORT': get_secret('PORT')
-#     },  
-#     'test': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'mariadb',
-#         'USER': 'root',
-#         'PASSWORD': get_secret('PASSWORD'),
-#         'HOST': get_secret('HOST'),
-#         'PORT': get_secret('TEST_PORT')
-#     }
-# }
-
-# TEST Sqlite DB
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'mariadb',
+        'USER': 'root',
+        'PASSWORD': get_secret('PASSWORD'),
+        'HOST': get_secret('HOST'),
+        'PORT': get_secret('PORT')
+    },  
+    'test': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'mariadb',
+        'USER': 'root',
+        'PASSWORD': get_secret('PASSWORD'),
+        'HOST': get_secret('HOST'),
+        'PORT': get_secret('TEST_PORT')
     }
 }
+
+# TEST Sqlite DB
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
