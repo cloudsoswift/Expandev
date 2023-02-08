@@ -31,9 +31,6 @@ class CustomRegisterSerializer(RegisterSerializer):
         data['login_type'] = self.validated_data.get('login_type')
         return data
 
-    def validate_password1(self, password):
-        return super().validate_password1(password)
-
     def validate(self, data):
         if data['login_type'] == 'kakao':
             pass
