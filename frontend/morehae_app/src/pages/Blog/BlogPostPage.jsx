@@ -106,6 +106,11 @@ const BlogPostPage = () => {
 
   // 좋아요 버튼 클릭 이벤트 핸들러
   const handleLike = () => {
+    // 로그인 안 하고 좋아요 누를시 반려.
+    if(!userInfo?.nickname){
+      alert("로그인 한 유저만 가능합니다.");
+      return;
+    }
     httpWithURL(process.env.REACT_APP_BLOG_URL)
       .post(`article/${params.postId}/like`)
       .then((response) => {

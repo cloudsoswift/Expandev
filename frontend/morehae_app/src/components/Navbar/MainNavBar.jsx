@@ -92,12 +92,12 @@ const MainNavBar = () => {
             <Link to='/blog/write'>
               <button className="transition bg-green-100 p-2 px-4 rounded-full mr-4 text-sm text-green-600 hover:bg-green-500 hover:text-white" >글 작성하기</button>
             </Link>
-            <Menu>
+            {/* <Menu>
               <Menu.Button>
                 <VscBell className="mr-4" size="25" />
               </Menu.Button>
               <NotificationList />
-            </Menu>
+            </Menu> */}
             <Menu>
               <Menu.Button>
                 <BsPerson size="25" />
