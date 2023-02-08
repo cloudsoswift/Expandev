@@ -20,6 +20,8 @@ class CustomRegisterSerializer(RegisterSerializer):
     nickname = serializers.CharField(max_length=10)
     login_type = serializers.CharField(max_length=10)
     sns_service_id = serializers.CharField(max_length=100)
+    password1 = serializers.CharField(write_only=True)
+    password2 = serializers.CharField(write_only=True)
 
     def get_cleaned_data(self):
         data = super().get_cleaned_data()
