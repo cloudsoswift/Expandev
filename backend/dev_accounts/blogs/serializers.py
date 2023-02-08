@@ -100,7 +100,7 @@ class ArticleSimpleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Article
-        fields = ('id','nickname','tags', 'like_users_count', 'comments_count', 'liked', 'overview')
+        fields = ('id','title', 'overview', 'nickname','tags', 'like_users_count', 'comments_count', 'liked', 'created_at')
         read_only_fields = ('nickname','user', 'like_users', 'tags', 'like_users_count', 'comments_count', 'profile_image')
     
     def get_liked(self, obj):
@@ -117,7 +117,7 @@ class CommentSimpleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ('id', 'article','like_users_count', 'content','is_secret','liked','nickname', 'recomments_count')
+        fields = ('id', 'article','like_users_count', 'content','is_secret','liked','nickname', 'recomments_count',  'created_at')
         read_only_fields = ('user', 'article','parent_comment', 'like_users_count')
 
     def get_liked(self, obj):
