@@ -3,6 +3,7 @@ from roadmaps.models import Review
 from .serializers import UserSerializer
 from backend.settings import get_secret
 from blogs.models import Article, Comment
+from .serializers import CustomJWTSerializer
 from .serializers import CustomRegisterSerializer
 from blogs.serializers import ArticleSimpleSerializer, CommentSimpleSerializer
 from .serializers import UserSerializer, ProfileImageSerializer, ProfileSerializer
@@ -22,6 +23,42 @@ import json
 import requests                       
 from pprint import pprint
 from ast import literal_eval
+
+
+KAKAO_OAUTH = 'https://kauth.kakao.com/oauth'
+KAKAO_API = 'https://kapi.kakao.com'
+SERVER_DOMAIN = 'http://127.0.0.1:8000'
+
+
+@api_view(['GET'])
+def verify_access_token(request):
+    kakao_verify_token = f'{KAKAO_API}/v1/user/access_token_info'
+    # access_token = request.HEADERS.get('Authorization')
+    
+    # headers = {'Authorization': access_token}
+    headers = {'Authorization': 'Bearer 68K2QTo8FWfddgj2FTpoRoO0IBdxfILmRdCcBRkXCisNHgAAAYY0Vy2m'}
+    response = requests.get(url=kakao_verify_token, headers=headers)
+    status_code = response.status_code
+    error_code = response.json().get('code')
+    if error_code: 
+        error_code = int(error_code)
+        msg = response.json().get('msg')
+    else:
+        msg = '성공'
+    context = {
+        'msg': msg,
+    }
+    return Response(context, status=status_code)
+
+
+def OAuth_User(request):
+    def wrapper():
+        user = request.user
+        if user.login_type == 'kakao':
+            verify_access_token(request)
+
+
+
 
 
 @api_view(['GET'])
@@ -117,11 +154,11 @@ def get_user_roadmaps(request, nickname):
     }
     return Response(data, status=status.HTTP_200_OK)
 
-
 @api_view(['GET'])
 def kakao_login(request):
-    kakao_api = 'https://kauth.kakao.com/oauth/authorize?response_type=code'
+    kakao_api = f'{KAKAO_OAUTH}/authorize?response_type=code'
     redirect_uri = 'http://i8d212.p.ssafy.io:9000/accounts/login/kakao/callback/'
+    # redirect_uri = f'{SERVER_DOMAIN}/accounts/login/kakao/callback/'
     client_id = get_secret('client_id')
     return redirect(f'{kakao_api}&client_id={client_id}&redirect_uri={redirect_uri}')
 
@@ -132,15 +169,22 @@ def kakao_call_back(request):
     data = {
         'grant_type': 'authorization_code',
         'client_id': get_secret('client_id'),
-        'redirect_uri': 'http://i8d212.p.ssafy.io:9000/accounts/login/kakao/callback/',
+        'redirect_uri': f'{SERVER_DOMAIN}/accounts/login/kakao/callback/',
         'code': request.GET['code'],
         'client_secret': get_secret('client_secret'),
     }
-    kakao_token_api = 'https://kauth.kakao.com/oauth/token'
-    id_token = requests.post(kakao_token_api, data=data).json().get('id_token')
+    kakao_token_api = f'{KAKAO_OAUTH}/token'
+    token_api_info = requests.post(kakao_token_api, data=data).json()
+    id_token = token_api_info.get('id_token')
+    access_token = token_api_info.get('access_token')
+    refresh_token = token_api_info.get('refresh_token')
 
+    exists_user_data = {
+        'access_token': access_token,
+        'refresh_token': refresh_token
+    }
     # 회원정보 조회
-    kakao_token_info_api = f'https://kauth.kakao.com/oauth/tokeninfo?id_token={id_token}'
+    kakao_token_info_api = f'{KAKAO_OAUTH}/tokeninfo?id_token={id_token}'
     user_info = requests.post(kakao_token_info_api).json()
     nickname = user_info.get('nickname')
     email = user_info.get('email')
@@ -153,7 +197,7 @@ def kakao_call_back(request):
     if get_user_model().objects.filter(sns_service_id=sns_service_id).exists():
         # 0. 존재
         # 1. 토큰 담아서 전달
-        pass
+        user = get_user_model().objects.get(sns_service_id=sns_service_id)
     else:
         # 0. 존재하지 않음
         # 1. 회원가입
@@ -163,9 +207,19 @@ def kakao_call_back(request):
             'sns_service_id': sns_service_id,
             'login_type': login_type,
         }
-        serialzier = CustomRegisterSerializer(data=data)
-        if serialzier.is_valid():
-            serialzier.save(request)
+        user = get_user_model().objects.create(
+                username='user without password',
+                nickname=nickname,
+                email=email,
+                sns_service_id=sns_service_id,
+                login_type=login_type,
+            )
+
+    serializer = CustomJWTSerializer(data=exists_user_data, context={'user': user})
+    if serializer.is_valid():
+        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+    else:
+        print(serializer.errors)
     return redirect('http://i8d212.p.ssafy.io/')
 
 

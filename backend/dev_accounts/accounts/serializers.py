@@ -16,7 +16,7 @@ from pathlib import Path
 
 
 class CustomRegisterSerializer(RegisterSerializer):
-    username = None
+    # username = None   
     nickname = serializers.CharField(max_length=10)
     login_type = serializers.CharField(max_length=10)
     sns_service_id = serializers.CharField(max_length=100)
