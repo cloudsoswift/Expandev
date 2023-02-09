@@ -150,6 +150,8 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(days=1),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
+JWT_AUTH_REFRESH_COOKIE = 'refresh_token'
+JWT_AUTH_HTTPONLY = True
 ##############################################################
 #
 # django user custom model 설정
