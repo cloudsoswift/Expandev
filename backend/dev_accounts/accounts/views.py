@@ -175,6 +175,7 @@ def kakao_call_back(request):
     }
     kakao_token_api = f'{KAKAO_OAUTH}/token'
     token_api_info = requests.post(kakao_token_api, data=data).json()
+    print('token_api_info', token_api_info)
     id_token = token_api_info.get('id_token')
     access_token = token_api_info.get('access_token')
     refresh_token = token_api_info.get('refresh_token')
@@ -189,7 +190,7 @@ def kakao_call_back(request):
     nickname = user_info.get('nickname')
     email = user_info.get('email')
     sns_service_id = user_info.get('sub')
-
+    print('user_info', user_info)
     # 회원가입 유무 판단
     # 0. 카카오 인지 네이버 인지 확인 해야함, 근데 일단 스킵
     login_type = 'kakao' # or 'naver
