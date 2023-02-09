@@ -77,11 +77,12 @@ class CommentSerializer(serializers.ModelSerializer):
     like_users_count = serializers.IntegerField(source = 'like_users.count', read_only=True)
     liked = serializers.SerializerMethodField(read_only=True)
     profile_image = serializers.CharField(source = 'user.profile.profile_image.url', read_only=True)
+    recomments_count = serializers.IntegerField(source = 'recomments.count', read_only=True)
 
     class Meta:
         model = Comment
         fields = '__all__'
-        read_only_fields = ('user', 'article','parent_comment','like_users', 'like_users_count', 'profile_image')
+        read_only_fields = ('user', 'article','parent_comment','like_users', 'like_users_count', 'profile_image', 'recomments_count')
 
     def get_liked(self, obj):
         user = self.context['user']
@@ -99,7 +100,7 @@ class ArticleSimpleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Article
-        fields = ('id','nickname','tags', 'like_users_count', 'comments_count', 'liked', 'overview')
+        fields = ('id','title', 'overview', 'nickname','tags', 'like_users_count', 'comments_count', 'liked', 'created_at')
         read_only_fields = ('nickname','user', 'like_users', 'tags', 'like_users_count', 'comments_count', 'profile_image')
     
     def get_liked(self, obj):
@@ -112,10 +113,11 @@ class CommentSimpleSerializer(serializers.ModelSerializer):
     nickname = serializers.CharField(source='user.nickname', read_only=True)
     like_users_count = serializers.IntegerField(source = 'like_users.count', read_only=True)
     liked = serializers.SerializerMethodField(read_only=True)
+    recomments_count = serializers.IntegerField(source = 'recomments.count', read_only=True)
 
     class Meta:
         model = Comment
-        fields = ('id', 'article','like_users_count', 'content','is_secret','liked','nickname')
+        fields = ('id', 'article','like_users_count', 'content','is_secret','liked','nickname', 'recomments_count',  'created_at')
         read_only_fields = ('user', 'article','parent_comment', 'like_users_count')
 
     def get_liked(self, obj):

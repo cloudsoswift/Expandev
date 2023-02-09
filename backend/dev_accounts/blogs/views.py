@@ -185,12 +185,15 @@ def comment(request, article_id=None, parent_id=None, comment_id=None):  # 댓�
         return Response(serializer.data)
 
     elif request.method == 'POST':  # 댓글 작성
+        if parent_comment:
+            article = parent_comment.article
         serializer = CommentSerializer(
             data=request.data, context={'user': request.user})
         if serializer.is_valid(raise_exception=True):
             serializer.save(user=request.user, article=article,
                             parent_comment=parent_comment)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
     elif request.method == 'DELETE':  # 댓글 삭제
         comment.delete()

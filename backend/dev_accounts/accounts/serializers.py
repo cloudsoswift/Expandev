@@ -16,12 +16,12 @@ from pathlib import Path
 
 
 class CustomRegisterSerializer(RegisterSerializer):
-    # username = None   
     nickname = serializers.CharField(max_length=10)
     login_type = serializers.CharField(max_length=10)
     sns_service_id = serializers.CharField(max_length=100)
     password1 = serializers.CharField(write_only=True, required=True)
     password2 = serializers.CharField(write_only=True, required=True)
+
 
     def get_cleaned_data(self):
         data = super().get_cleaned_data()
@@ -60,7 +60,6 @@ class CustomRegisterSerializer(RegisterSerializer):
         self.custom_signup(request, user)
         setup_user_email(request, user, [])
         return user
-
 
 
 # 유저 디테일 시리얼라이저

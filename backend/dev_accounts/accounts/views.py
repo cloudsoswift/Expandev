@@ -5,8 +5,8 @@ from backend.settings import get_secret
 from blogs.models import Article, Comment
 from .tokens import get_tokens_for_user
 from blogs.serializers import ArticleSimpleSerializer, CommentSimpleSerializer
-from .serializers import UserSerializer, ProfileImageSerializer, ProfileSerializer
 from roadmaps.serializer import ReviewSimpleSerializer, NodeSimpleserializer, TrackSimpleSerializer
+from .serializers import UserSerializer, ProfileImageSerializer, ProfileSerializer, CustomJWTSerializer
 
 from rest_framework import status
 from django.http import JsonResponse
@@ -91,12 +91,14 @@ def get_user_blogs(request, nickname):
         user=profile_user), many=True, context={'user': request.user})
     like_articles = ArticleSimpleSerializer(
         instance=profile_user.like_articles, many=True, context={'user': request.user})
-    comments = CommentSimpleSerializer(instance=Comment.objects.filter(
+    post_comments = CommentSimpleSerializer(instance=Comment.objects.filter(
         user=profile_user), many=True, context={'user': request.user})
+    like_comments = CommentSimpleSerializer(instance=profile_user.like_comments, many=True, context={'user': request.user})
     data = {
         'post_articles': post_articles.data,
         'like_articles': like_articles.data,
-        'post_comments': comments.data
+        'post_comments': post_comments.data,
+        'like_comments': like_comments.data,
     }
     return Response(data, status=status.HTTP_200_OK)
 
@@ -105,13 +107,16 @@ def get_user_blogs(request, nickname):
 def get_user_roadmaps(request, nickname):
     profile_user = get_object_or_404(User, nickname=nickname)
     post_reviews = ReviewSimpleSerializer(instance=Review.objects.filter(
-        user=profile_user), many=True)
+        user=profile_user), many=True, context={'user': request.user})
+    like_reviews = ReviewSimpleSerializer(
+        instance=profile_user.like_reviews, many=True, context={'user': request.user})
     clear_nodes = NodeSimpleserializer(profile_user.clear_nodes.all(
     ), many=True, context={'user': request.user})
     favorite_roadmpas = TrackSimpleSerializer(
         profile_user.favorite_roadmaps.all(), many=True, context={'user': request.user})
     data = {
         'post_reviews': post_reviews.data,
+        'like_reviews':like_reviews.data,
         'clear_nodes': clear_nodes.data,
         'favorite_roadmpas': favorite_roadmpas.data
     }
