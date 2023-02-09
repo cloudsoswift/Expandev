@@ -7,7 +7,7 @@ urlpatterns = [
     path('registration', include('dj_rest_auth.registration.urls')),
     path('check-email/<str:email>', views.check_duplicate_email),
     path('check-nickname/<str:nickname>', views.check_duplicate_nickname),
-    path('userlist', views.userlist),
+    # path('userlist', views.userlist),
     path('userchange', views.userchange),
     path('profile', views.set_profile),
     path('user/<str:nickname>/profile', views.get_user_profile),
@@ -17,4 +17,5 @@ urlpatterns = [
     path('login/kakao/callback/', views.kakao_call_back),
     path('verify/token/refresh/cookie', views.verify_refresh_token_in_cookie),
     path('cookie/login', views.include_refresh_token_in_cookie),
+    # path('test', views.verify_access_token)
 ]

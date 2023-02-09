@@ -51,16 +51,16 @@ def verify_access_token(request):
     return Response(context, status=status_code)
 
 
-def OAuth_User(request):
+def OAuth_User(func):
     def wrapper():
-        user = request.user
+        user = func.user
         if user.login_type == 'kakao':
-            verify_access_token(request)
+            verify_access_token(func)
+        else:
+            pass 
 
 
-
-
-
+@OAuth_User
 @api_view(['GET'])
 def userlist(request):
     user_list = get_list_or_404(User)
@@ -103,7 +103,6 @@ def check_duplicate_email(request, email):
 
 @api_view(['GET'])
 def check_duplicate_nickname(request, nickname):
-
     regx_nickname = re.compile('[a-zA-Z가-힣]{3,15}')
     if not regx_nickname.match(nickname):
         return Response({'message': '닉네임은 최소 3글자 최대 15글자, 특수문자, 공백 제외'}, status=status.HTTP_400_BAD_REQUEST)
