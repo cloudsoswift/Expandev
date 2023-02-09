@@ -1,56 +1,57 @@
 import { useEffect, useState } from "react";
 import Tabs from "@/components/Tab/Tabs";
 import HttpWithURL from "@/utils/http";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import { useSelector } from "react-redux";
+
 
 const UserMainPage = () => {
   const [userProfile, setUserProfile] = useState();
   const [userRoadmap, setUserRoadmap] = useState();
   const [userBlog, setUserBlog] = useState();
 
-  const userInfo = useSelector((state) => state.user.user);
-  const userNickname = userInfo.nickname;
-  console.log(userInfo);
+  // URL에서 유저닉네임 받아옴
+  const someUser = useParams()
+
+  const getProfile = () => {
+    HttpWithURL(process.env.REACT_APP_USER_URL)
+      .get(`user/${someUser?.nickname}/profile`)
+      .then((res) =>
+        setUserProfile(() => {
+          console.log(res.data, "data");
+          return res.data;
+        })
+      )
+      .catch((err) => console.log(err));
+  };
+
+  const getRoadmapTab = (nickname) => {
+    HttpWithURL(process.env.REACT_APP_USER_URL)
+      .get(`user/${someUser?.nickname}/roadmaps`)
+      .then((res) =>
+        setUserRoadmap(() => {
+          // console.log(res.data, "roadmap");
+          return res.data;
+        })
+      )
+      .catch((err) => console.log(err));
+  };
+
+  const getBlogTab = () => {
+    HttpWithURL(process.env.REACT_APP_USER_URL)
+      .get(`user/${someUser?.nickname}/blogs`)
+      .then((res) =>
+        setUserBlog(() => {
+          // console.log(res.data, "roadmap");
+          return res.data;
+        })
+      )
+      .catch((err) => console.log(err));
+  };
+
 
   useEffect(() => {
-
-    const getProfile = () => {
-      HttpWithURL(process.env.REACT_APP_USER_URL)
-        .get(`user/${userNickname}/profile`)
-        .then((res) =>
-          setUserProfile(() => {
-            console.log(res.data, "data");
-            return res.data;
-          })
-        )
-        .catch((err) => console.log(err));
-    };
-
-    const getRoadmapTab = () => {
-      HttpWithURL(process.env.REACT_APP_USER_URL)
-        .get(`user/${userNickname}/roadmaps`)
-        .then((res) =>
-          setUserRoadmap(() => {
-            // console.log(res.data, "roadmap");
-            return res.data;
-          })
-        )
-        .catch((err) => console.log(err));
-    };
-
-    const getBlogTab = () => {
-      HttpWithURL(process.env.REACT_APP_USER_URL)
-        .get(`user/${userNickname}/blogs`)
-        .then((res) =>
-          setUserBlog(() => {
-            // console.log(res.data, "roadmap");
-            return res.data;
-          })
-        )
-        .catch((err) => console.log(err));
-    };
     getProfile();
     getRoadmapTab();
     getBlogTab();
@@ -59,9 +60,6 @@ const UserMainPage = () => {
   console.log(userProfile,"profile");
   console.log(userRoadmap, "roadmap")
   console.log(userBlog, "blog")
-
-  // const profile_img = `http://i8d212.p.ssafy.io:8000${userProfile?.profile_image}`;
-  // const profile_img = `http://i8d212.p.ssafy.io:8000${userProfile?.profile_image}`;
 
   return (
     <div className="flex w-auto h-full justify-center bg-dark ">

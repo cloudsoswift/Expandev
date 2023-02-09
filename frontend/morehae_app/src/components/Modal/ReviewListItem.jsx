@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState} from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaHeart } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+
 
 import { Menu } from "@headlessui/react";
 
@@ -18,6 +20,8 @@ const ReviewListItem = ({
   user_profile_image,
   like_users,
 }) => {
+
+
 
   // <<수정 및 삭제>>
   // 수정 상태 on/off 값 저장
@@ -95,13 +99,19 @@ const ReviewListItem = ({
   }, [like_users]);
 
 
+  let navigate = useNavigate()
+
+  const toUserProfile = () => {
+    navigate(`/user/${user}`)
+  }
 
   return (
-    <div>
-      <div className="rounded mb-3 p-3 ">
+    <div >
+      <div  className="rounded mb-3 p-3 ">
         <div className="grid grid-cols-5 ">
           <div className="col-span-1 flex align-middle">
             <img
+              onClick={toUserProfile}
               src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmOXESdHIQO3wJZ2Ct7hu56W7k2s_Li3SYXyqYvNJ0SOSxRAL7xKVswcUCAOJXTJWsMTI&usqp=CAU"
               alt="img"
               className="w-16 h-16 rounded-full mt-2 mx-2 border-2 border-green-500"
