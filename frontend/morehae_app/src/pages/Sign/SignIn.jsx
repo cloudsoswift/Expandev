@@ -5,7 +5,6 @@ import { userActions } from "../../utils/store/user-slice";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import httpWithURL from "@/utils/http";
-import Cookies from "universal-cookie";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -44,6 +43,7 @@ const SignIn = () => {
         }
       )
       .then(({ status, data }) => {
+        console.log(data);
         switch (status) {
           case 200:
             return data;
@@ -54,13 +54,13 @@ const SignIn = () => {
       .then((data) => {
         // refresh token을 86,400초 (60초 * 60분 * 24시간 = 1일) 유지되는 httpOnly Cookie로 설정.
         // document.cookie = `refresh_token=${data.refresh_token};path=/;max-age=86400;httpOnly;`;
-        const cookies = new Cookies();
-        cookies.set("refresh_token", data.refresh_token, {
-          path: "/",
-          httpOnly: true,
-          maxAge: 86400,
-        });
-        console.log(cookies);
+        // const cookies = new Cookies();
+        // cookies.set("refresh_token", data.refresh_token, {
+        //   path: "/",
+        //   httpOnly: true,
+        //   maxAge: 86400,
+        // });
+        // console.log(cookies);
         dispatch(userActions.setAccessToken(data.access_token));
         dispatch(
           userActions.setUser({
