@@ -56,7 +56,10 @@ const elkLayout = (
   };
   return elk.layout(graph);
 };
-const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail, onRoleChange }) => {
+const ReactFlowRoadmapComponent = ({
+  nodesDataList,
+  loadNodeDetail,
+}) => {
   // reactFlow 관련 state
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
@@ -307,8 +310,8 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail, onRoleChange
     [loadNodeDetail, setViewport]
   );
   const handleNodeClickButton = (id) => {
-    setClickedNode(getNode(id.toString()));
-  }
+    loadNodeDetail(id.toString());
+  };
   const handleMouseMoveEnd = useCallback(
     (event, viewport) => {
       // console.log("END", event, viewport);
@@ -330,10 +333,11 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail, onRoleChange
     [hoveredNode]
   );
   // 클릭된 메인노드 바뀔 때 마다 해당 노드를 화면의 메인으로 설정.
-  useEffect(()=> {
-    if(clickedNode === null){
+  useEffect(() => {
+    if (clickedNode === null) {
       return;
     }
+    console.log(clickedNode);
     setCenter(
       clickedNode.positionAbsolute.x + clickedNode.width / 2,
       clickedNode.positionAbsolute.y + clickedNode.height / 2,
@@ -343,10 +347,14 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail, onRoleChange
       }
     );
     setZoomLevel(1.5);
-    if(clickedNode.id !== hoveredNode?.id){
+    if (clickedNode.id !== hoveredNode?.id) {
       setHoveredNode(clickedNode);
     }
-  }, [clickedNode])
+  }, [clickedNode]);
+
+  const onSituationChange = (situation) => {
+    setClickedNode(getNode(situation.id.toString()));
+  }
 
   // Zoom 값 또는 현재 hover된 노드 값이 바뀔 떄 마다 하위 노드를 보여주는 상태인지 아닌지를 Update
   useEffect(() => {
@@ -437,7 +445,10 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail, onRoleChange
       className="border"
       style={{ backgroundImage: `url(${galaxyImage})` }}
     >
-      <RoadmapPanel onClickNodeButton={handleNodeClickButton} onRoleChange={onRoleChange}/>
+      <RoadmapPanel
+        onClickNodeButton={handleNodeClickButton}
+        onSituationChange={onSituationChange}
+      />
     </ReactFlow>
   );
 };
@@ -445,22 +456,21 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail, onRoleChange
 const ReactFlowRoadmap = ({ loadNodeDetail }) => {
   const [nodesDataList, setNodesDataList] = useState({});
   // 상황 선택될 때마다 로드맵 데이터를 가져온다
-  const handleRoleChange = (role) => {
+  useEffect(() => {
     const getRoadMap = async () => {
       const response = await HttpWithURL(process.env.REACT_APP_ROADMAP_URL).get(
-        `track/${role?.id ? role?.id : 1}`
+        `track/1`
       );
       setNodesDataList(response.data);
     };
     getRoadMap();
-  }
+  }, []);
   return (
     <div className="w-full h-5/6 relative">
       <ReactFlowProvider>
         <ReactFlowRoadmapComponent
           nodesDataList={nodesDataList}
           loadNodeDetail={loadNodeDetail}
-          onRoleChange={handleRoleChange}
         />
         <MiniMap position="bottom-right" />
       </ReactFlowProvider>

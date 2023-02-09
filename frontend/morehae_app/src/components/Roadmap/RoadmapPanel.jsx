@@ -1,71 +1,88 @@
 import { Disclosure, Transition } from "@headlessui/react";
 import { useEffect } from "react";
-import { BsCaretDownSquare } from "react-icons/bs";
 import { Panel } from "reactflow";
 import HttpWithURL from "@/utils/http";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { BsBookmarkStar, BsCaretDownSquare } from "react-icons/bs";
 import { ImCross } from "react-icons/im";
 import { AiOutlineLoading } from "react-icons/ai";
 import { TbLayoutSidebarLeftExpand } from "react-icons/tb";
 
-const RoadmapPanel = ({ onClickNodeButton, onRoleChange }) => {
-  const [roleList, setRoleList] = useState([]);
-  const [role, setRole] = useState(null);
+function isEmpty(obj) {
+  return obj instanceof Object && Object.keys(obj).length === 0;
+}
+
+const RoadmapPanel = ({ onClickNodeButton, onSituationChange }) => {
+  const [trackInfo, setTrackInfo] = useState({});
+  const [situation, setSituation] = useState(null);
   const [situationList, setSituationList] = useState([]);
-  const [situation, setSituation] = useState({});
+  const [subNodeList, setSubNodeList] = useState([]);
   const [isSituationLoading, setSituationLoading] = useState(false);
   const [isShown, setIsShown] = useState(true);
-  const getRoleList = () => {
+
+  const userInfo = useSelector(state=>state.user.user);
+
+  const getSituationList = () => {
     HttpWithURL(process.env.REACT_APP_ROADMAP_URL)
-      .get("roles")
+      .get("track/1")
       .then((response) => {
         console.log(response);
-        setRoleList(response.data);
+        setTrackInfo(response.data);
+        setSituationList(response.data.nodesData);
       })
       .catch((error) => {
         console.log(error);
       });
   };
-  const getSituation = () => {
+  const getSubNodes = () => {
     setSituationLoading(true);
-    HttpWithURL(process.env.REACT_APP_ROADMAP_URL)
-      .get(`track/${role.id}`)
-      .then((response) => {
-        console.log(response);
-        setSituationList(response.data.nodesData);
-        setSituationLoading(false);
-      })
-      .catch((Error) => {
-        console.log(Error);
-      });
+    setSubNodeList(situation.childs);
+    setSituationLoading(false);
   };
   const handleNodeButton = (e) => {
     // console.log(e.target.id);
     onClickNodeButton(e.target.id);
   };
   const handleToggleOverlay = () => {
-    setIsShown(prveState=>!prveState);
+    setIsShown((prveState) => !prveState);
   };
+  // 로드맵 즐겨찾기 보류
+  // const handleTrackFavorite = (e) => {
+  //   HttpWithURL(process.env.REACT_APP_ROADMAP_URL)
+  //   .get(`track/${e.target.id}/favorite`)
+  //   .then((response)=>{
+
+  //   })
+  // };
   useEffect(() => {
-    getRoleList();
+    getSituationList();
   }, []);
+  useEffect(() => {
+    console.log(subNodeList, "subNodeList");
+    console.log(situationList, "situationList");
+    console.log(situation, "situation");
+  }, [subNodeList]);
 
   useEffect(() => {
-    if (role === null) {
+    if (situation === null) {
       return;
     }
-    onRoleChange(role);
-    getSituation();
-  }, [role]);
+    onSituationChange(situation);
+    getSubNodes();
+  }, [situation]);
   return (
     <Panel
       position="top-left"
-      className={isShown ? "h-full -bottom-10 w-1/4 mb-10" : ""}
+      className={isShown ? "h-[calc(100%-50px)] w-1/4 mb-10" : ""}
       style={{ minWidth: "280px" }}
     >
       {!isShown && (
         <div>
-          <button onClick={handleToggleOverlay} className="border p-2 text-2xl rounded-md">
+          <button
+            onClick={handleToggleOverlay}
+            className="border p-2 text-2xl rounded-md"
+          >
             <TbLayoutSidebarLeftExpand />
           </button>
         </div>
@@ -77,23 +94,33 @@ const RoadmapPanel = ({ onClickNodeButton, onRoleChange }) => {
               <ImCross className="text-white" />
             </button>
           </div>
-          <div>
-            {roleList === [] && (
+          <div className="h-[calc(100%-32px)] overflow-y-scroll">
+            {isEmpty(trackInfo) && (
               <div className="text-3xl font-bold">
                 현재 서버와 통신할 수 없습니다.
               </div>
             )}
-            {roleList.map((r) => (
-              <Disclosure key={r.id}>
+            {!isEmpty(trackInfo) && (
+              <div className="text-white text-center py-2">{trackInfo?.title}</div>
+            )}
+            {situationList.map((s) => (
+              <Disclosure key={s.id}>
                 {({ open }) => (
-                  <>
+                  <div className="items-center">
+                    {/* <button
+                      className="text-white border p-1 rounded-md absolute ml-2 mt-2"
+                      id={r.id}
+                      onClick={handleTrackFavorite}
+                    >
+                      <BsBookmarkStar className="pointer-events-none"/>
+                    </button> */}
                     <Disclosure.Button
-                      className="grid grid-cols-10 rounded-t-xl justify-center border items-center p-2 border border-white bg-black text-green-500 w-full"
+                      className="grid grid-cols-10 rounded-t-xl justify-center items-center p-2 border border-white bg-black text-green-500 w-full"
                       onClick={() => {
-                        setRole(r);
+                        setSituation(s);
                       }}
                     >
-                      <span className="col-span-9">{r.content}</span>
+                      <span className="col-span-9">{s.title}</span>
                       <BsCaretDownSquare
                         className={`justify-self-end inline ${
                           open ? "rotate-180" : ""
@@ -110,24 +137,24 @@ const RoadmapPanel = ({ onClickNodeButton, onRoleChange }) => {
                     >
                       <Disclosure.Panel className="border border-t-0 border-white w-full">
                         {({ close }) =>
-                          r.id === role.id ? (
+                          s.id === situation.id ? (
                             isSituationLoading ? (
                               <div className="flex justify-center items-center text-white">
                                 로딩중...{" "}
                                 <AiOutlineLoading className="animate-spin" />
                               </div>
                             ) : (
-                              situationList.map((s) => (
+                              subNodeList.map((sn) => (
                                 <div
-                                  key={s.id}
+                                  key={sn.id}
                                   className="text-center border-b"
                                 >
                                   <button
-                                    id={s.id}
+                                    id={sn.id}
                                     onClick={handleNodeButton}
                                     className="text-green-500 font-bold"
                                   >
-                                    {s.title}
+                                    {sn.title}
                                   </button>
                                 </div>
                               ))
@@ -138,7 +165,7 @@ const RoadmapPanel = ({ onClickNodeButton, onRoleChange }) => {
                         }
                       </Disclosure.Panel>
                     </Transition>
-                  </>
+                  </div>
                 )}
               </Disclosure>
             ))}
