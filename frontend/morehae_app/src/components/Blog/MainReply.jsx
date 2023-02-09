@@ -38,30 +38,30 @@ const MainReply = ({reply}) => {
   const [isShowSubReply, setIsShowSubReply] = useState(false);
   const [isShowInputReply, setIsShowInputReply] = useState(false);
   const [subReplies, setSubReplies] = useState([]);
-  const replyInputRef = useRef(null);
+  // const replyInputRef = useRef(null);
 
-  useEffect(() => {
-    if (isShowInputReply) {
-      replyInputRef.current.focus()
-    }
-  }, [isShowInputReply])
+  // useEffect(() => {
+  //   if (isShowInputReply) {
+  //     replyInputRef.current.focus()
+  //   }
+  // }, [isShowInputReply])
 
   // 대댓글 리스트 요청
   const getSubReplyData = () => {
-    // setSubReplies(() => dummyReplies)
+    setSubReplies(() => dummyReplies)
 
-    httpWithURL(process.env.REACT_APP_BLOG_URL) // GET 요청
-      .get(`recomment?parent_id=${reply.id}`)
-      .then((Response) => {
-        console.log("대댓글 상세정보:", Response.data?.recomments);
-        setSubReplies((oldState) => {
-          // return dummyReplies;
-          return Response.data?.recomments ?? oldState;
-        })
-      })
-      .catch((Error) => {
-        console.log(Error);
-      });
+    // httpWithURL(process.env.REACT_APP_BLOG_URL) // GET 요청
+    //   .get(`recomment?parent_id=${reply.id}`)
+    //   .then((Response) => {
+    //     console.log("대댓글 상세정보:", Response.data?.recomments);
+    //     setSubReplies((oldState) => {
+    //       // return dummyReplies;
+    //       return Response.data?.recomments ?? oldState;
+    //     })
+    //   })
+    //   .catch((Error) => {
+    //     console.log(Error);
+    //   });
   };
 
   
@@ -96,7 +96,8 @@ const MainReply = ({reply}) => {
       </div>
       <div className='ml-2'>
         {isShowInputReply &&
-        <AddReply setIsShowInputReply={setIsShowInputReply} ref={replyInputRef}/>
+        // <AddReply onHandleCancel={() => setIsShowInputReply(false)} ref={replyInputRef}/>
+        <AddReply onHandleCancel={() => setIsShowInputReply(false)}/>
         }
         {reply.recomments_count !== 0 &&
         <button onClick={showSubReply} className="transition-colors text-blue-500 hover:text-green-300">답글 보기({reply.recomments_count})</button>
