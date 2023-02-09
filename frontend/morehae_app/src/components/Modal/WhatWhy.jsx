@@ -27,6 +27,7 @@ const WhatWhy = ({ reqData, nodeId }) => {
       navigate("/blog/write");
     }
   };
+  
   useEffect(() => {
     setCheckbox(reqData.isComplete);
   }, [reqData.isComplete]);

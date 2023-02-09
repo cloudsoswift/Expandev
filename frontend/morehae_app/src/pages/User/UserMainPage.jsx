@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Tabs from "@/components/Tab/Tab";
+import Tabs from "@/components/Tab/Tabs";
 import HttpWithURL from "@/utils/http";
 import { Link } from "react-router-dom";
 
