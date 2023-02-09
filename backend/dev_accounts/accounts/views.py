@@ -27,7 +27,7 @@ from ast import literal_eval
 
 KAKAO_OAUTH = 'https://kauth.kakao.com/oauth'
 KAKAO_API = 'https://kapi.kakao.com'
-SERVER_DOMAIN = 'http://127.0.0.1:8000'
+SERVER_DOMAIN = 'http://i8d212.p.ssafy.io:9000'
 
 
 @api_view(['GET'])
