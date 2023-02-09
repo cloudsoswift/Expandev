@@ -75,8 +75,41 @@ def article_list(request):  # 게시글 조회
     return Response(context)
 
 
+
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+
+import requests                       
+
+KAKAO_OAUTH = 'https://kauth.kakao.com/oauth'
+KAKAO_API = 'https://kapi.kakao.com'
+SERVER_DOMAIN = 'http://127.0.0.1:8000'
+
+
+# @api_view(['GET'])
+def verify_access_token(request):
+    kakao_verify_token = f'{KAKAO_API}/v1/user/access_token_info'
+    access_token = request.HEADERS.get('Authorization')
+    
+    headers = {'Authorization': access_token}
+    # headers = {'Authorization': 'Bearer TfPpE6poCiRSvlJGhROhHAoCWJxirFT8-gcN-UdlCj1z7AAAAYY09rrO'}
+    response = requests.get(url=kakao_verify_token, headers=headers)
+    status_code = response.status_code
+    error_code = response.json().get('code')
+    if error_code: 
+        error_code = int(error_code)
+        msg = response.json().get('msg')
+    else:
+        msg = '성공'
+    context = {
+        'msg': msg,
+    }
+    return Response(context, status=status_code)
+
+
 @api_view(['POST', 'GET', 'PUT', 'DELETE'])
 def article(request, article_id=None):  # 게시글 디테일
+    print('일단 들어옴')
     if article_id:
         article = get_object_or_404(Article, pk=article_id)
 
@@ -105,8 +138,13 @@ def article(request, article_id=None):  # 게시글 디테일
                 temp, _ = Tag.objects.get_or_create(tag=tag)
                 tags.append(temp)
         if request.method == 'POST':
-            serializer = ArticleSerializer(
-                data=data, context={'user': request.user})
+            if verify_access_token(request).status == 200:
+                print('success')
+                serializer = ArticleSerializer(
+                    data=data, context={'user': request.user})
+            else:
+                print('else!')
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
         elif request.method == 'PUT':
             serializer = ArticleSerializer(
                 instance=article, data=data, context={'user': request.user})
