@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import Tabs from "@/components/Tab/Tab";
+import Tabs from "@/components/Tab/Tabs";
 import HttpWithURL from "@/utils/http";
 import { Link } from "react-router-dom";
 
 import { useSelector } from "react-redux";
-import httpWithURL from "@/utils/http";
 
 const UserMainPage = () => {
   const [userProfile, setUserProfile] = useState();
@@ -57,11 +56,12 @@ const UserMainPage = () => {
     getBlogTab();
   }, []);
 
-  console.log(userProfile);
-  console.log(userRoadmap)
-  console.log(userBlog)
+  console.log(userProfile,"profile");
+  console.log(userRoadmap, "roadmap")
+  console.log(userBlog, "blog")
 
-  // const profile_img = `http://i8d212.p.ssafy.io:9000${userProfile?.profile_image}`;
+  // const profile_img = `http://i8d212.p.ssafy.io:8000${userProfile?.profile_image}`;
+  // const profile_img = `http://i8d212.p.ssafy.io:8000${userProfile?.profile_image}`;
 
   return (
     <div className="flex w-auto h-full justify-center bg-dark ">
@@ -71,8 +71,8 @@ const UserMainPage = () => {
             <div>
               <img
                 className=" mt-2 h-36 w-36 rounded-full m-auto "
-                // src={profile_img}
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
+                src={`http://i8d212.p.ssafy.io:8000${userProfile?.profile_image}`}
+                // src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
                 alt="img"
               />
             </div>
@@ -84,7 +84,8 @@ const UserMainPage = () => {
             </div>
             <div className="mt-9 m-2 text-right">
               <Link
-                to="/edit"
+
+                to='edit'
                 className="px-3 py-1 rounded-md shadow-md text-xs text-white bg-green-500 hover:bg-green-700 drop-shadow-md"
               >
                 회원정보수정
@@ -106,7 +107,7 @@ const UserMainPage = () => {
                 </div>
                 <div className="mx-1 w-full text-xs">
                   로드맵 즐겨찾기
-                  <div>X</div>
+                  <div>{userProfile?.favorite_roadmaps_count}</div>
                 </div>
               </div>
               <div className="flex justify-center text-center shadow-md bg-white m-2  p-2 rounded-md">

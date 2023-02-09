@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import ReviewEditor from "@/components/Modal/ReviewEditor";
 import ReviewList from "@/components/Modal/ReviewList";
@@ -6,8 +6,6 @@ import httpWithURL from "../../utils/http";
 
 const Review = ({ reqData, nodeId }) => {
   const [data, setData] = useState(reqData.review);
-  // const dataId = useRef(reqData.review.length + 1);
-  // const [likedUser, setLikedUser] = useState(false);
 
   const userInfo = useSelector((state) => state.user.user);
 
@@ -19,6 +17,7 @@ const Review = ({ reqData, nodeId }) => {
         { withCredentials: true }
       )
       .then((res) => {
+        console.log(res);
         const newItem = {
           user: userInfo.nickname,
           content: res.data.content,
@@ -28,9 +27,13 @@ const Review = ({ reqData, nodeId }) => {
           id: res.data.id,
           user_profile_image: res.data.user_profile_image,
         };
-        setData([ ...data, newItem ]);
+        alert("리뷰가 작성되었습니다");
+        setData([...data, newItem]);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        alert("서버와 통신중 에러가 발생했습니다. 다시 시도해주세요.");
+      });
   };
 
   const onDelete = (targetId) => {
@@ -67,28 +70,35 @@ const Review = ({ reqData, nodeId }) => {
       .catch((err) => console.log(err));
   };
 
-
-
-
   const reviewLike = (targetId) => {
-    console.log(targetId)
+    console.log(targetId);
     httpWithURL(process.env.REACT_APP_ROADMAP_URL)
       .post(`review/${targetId}/like`, { withCredentials: true })
       .then((res) => {
-        console.log(res)
-        setData((prevData)=>{
-          const originalReview = prevData.find(r => r.id === targetId);
-          let newLike_users = originalReview.like_users.includes('유저 아이디'); 
-          // const is_included = prevData.find(r => r.id ===)
-          prevData.map((review)=>review.id === targetId ? {...review, } : review )
-        })
-        // setLikedUser(()=> !likedUser);
-        // console.log(likedUser, "likedUser in function")
+        console.log(res);
+        setData((prevData) => {
+          // 좋아요를 누른 리뷰를 찾아서
+          const originalReview = prevData.find((r) => r.id === targetId);
+          // 해당 리뷰를 좋아요한 유저 중에 현재 로그인한 유저가 있다면, 
+          // true : 현재 로그인한 유저를 제외한 like_user의 필터링 / false : 해당 리뷰를 좋아요한 유저에 그 유저를 새로 넣어줌
+          let newLike_users = originalReview.like_users.includes(userInfo.id)
+            ? originalReview.like_users.filter(
+                (like_user) => like_user !== userInfo.id
+              )
+            : [...originalReview.like_users, userInfo.id];
+          console.log(originalReview);
+          
+          return prevData.map((review) =>
+            review.id === targetId
+              ? { ...review, like_users: newLike_users }
+              : review
+          );
+        });
       })
       .catch((err) => console.log(err));
   };
   // console.log(likedUser, "likedUser in review")
-  console.log(data)
+  console.log(data, "total data");
 
   return (
     <div>
@@ -99,7 +109,6 @@ const Review = ({ reqData, nodeId }) => {
           onEdit={onEdit}
           reviewLike={reviewLike}
           userInfo={userInfo}
-    
         />
         <ReviewEditor onCreate={onCreate} />
       </div>

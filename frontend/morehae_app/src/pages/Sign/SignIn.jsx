@@ -94,7 +94,7 @@ const SignIn = () => {
             <input
               value={email}
               onChange={handleEmail}
-              placeholder="이메일주소@morehae.com"
+              placeholder="이메일주소@expandev.com"
               type="text"
               className={inputStyle + " mb-4"}
             />

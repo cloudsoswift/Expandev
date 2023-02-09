@@ -22,7 +22,7 @@ const RoadmapPage = () => {
 
   // 로드맵 상세 모달 데이터 가져오기
   const loadNodeDetail = async (id) => {
-    // setNodeId(() => id);
+    setNodeId(() => id);
     // console.log(check);
     await HttpWithURL(process.env.REACT_APP_ROADMAP_URL)
       .get(`node/${id}`)
