@@ -109,7 +109,6 @@ def verify_access_token(request):
 
 @api_view(['POST', 'GET', 'PUT', 'DELETE'])
 def article(request, article_id=None):  # 게시글 디테일
-    print('일단 들어옴')
     if article_id:
         article = get_object_or_404(Article, pk=article_id)
 
@@ -130,7 +129,7 @@ def article(request, article_id=None):  # 게시글 디테일
             'content': request.data.get('content'),
             'thumbnail': request.data.get('thumbnail'),
         }
-        if  request.data.get('overview'):
+        if request.data.get('overview'):
             data['overview'] = request.data.get('overview')
         tags = []
         if entered_tags:
@@ -138,13 +137,7 @@ def article(request, article_id=None):  # 게시글 디테일
                 temp, _ = Tag.objects.get_or_create(tag=tag)
                 tags.append(temp)
         if request.method == 'POST':
-            if verify_access_token(request).status == 200:
-                print('success')
-                serializer = ArticleSerializer(
-                    data=data, context={'user': request.user})
-            else:
-                print('else!')
-                return Response(status=status.HTTP_401_UNAUTHORIZED)
+            serializer = ArticleSerializer(data=data, context={'user': request.user})
         elif request.method == 'PUT':
             serializer = ArticleSerializer(
                 instance=article, data=data, context={'user': request.user})
