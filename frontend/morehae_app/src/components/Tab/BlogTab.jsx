@@ -14,7 +14,7 @@ const BlogTab = ({ userBlog }) => {
       <div className="mt-8 mb-12">
         {/* 제일 잘만든거 */}
         <div className="m-3">작성한 게시글</div>
-        <div className="h-80 bg-[rgb(48,54,61)] border rounded-l-lg drop-shadow-md flex flex-wrap gap-1 p-4 overflow-y-auto  ">
+        <div className="h-[20.5rem] bg-[rgb(48,54,61)] border rounded-l-lg drop-shadow-md flex flex-wrap gap-1 p-4 overflow-y-auto customscrollbar ">
           {userBlog?.post_articles.map((post) => (
             <div
               key={post.id}
@@ -42,7 +42,7 @@ const BlogTab = ({ userBlog }) => {
               <div className="text-sm h-32 text-[rgb(191,192,194)] px-3 pt-2 pb-2 text-ellipsis line-clamp-6  border-[rgb(131,132,139)]">
                 {post?.overview}
               </div>
-              <div className="h-14 border-b pl-3 border-[rgb(131,132,139)]">
+              <div className="h-14  border-b pl-3 border-[rgb(131,132,139)]">
                 {/* 태그 중 상위 2개(0,1번째)만 렌더링 */}
                 {post?.tags
                   ?.filter((item, index) => index <= 1)
@@ -73,7 +73,7 @@ const BlogTab = ({ userBlog }) => {
 
       <div className="mb-12">
         <div className="m-3">좋아요한 게시글</div>
-        <div className="h-[24rem] bg-[rgb(48,54,61)] border rounded-l-lg drop-shadow-md p-4 overflow-y-auto  ">
+        <div className="h-[24rem] bg-[rgb(48,54,61)] border rounded-l-lg drop-shadow-md p-4 overflow-y-auto customscrollbar ">
           {userBlog?.like_articles.map((post) => (
             <div
               key={post?.id}
@@ -133,7 +133,7 @@ const BlogTab = ({ userBlog }) => {
 
       <div className="mb-12">
         <div className="m-3">작성한 댓글, 댓글 생성해서 렌더링해야함</div>
-        <div className="h-80 bg-[rgb(48,54,61)] border rounded-l-lg drop-shadow-md p-4 overflow-y-auto  ">
+        <div className="h-80 bg-[rgb(48,54,61)] border rounded-l-lg drop-shadow-md p-4 overflow-y-auto customscrollbar ">
           {userBlog?.post_articles.map((post) => (
             <div
               key={post.id}
@@ -173,7 +173,7 @@ const BlogTab = ({ userBlog }) => {
       </div>
       <div>
         <div className="m-3">좋아요한 댓글, 댓글 생성해서 렌더링해야함</div>
-        <div className="h-80 bg-[rgb(48,54,61)] border rounded-l-lg drop-shadow-md p-4 overflow-y-auto  ">
+        <div className="h-80 bg-[rgb(48,54,61)] border rounded-l-lg drop-shadow-md p-4 overflow-y-auto customscrollbar ">
           {userBlog?.post_articles.map((post) => (
             <div
               key={post.id}

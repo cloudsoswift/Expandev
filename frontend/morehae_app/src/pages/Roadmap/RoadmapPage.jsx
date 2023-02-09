@@ -5,7 +5,6 @@ import Modal from "@/components/Modal/Modal";
 import WhatWhy from "@/components/Modal/WhatWhy";
 import Links from "@/components/Modal/Links";
 import Review from "@/components/Modal/Review";
-import Dropdown from "@/components/Dropdown/Dropdown";
 import HttpWithURL from "@/utils/http";
 
 import { useEffect } from "react";
@@ -19,6 +18,7 @@ const RoadmapPage = () => {
   const [reqData, setReqData] = useState([]);
   const [nodeId, setNodeId] = useState(null);
 
+  
 
   // 로드맵 상세 모달 데이터 가져오기
   const loadNodeDetail = async (id) => {
@@ -29,6 +29,12 @@ const RoadmapPage = () => {
       .then((res) => setReqData(() => res.data));
     setShowModal(() => !showModal);
   };
+
+  useEffect(() => {
+    if (searchParams?.get("nodeId")) {
+      loadNodeDetail(searchParams.get("nodeId"));
+    }
+  }, [searchParams]);
 
   // Component 첫 Rendering시 Initialize
   // 1. 메인 노드들 Elkjs를 이용해 위치 계산
@@ -43,9 +49,7 @@ const RoadmapPage = () => {
   return (
     <div className="bg-dark">
       <div className="w-screen h-screen">
-        <ReactFlowRoadmap
-          loadNodeDetail={loadNodeDetail}
-        />
+        <ReactFlowRoadmap loadNodeDetail={loadNodeDetail} />
         <Modal
           id={reqData.id}
           data={reqData}
