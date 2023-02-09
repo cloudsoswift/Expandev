@@ -2,8 +2,12 @@ import React from "react";
 import ReviewListItem from "@/components/Modal/ReviewListItem";
 import { FaStar } from "react-icons/fa";
 
+
 const ReviewList = ({ reviewList, onDelete, onEdit, reviewLike, userInfo }) => {
   console.log(reviewList);
+
+  // const reviewRef =useRef<HTMLDivElement>(null)
+
   const getAvgImp = (list) => {
     if (list.length === 0) return 0;
     let sum = 0;
@@ -54,6 +58,7 @@ const ReviewList = ({ reviewList, onDelete, onEdit, reviewLike, userInfo }) => {
             <div className="bg-[rgb(32,37,42)] py-2 rounded-lg drop-shadow-lg">
               {reviewList.map((item) => (
                 <ReviewListItem
+                  
                   key={item.id}
                   {...item}
                   onDelete={onDelete}
