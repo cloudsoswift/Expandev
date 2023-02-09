@@ -1,14 +1,15 @@
 from .models import User
 
-from django.conf import settings
 from rest_framework import serializers
-from allauth.account.adapter import get_adapter
-from dj_rest_auth.serializers import JWTSerializer
-from allauth.account.utils import setup_user_email
-from django.utils.translation import gettext_lazy as _
-from dj_rest_auth.serializers import UserDetailsSerializer
-from dj_rest_auth.serializers import UserDetailsSerializer
 from dj_rest_auth.registration.serializers import RegisterSerializer
+from dj_rest_auth.serializers import UserDetailsSerializer
+from django.utils.translation import gettext_lazy as _
+
+from rest_framework import serializers
+from dj_rest_auth.serializers import JWTSerializer
+from dj_rest_auth.serializers import UserDetailsSerializer
+
+from django.conf import settings
 from django.core.exceptions import ValidationError as DjangoValidationError
 
 import os
@@ -97,11 +98,10 @@ class ProfileSerializer(serializers.ModelSerializer):
     like_articles_count = serializers.IntegerField(source='like_articles.count', read_only=True)
     post_articles_count= serializers.IntegerField(source='articles.count', read_only=True)
     post_reviews_count= serializers.IntegerField(source='review.count', read_only=True)
-    favorite_roadmaps_count = serializers.IntegerField(source='favorite_roadmaps.count', read_only=True)
 
     class Meta:
         model = User
-        fields = ('id','nickname','position','introduce', 'profile_image', 'clear_nodes_count','like_articles_count','post_articles_count','post_reviews_count', 'favorite_roadmaps_count', )
+        fields = ('id','nickname','position','introduce', 'clear_nodes_count','like_articles_count','post_articles_count','post_reviews_count', 'profile_image', )
 
 
 class CustomJWTSerializer(JWTSerializer):
@@ -110,3 +110,4 @@ class CustomJWTSerializer(JWTSerializer):
         serializer = CustomUserDetailSerializer(instance=self.context['user'])
         user_data = serializer.data
         return user_data
+
