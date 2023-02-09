@@ -16,23 +16,23 @@ from pathlib import Path
 
 
 class CustomRegisterSerializer(RegisterSerializer):
-    username = None
     nickname = serializers.CharField(max_length=10)
     login_type = serializers.CharField(max_length=10)
     sns_service_id = serializers.CharField(max_length=100)
+    password1 = serializers.CharField(write_only=True, required=True)
+    password2 = serializers.CharField(write_only=True, required=True)
+
 
     def get_cleaned_data(self):
         data = super().get_cleaned_data()
         data['nickname'] = self.validated_data.get('nickname')
-        data['password1'] = self.validated_data.get('password1')
-        data['password2'] = self.validated_data.get('password2')
         data['email'] = self.validated_data.get('email')
         data['sns_service_id'] = self.validated_data.get('sns_service_id')
         data['login_type'] = self.validated_data.get('login_type')
         return data
 
     def validate_password1(self, password):
-        return super().validate_password1(password)
+        return get_adapter().clean_password(password)
 
     def validate(self, data):
         if data['login_type'] == 'kakao':
@@ -65,14 +65,14 @@ class CustomRegisterSerializer(RegisterSerializer):
 # 유저 디테일 시리얼라이저
 class CustomUserDetailSerializer(UserDetailsSerializer):
     class Meta(UserDetailsSerializer.Meta):
-        fields = ('id','email', 'nickname', 'login_type', 'is_active',)
+        fields = ('id','email', 'nickname', 'login_type', 'is_active', 'sns_service_id')
         read_only_fields = ('email', 'password',)
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id','email', 'nickname', 'login_type', 'is_active',)
+        fields = ('id','email', 'nickname', 'login_type', 'is_active', 'sns_service_id')
 
 
 class ProfileImageSerializer(serializers.ModelSerializer):
