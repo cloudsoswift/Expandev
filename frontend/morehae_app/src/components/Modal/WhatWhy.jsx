@@ -27,6 +27,7 @@ const WhatWhy = ({ reqData, nodeId }) => {
       navigate("/blog/write");
     }
   };
+  
   useEffect(() => {
     setCheckbox(reqData.isComplete);
   }, [reqData.isComplete]);
@@ -69,13 +70,13 @@ const WhatWhy = ({ reqData, nodeId }) => {
         <div className="my-5">
           <h2 className="text-xl mb-3 text-white ">WHAT</h2>
           <p className="mb-5 font-normal text-[rgb(191,192,194)] break-words ">
-            {/* {reqData.content} */}
+            {reqData.content}
             dladmldldmldladmldldmldladmldldmldladmldldmldladmldldmldladmldldmldladmldldmldladmldldmldladmldldmldladmldldml
           </p>
 
           <h2 className="text-xl mb-3 text-white">WHY</h2>
           <p className="mb-5 font-normal text-[rgb(191,192,194)] break-words ">
-            {/* {reqData.purpose} */}
+            {reqData.purpose}
             dladmldldmldladmldldmldladmldldmldladmldldmldladmldldmldladmldldmldladmldldmldladmldldmldladmldldmldladmldldml
           </p>
         </div>

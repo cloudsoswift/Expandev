@@ -2,8 +2,12 @@ import React from "react";
 import ReviewListItem from "@/components/Modal/ReviewListItem";
 import { FaStar } from "react-icons/fa";
 
+
 const ReviewList = ({ reviewList, onDelete, onEdit, reviewLike, userInfo }) => {
   console.log(reviewList);
+
+  // const reviewRef =useRef<HTMLDivElement>(null)
+
   const getAvgImp = (list) => {
     if (list.length === 0) return 0;
     let sum = 0;
@@ -28,9 +32,11 @@ const ReviewList = ({ reviewList, onDelete, onEdit, reviewLike, userInfo }) => {
         <div>
           <div className="text- mt-2 mb-5 text-white  ">REVIEW</div>
 
-          <div className="flex">
+          <div className="">
+            {/* 디자인 생각해보기 */}
+            <div className="text-sm mb-2">리뷰수 {reviewList?.length}개</div>
             <div className="mr-2 mb-2 text-sm flex">
-              <span className="text-white mr-1 ">중요도</span>
+              <span className="text-white mr-1 ">전체 중요도</span>
               {Array.from({ length: getAvgImp(reviewList) }, (v, idx) => (
                 <FaStar key={idx} className="text-sm text-yellow-300 mt-0.5" />
               ))}
@@ -52,6 +58,7 @@ const ReviewList = ({ reviewList, onDelete, onEdit, reviewLike, userInfo }) => {
             <div className="bg-[rgb(32,37,42)] py-2 rounded-lg drop-shadow-lg">
               {reviewList.map((item) => (
                 <ReviewListItem
+                  
                   key={item.id}
                   {...item}
                   onDelete={onDelete}
@@ -62,7 +69,9 @@ const ReviewList = ({ reviewList, onDelete, onEdit, reviewLike, userInfo }) => {
               ))}
             </div>
           ) : (
-            <div className="bg-[rgb(32,37,42)] p-2 rounded-lg drop-shadow-lg text-sm">작성된 리뷰가 없습니다</div>
+            <div className="bg-[rgb(32,37,42)] p-2 rounded-lg drop-shadow-lg text-sm">
+              작성된 리뷰가 없습니다
+            </div>
           )}
         </div>
       </div>

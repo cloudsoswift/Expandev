@@ -4,6 +4,20 @@ import { createPortal } from "react-dom";
 // modal 형식만 나타내는 component
 const Modal = ({ isVisible, onClose, children }) => {
 
+  // var last_pos = 0;
+  // document.addEventListener("scroll", function () {
+  //   var pos = document.body.scrollTop;
+  //   if (pos > last_pos) {
+  //     document.querySelector(
+  //       ".customscrollbar::-webkit-scrollbar-thumb"
+  //     ).style.backgroundColor = "#000000";
+  //   } else {
+  //     document.querySelector(
+  //       ".customscrollbar::-webkit-scrollbar-thumb"
+  //     ).style.backgroundColor = "#FFFFFF";
+  //   }
+  //   last_pos = pos;
+  // });
 
   if (!isVisible) return null;
 
@@ -24,10 +38,8 @@ const Modal = ({ isVisible, onClose, children }) => {
     >
       {/* modal bg */}
       {/* scroll을 지정할 땐 max값이 필수 */}
-      <div className="overflow-y-auto scroll-smooth max-h-screen sm:w-[600px] right-0 top-0 ">
-        
+      <div className="overflow-y-auto scroll-smooth max-h-screen sm:w-[600px] right-0 top-0 customscrollbar">
         <div className=" bg-[rgb(32,37,42)] ">{children}</div>
-        
       </div>
     </div>,
     // 포탈 분리

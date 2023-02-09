@@ -1,9 +1,9 @@
 // import { useState } from "react";
 import { Menu } from "@headlessui/react";
-import { BsPerson, BsPencilSquare } from "react-icons/bs";
-import { VscBell } from "react-icons/vsc";
+import { BsPerson} from "react-icons/bs";
+
 import { Link, useNavigate } from "react-router-dom";
-import NotificationList from "@/components/Navbar/NotificationList";
+
 import { useDispatch, useSelector } from "react-redux";
 import httpWithURL from "@/utils/http";
 import { userActions } from "@/utils/store/user-slice";
