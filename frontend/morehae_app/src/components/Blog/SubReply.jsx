@@ -3,13 +3,6 @@ import AddReply from './AddReply';
 
 const SubReply = ({reply}) => {
   const [isShowInputReply, setIsShowInputReply] = useState(false);
-  const replyInputRef = useRef(null);
-  
-  useEffect(() => {
-    if (isShowInputReply) {
-      replyInputRef.current.focus()
-    }
-  }, [isShowInputReply])
 
   const showInput = () => {
     setIsShowInputReply(!isShowInputReply);
@@ -34,7 +27,7 @@ const SubReply = ({reply}) => {
       </div>
       <div className='ml-2'>
         {isShowInputReply &&
-        <AddReply setIsShowInputReply={setIsShowInputReply} ref={replyInputRef}/>
+        <AddReply onHandleCancel={() => setIsShowInputReply(false)}/>
         }
       </div>
     </div>

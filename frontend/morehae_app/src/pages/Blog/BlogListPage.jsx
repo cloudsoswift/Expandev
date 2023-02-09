@@ -68,11 +68,11 @@ const BlogListPage = () => {
     axios
       .get(`${process.env.REACT_APP_BLOG_URL}?sort_type=hit&count=${trendPage}`)
       .then((Response) => {
-        // console.log("트렌드 탭 게시글 리스트:", Response.data.articles);
-        // console.log("트렌드 탭 게시글 리스트:", dummyTrend.articles);
+        console.log("트렌드 탭 게시글 리스트:", Response.data.articles);
         setPostListTrend((oldState) => {
           if (Response?.data?.articles) {
             // return [...oldState, ...Response.data.articles];
+            // return [...Response.data.articles];
             return dummyTrend.articles;
           } else {
             return oldState;
@@ -126,22 +126,24 @@ const BlogListPage = () => {
     });
   }
 
-  
   useEffect(() => {
     // url 링크 파싱하여 적절한 탭으로 이동
     const urlStringList = window.location.href.split('/');
     if (urlStringList.includes("recent")) {
       setActiveTabIndex(1);
     }
+
+    // 초기 데이터 로딩
+    getTrendPostList();
+    getRecentPostList();
+  }, [])
+
+  useEffect(() => {
     // 태그 검색일 경우 태그 검색 결과만 반영
     if(params.tagName){
       getTagPostList();
       return;
     }
-    // 초기 데이터 로딩
-    getTrendPostList();
-    getRecentPostList();
-    
   }, [searchParams, params])
 
   const handleFocus = () => {
@@ -189,17 +191,13 @@ const BlogListPage = () => {
             <input placeholder="검색어 입력..." onFocus={handleFocus} onBlur={handleBlur} onKeyDown={handleKeyDown} className="h-full bg-dark" />
             <button onClick={clickSearch} className="transition-colors mx-2 hover:text-green-300">검색</button>
           </div>
-          {/* <div ref={searchBoxRef} className="transition rounded-md h-10 flex items-center text-sm border border-gray-400 p-2">
-            <input type="text" placeholder="검색어 입력" onFocus={handleFocus} onBlur={handleBlur} onKeyDown={handleKeyDown} className="h-full border-none" />
-            <button onClick={clickSearch} className="w-8 h-full pl-4"><BsSearch/></button>
-          </div> */}
         </div>
         
         {/* 게시글 리스트 UI */}
         <div className="flex flex-wrap w-[76rem] mt-4">
           {activeTabIndex === 0 ?
             (postListTrend.length === 0 ? <div>트렌드 글 없음</div> : postListTrend.map(post => <Link key={post.id} to={`/blog/post/${post.id}`}><PostPreview post={post}/></Link>) ):
-            (postListTrend.length === 0 ? <div>최신 글 없음</div> : postListRecent.map(post => <Link key={post.id} to={`/blog/post/${post.id}`}><PostPreview post={post}/></Link>) )
+            (postListRecent.length === 0 ? <div>최신 글 없음</div> : postListRecent.map(post => <Link key={post.id} to={`/blog/post/${post.id}`}><PostPreview post={post}/></Link>) )
           }
         </div>
       </div>
