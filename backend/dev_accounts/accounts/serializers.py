@@ -17,29 +17,63 @@ from pathlib import Path
 
 
 class CustomRegisterSerializer(RegisterSerializer):
+    nickname = serializers.CharField(max_length=10)
+    login_type = serializers.CharField(max_length=10)
+    sns_service_id = serializers.CharField(max_length=100)
     password1 = serializers.CharField(write_only=True, required=True)
     password2 = serializers.CharField(write_only=True, required=True)
-    nickname = serializers.CharField(min_length = 1, required= True)
-    login_type = serializers.CharField(required = False)    
+
 
     def get_cleaned_data(self):
         data = super().get_cleaned_data()
-        data['nickname'] = self.validated_data.get('nickname','Ghost')
+        data['nickname'] = self.validated_data.get('nickname')
+        data['email'] = self.validated_data.get('email')
+        data['sns_service_id'] = self.validated_data.get('sns_service_id')
         data['login_type'] = self.validated_data.get('login_type')
         return data
+
+    def validate_password1(self, password):
+        return get_adapter().clean_password(password)
+
+    def validate(self, data):
+        if data['login_type'] == 'kakao':
+            pass
+        else:
+            if data['password1'] != data['password2']:
+                raise serializers.ValidationError(_("The two password fields didn't match."))
+        return data
+
+    def save(self, request):
+        adapter = get_adapter()
+        user = adapter.new_user(request)
+        self.cleaned_data = self.get_cleaned_data()
+        user = adapter.save_user(request, user, self, commit=False)
+        user.nickname = self.validated_data.get('nickname')
+        user.sns_service_id = self.validated_data.get('sns_service_id')
+        if "password1" in self.cleaned_data:
+            try:
+                adapter.clean_password(self.cleaned_data['password1'], user=user)
+            except DjangoValidationError as exc:
+                raise serializers.ValidationError(
+                    detail=serializers.as_serializer_error(exc)
+            )
+        user.save()
+        self.custom_signup(request, user)
+        setup_user_email(request, user, [])
+        return user
 
 
 # 유저 디테일 시리얼라이저
 class CustomUserDetailSerializer(UserDetailsSerializer):
     class Meta(UserDetailsSerializer.Meta):
-        fields = ('id','email', 'nickname', 'login_type', 'is_active')
+        fields = ('id','email', 'nickname', 'login_type', 'is_active', 'sns_service_id')
         read_only_fields = ('email', 'password',)
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id','email', 'nickname', 'login_type', 'is_active')
+        fields = ('id','email', 'nickname', 'login_type', 'is_active', 'sns_service_id')
 
 
 class ProfileImageSerializer(serializers.ModelSerializer):
