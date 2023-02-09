@@ -80,6 +80,13 @@ const SignIn = () => {
   const inputStyle =
     "transition bg-dark duration-300 box-border rounded-lg border-2 border-slate-700 w-full h-12 p-2 outline-none hover:border-green-500 focus:border-green-300";
 
+  const handleKakaoClick = (e) => {
+    e.preventDefault();
+    const url = "http://i8d212.p.ssafy.io:9000/accounts/login/kakao/"
+    // window.open(url, "_blank", "noopener, noreferrer");
+    window.open(url,'카카오 로그인','width=430, height=500, location=no, status=no, scrollbars=yes');
+  }
+
   return (
     <div className="flex justify-center mt-20">
       <div className="flex-column bg-[#171b21] w-[36rem] p-4 rounded-lg border border-slate-700">
@@ -128,7 +135,7 @@ const SignIn = () => {
           <button className="transition w-full h-12 rounded-lg bg-blue-700 text-white hover:bg-blue-500 mb-2">
             구글로 시작
           </button>
-          <button className="transition w-full h-12 rounded-lg bg-yellow-500 text-white hover:bg-yellow-300 mb-2">
+          <button onClick={handleKakaoClick} className="transition w-full h-12 rounded-lg bg-yellow-500 text-white hover:bg-yellow-300 mb-2">
             카카오로 시작
           </button>
           <button className="transition bg-green w-full h-12 rounded-lg bg-green-600 text-white hover:bg-green-500 mb-2">

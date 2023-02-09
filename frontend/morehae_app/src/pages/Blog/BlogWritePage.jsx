@@ -28,6 +28,7 @@ const BlogWritePage = () => {
   const userInfo = useSelector((state)=>state.user.user);
   // 게시물 등록 이벤트 핸들러
   const handleSendPost = () => {
+    console.log("ddd");
     // 제목이나 요약글이 Valid 하지 않으면 진행하지 않음.
     if (!titleIsValid || !overviewIsValid) {
       return;

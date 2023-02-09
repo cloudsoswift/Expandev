@@ -7,6 +7,7 @@ import TagPill from "@/components/Blog/TagPill";
 import { useSelector } from "react-redux";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import TagList from "../../components/Blog/TagList";
+import AddReply from '@/components/Blog/AddReply';
 
 const dummyReplies = [
   {
@@ -23,6 +24,7 @@ const dummyReplies = [
     user_thumbnail: "urlurl",
     parent_comment: null,
     like_users: [],
+    recomments_count: 2
   },
   {
     id: 2,
@@ -38,6 +40,7 @@ const dummyReplies = [
     user_thumbnail: "urlurl",
     parent_comment: null,
     like_users: [3],
+    recomments_count: 0
   },
 ];
 
@@ -84,20 +87,20 @@ const BlogPostPage = () => {
 
   const getReplyData = () => {
     const postID = params.postId;
-    // setReplies(() => dummyReplies);
-    httpWithURL(process.env.REACT_APP_ARTICLE_URL) // GET 요청
-      .get(`${7}/comment`)
-      .then((Response) => {
-        console.log("댓글 상세정보:", Response.data);
-        setReplies((oldState) => {
-          if (Response?.data !== undefined) {
-            return Response.data;
-          }
-        });
-      })
-      .catch((Error) => {
-        console.log("댓글 정보 가져오기 실패", Error);
-      });
+    setReplies(() => dummyReplies);
+    // httpWithURL(process.env.REACT_APP_ARTICLE_URL) // GET 요청
+    //   .get(`${7}/comment`)
+    //   .then((Response) => {
+    //     console.log("댓글 상세정보:", Response.data);
+    //     setReplies((oldState) => {
+    //       if (Response?.data !== undefined) {
+    //         return Response.data;
+    //       }
+    //     });
+    //   })
+    //   .catch((Error) => {
+    //     console.log("댓글 정보 가져오기 실패", Error);
+    //   });
   };
   useEffect(() => {
     getPostData();
@@ -141,6 +144,10 @@ const BlogPostPage = () => {
       alert("글 삭제에 실패했습니다. 다시 시도해주세요.");
     });
   };
+
+  const clearReplyInput = () => {
+    
+  }
 
   return (
     <div className="grid">
@@ -187,6 +194,9 @@ const BlogPostPage = () => {
             )
           }
         </div>
+        {userInfo && (
+        <AddReply onHandleCancel={() => {}} />
+        )}
         {replies.map((reply) => (
           <MainReply key={reply.id} reply={reply} />
         ))}
