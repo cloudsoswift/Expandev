@@ -172,7 +172,10 @@ def kakao_call_back(request):
         'access_token': access_token,
         'refresh_token': refresh_token,
     }
-    return redirect('http://localhost:5173/done')
+    # return redirect('http://localhost:5173/done')
+    return Response(status=status.HTTP_302_FOUND)
+
+
 
 @api_view(['POST'])
 def verify_refresh_token_in_cookie(request):
