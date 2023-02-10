@@ -5,7 +5,6 @@ import { userActions } from "../../utils/store/user-slice";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import httpWithURL from "@/utils/http";
-import Cookies from "universal-cookie";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -34,6 +33,7 @@ const SignIn = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     console.log(email, password);
+    dispatch(userActions.setAccessToken(""));
     httpWithURL(process.env.REACT_APP_USER_URL)
       .post(
         "login/",
@@ -43,6 +43,7 @@ const SignIn = () => {
         }
       )
       .then(({ status, data }) => {
+        console.log(data);
         switch (status) {
           case 200:
             return data;
@@ -53,13 +54,13 @@ const SignIn = () => {
       .then((data) => {
         // refresh token을 86,400초 (60초 * 60분 * 24시간 = 1일) 유지되는 httpOnly Cookie로 설정.
         // document.cookie = `refresh_token=${data.refresh_token};path=/;max-age=86400;httpOnly;`;
-        const cookies = new Cookies();
-        cookies.set("refresh_token", data.refresh_token, {
-          path: "/",
-          httpOnly: true,
-          maxAge: 86400,
-        });
-        console.log(cookies);
+        // const cookies = new Cookies();
+        // cookies.set("refresh_token", data.refresh_token, {
+        //   path: "/",
+        //   httpOnly: true,
+        //   maxAge: 86400,
+        // });
+        // console.log(cookies);
         dispatch(userActions.setAccessToken(data.access_token));
         dispatch(
           userActions.setUser({
@@ -79,6 +80,13 @@ const SignIn = () => {
   const inputStyle =
     "transition bg-dark duration-300 box-border rounded-lg border-2 border-slate-700 w-full h-12 p-2 outline-none hover:border-green-500 focus:border-green-300";
 
+  const handleKakaoClick = (e) => {
+    e.preventDefault();
+    const url = "http://i8d212.p.ssafy.io:9000/accounts/login/kakao/"
+    // window.open(url, "_blank", "noopener, noreferrer");
+    window.open(url,'카카오 로그인','width=430, height=500, location=no, status=no, scrollbars=yes');
+  }
+
   return (
     <div className="flex justify-center mt-20">
       <div className="flex-column bg-[#171b21] w-[36rem] p-4 rounded-lg border border-slate-700">
@@ -93,7 +101,7 @@ const SignIn = () => {
             <input
               value={email}
               onChange={handleEmail}
-              placeholder="이메일주소@morehae.com"
+              placeholder="이메일주소@expandev.com"
               type="text"
               className={inputStyle + " mb-4"}
             />
@@ -127,7 +135,7 @@ const SignIn = () => {
           <button className="transition w-full h-12 rounded-lg bg-blue-700 text-white hover:bg-blue-500 mb-2">
             구글로 시작
           </button>
-          <button className="transition w-full h-12 rounded-lg bg-yellow-500 text-white hover:bg-yellow-300 mb-2">
+          <button onClick={handleKakaoClick} className="transition w-full h-12 rounded-lg bg-yellow-500 text-white hover:bg-yellow-300 mb-2">
             카카오로 시작
           </button>
           <button className="transition bg-green w-full h-12 rounded-lg bg-green-600 text-white hover:bg-green-500 mb-2">

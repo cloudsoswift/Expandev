@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const ReviewEditor = ({ onCreate }) => {
   const contentInput = useRef();
@@ -20,10 +21,10 @@ const ReviewEditor = ({ onCreate }) => {
   ]);
 
   const [state, setState] = useState({
-    content: "",
-    importance: 5,
-    difficulty: 5,
+    content: ""
   });
+
+  const userInfo = useSelector((state) => state.user.user);
 
   const handleChangeState = (e) => {
     setState({
@@ -38,13 +39,16 @@ const ReviewEditor = ({ onCreate }) => {
       alert("5글자 이상 입력해주세요");
       return;
     }
-    onCreate(state.content, state.importance, state.difficulty);
-    console.log(state);
-    alert("작성 완료");
+    if (!userInfo.nickname) {
+      alert("리뷰를 작성하려면 로그인해주세요");
+      return;
+    }
+    onCreate(state.content, state.importance, state.difficulty)
+    // 변경된것, 아직 create 결과에 따라 state관련 삭제할지 if 걸어야 함
+    setImClicked([false, false, false, false, false])
+    setDiClicked([false, false, false, false, false])
     setState({
       content: "",
-      importance: 5,
-      difficulty: 5,
     });
   };
 
@@ -107,8 +111,8 @@ const ReviewEditor = ({ onCreate }) => {
                   onClick={() => handleImStarClick(el)}
                   className={
                     imClicked[el]
-                      ? " text-yellow-300 text-md"
-                      : " text-gray-200 text-md"
+                      ? " text-yellow-300 text-md cursor-pointer"
+                      : " text-gray-200 text-md cursor-pointer"
                   }
                 />
               );
@@ -126,8 +130,8 @@ const ReviewEditor = ({ onCreate }) => {
                   onClick={() => handleDiStarClick(el)}
                   className={
                     diClicked[el]
-                      ? " text-yellow-300 text-md"
-                      : " text-gray-200 text-md"
+                      ? " text-yellow-300 text-md cursor-pointer"
+                      : " text-gray-200 text-md cursor-pointer"
                   }
                 />
               );
@@ -151,7 +155,7 @@ const ReviewEditor = ({ onCreate }) => {
             placeholder="내용"
             value={state.content}
             onChange={handleChangeState}
-            className="rounded-md p-1 mb-3 w-full h-[100px] text-sm bg-[rgb(32,37,42)] text-white"
+            className="rounded-md p-1 mb-3 w-full h-[100px] text-sm bg-[rgb(32,37,42)] text-white "
           />
         </div>
         <div className="flex justify-end">

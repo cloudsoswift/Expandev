@@ -7,6 +7,8 @@ import PostEditor from "../../components/Blog/PostEditor";
 import InputThumbnail from "../../components/Blog/InputThumbnail";
 import InputTitle from "../../components/Blog/InputTitle";
 import InputOverview from "../../components/Blog/InputOverview";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const BlogWritePage = () => {
   const navigate = useNavigate();
@@ -18,14 +20,15 @@ const BlogWritePage = () => {
   const [overviewIsValid, setOverviewIsValid] = useState(false);
   // Thumbnail 관련 State
   const [thumbnail, setThumbnail] = useState("");
-  //
+  // 태그 관련 State
   const [tags, setTags] = useState([]);
   const [editor, setEditor] = useState();
   const request = httpWithURL(process.env.REACT_APP_BLOG_URL);
-  // const request = httpWithURL("http://i8d212.p.ssafy.io:8000/blogs");
 
+  const userInfo = useSelector((state)=>state.user.user);
   // 게시물 등록 이벤트 핸들러
   const handleSendPost = () => {
+    console.log("ddd");
     // 제목이나 요약글이 Valid 하지 않으면 진행하지 않음.
     if (!titleIsValid || !overviewIsValid) {
       return;
@@ -36,13 +39,12 @@ const BlogWritePage = () => {
     if (overviewIsValid) {
       body.append("overview", overview);
     }
-    if (!thumbnail) {
-      body.append("thumnail", thumbnail);
+    if (thumbnail) {
+      body.append("thumbnail", thumbnail);
     }
     for (let tag of tags) {
       body.append("tags", tag.tag);
     }
-    console.log(request.defaults);
     request
       .post("/article", body, {
         withCredentials: true,
@@ -62,6 +64,13 @@ const BlogWritePage = () => {
         }
       });
   };
+  useEffect(() => {
+    // 로그인 하지 않고 진입시 블로그 메인 페이지로 강제 이동시킴.
+    if(!userInfo?.nickname) {
+      alert("로그인이 필요합니다.");
+      navigate("/login");
+    }
+  }, [userInfo]);
   return (
     <div className="flex justify-center">
       <div className="h-full w-1/2">

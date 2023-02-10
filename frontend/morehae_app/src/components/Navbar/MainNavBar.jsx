@@ -1,12 +1,13 @@
 // import { useState } from "react";
 import { Menu } from "@headlessui/react";
-import { BsPerson, BsPencilSquare } from "react-icons/bs";
-import { VscBell } from "react-icons/vsc";
+import { BsPerson} from "react-icons/bs";
+
 import { Link, useNavigate } from "react-router-dom";
-import NotificationList from "@/components/Navbar/NotificationList";
+
 import { useDispatch, useSelector } from "react-redux";
 import httpWithURL from "@/utils/http";
 import { userActions } from "@/utils/store/user-slice";
+import logoImg from "@/img/expandev-logo-green.png";
 
 // 블로그 url 구조 나오면 블로그 글 작성 페이지로 to 설정 필요.
 
@@ -57,7 +58,7 @@ const MainNavBar = () => {
       <div className="grid grid-cols-12 auto-cols-auto h-full items-center">
         <div className="logo col-span-3 pl-8 justify-items-center">
           <Link className="text-4xl font-bold" id="logo" to="/">
-            개발자국🐾
+            <img className="w-52" src={logoImg} alt="" />
           </Link>
         </div>
         <div className="roadmapBtn col-span-3 justify-self-end">
@@ -89,20 +90,20 @@ const MainNavBar = () => {
         {isLogin && (
           <div className="userProfile col-span-3 flex justify-self-center items-center">
             <Link to='/blog/write'>
-              <button className="transition bg-green-100 p-2 px-4 rounded-full mr-4 text-sm text-green-600 hover:bg-green-500 hover:text-white" >글 작성하기</button>
+              <button className="transition  p-2 px-4 rounded-full mr-4 text-sm bg-green-100 text-green-600 hover:bg-green-500 hover:text-white" >글 작성하기</button>
             </Link>
-            <Menu>
+            {/* <Menu>
               <Menu.Button>
                 <VscBell className="mr-4" size="25" />
               </Menu.Button>
               <NotificationList />
-            </Menu>
+            </Menu> */}
             <Menu>
               <Menu.Button>
                 <BsPerson size="25" />
               </Menu.Button>
-              <Menu.Items className="absolute top-full bg-gray-500 shadow-md rounded-md mt-2 w-56 flex flex-col focus:outline-none py-2 border">
-                <Menu.Item>
+              <Menu.Items className="absolute top-full bg-[#171b21] shadow-md rounded mt-2 py-2 w-56 flex flex-col focus:outline-none border border-slate-700">
+                {/* <Menu.Item>
                   <div className="w-full h-28 border-y grid grid-cols-2">
                     <div className="flex justify-center self-center">
                       <BsPerson size="15" className={buttonStyle} />
@@ -112,21 +113,21 @@ const MainNavBar = () => {
                       <div className="text-sm text-black/70 overflow-hidden whitespace-nowrap text-ellipsis" title={user.email}>{user.email}</div>
                     </div>
                   </div>
-                </Menu.Item>
+                </Menu.Item> */}
                 <Menu.Item>
                   <Link
-                    className="flex px-2 py-2 border-b hover:bg-gray-300"
+                    className="flex p-4 hover:bg-slate-700"
                     to={userLink}
                   >
-                    <span className="text-xl">마이 페이지</span>
+                    <span>마이 페이지</span>
                   </Link>
                 </Menu.Item>
                 <Menu.Item>
                   <button
-                    className="flex px-2 py-2 border-b hover:bg-gray-300"
+                    className="flex p-4 text-red-500 hover:bg-slate-700"
                     onClick={logoutHandler}
                   >
-                    <span className="text-xl">Logout</span>
+                    <span>로그아웃</span>
                   </button>
                 </Menu.Item>
               </Menu.Items>
