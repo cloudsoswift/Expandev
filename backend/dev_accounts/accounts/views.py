@@ -154,7 +154,7 @@ def kakao_call_back(request):
     # 회원가입 유무 조회
     if get_user_model().objects.filter(sns_service_id=sns_service_id).exists():
         user = get_user_model().objects.get(sns_service_id=sns_service_id)
-        status = 200
+        # status = 200
     else:
         user = get_user_model().objects.create(
             username='user without password',
@@ -163,7 +163,7 @@ def kakao_call_back(request):
             sns_service_id=sns_service_id,
             login_type=login_type,
         )
-        status = 201
+        # status = 201
     # JWT 발행
     JWT = get_tokens_for_user(user)
     access_token = JWT['access']
