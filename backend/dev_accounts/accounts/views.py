@@ -126,8 +126,8 @@ def get_user_roadmaps(request, nickname):
 @api_view(['GET'])
 def kakao_login(request):
     kakao_api = f'{KAKAO_OAUTH}/authorize?response_type=code'
-    # redirect_uri = f'{SERVER_DOMAIN}/accounts/login/kakao/callback/'
-    redirect_uri = 'http://localhost:5173/done'
+    redirect_uri = f'{SERVER_DOMAIN}/accounts/login/kakao/callback/'
+    # redirect_uri = 'http://localhost:5173/done'
     client_id = get_secret('client_id')
     return redirect(f'{kakao_api}&client_id={client_id}&redirect_uri={redirect_uri}')
 
