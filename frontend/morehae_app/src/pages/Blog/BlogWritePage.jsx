@@ -39,13 +39,12 @@ const BlogWritePage = () => {
     if (overviewIsValid) {
       body.append("overview", overview);
     }
-    if (!thumbnail) {
-      body.append("thumnail", thumbnail);
+    if (thumbnail) {
+      body.append("thumbnail", thumbnail);
     }
     for (let tag of tags) {
       body.append("tags", tag.tag);
     }
-    console.log(request.defaults);
     request
       .post("/article", body, {
         withCredentials: true,
@@ -65,7 +64,6 @@ const BlogWritePage = () => {
         }
       });
   };
-
   useEffect(() => {
     // 로그인 하지 않고 진입시 블로그 메인 페이지로 강제 이동시킴.
     if(!userInfo?.nickname) {

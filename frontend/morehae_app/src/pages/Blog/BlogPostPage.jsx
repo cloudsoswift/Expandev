@@ -155,7 +155,7 @@ const BlogPostPage = () => {
         <div className="text-2xl text-center">{post.title}</div>
         <div className="text-sm text-end">{dateString}</div>
         <div className="text-sm text-gray-500 text-end">{`${post.hit}번 읽힌 글입니다.`}</div>
-        <div className="text-xl text-end">{post.username}</div>
+        <div className="text-xl text-end"><Link to={`/user/${post.username}`}>{post.username}</Link></div>
         <div></div>
         <div></div>
         <PostViewer content={post.content} />

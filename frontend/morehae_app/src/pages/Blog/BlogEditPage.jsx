@@ -55,7 +55,7 @@ const BlogEditPage = () => {
       body.append("overview", overview);
     }
     if (!thumbnail) {
-      body.append("thumnail", thumbnail);
+      body.append("thumbnail", thumbnail);
     }
     for (let tag of tags) {
       body.append("tags", tag.tag);
