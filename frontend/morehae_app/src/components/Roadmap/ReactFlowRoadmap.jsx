@@ -19,6 +19,7 @@ import MainNode from "@/components/Roadmap/nodes/MainNode";
 import SubNode from "@/components/Roadmap/nodes/SubNode";
 import galaxyImage from "@/img/galaxy.jpg";
 import RoadmapPanel from "./RoadmapPanel";
+import { AiOutlineLoading } from "react-icons/ai";
 
 // Node Type 관련
 const nodeTypes = {
@@ -56,10 +57,7 @@ const elkLayout = (
   };
   return elk.layout(graph);
 };
-const ReactFlowRoadmapComponent = ({
-  nodesDataList,
-  loadNodeDetail,
-}) => {
+const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
   // reactFlow 관련 state
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
@@ -354,7 +352,7 @@ const ReactFlowRoadmapComponent = ({
 
   const onSituationChange = (situation) => {
     setClickedNode(getNode(situation.id.toString()));
-  }
+  };
 
   // Zoom 값 또는 현재 hover된 노드 값이 바뀔 떄 마다 하위 노드를 보여주는 상태인지 아닌지를 Update
   useEffect(() => {
@@ -455,25 +453,38 @@ const ReactFlowRoadmapComponent = ({
 
 const ReactFlowRoadmap = ({ loadNodeDetail }) => {
   const [nodesDataList, setNodesDataList] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
   // 상황 선택될 때마다 로드맵 데이터를 가져온다
   useEffect(() => {
     const getRoadMap = async () => {
+      setIsLoading(true);
       const response = await HttpWithURL(process.env.REACT_APP_ROADMAP_URL).get(
         `track/1`
       );
       setNodesDataList(response.data);
+      setIsLoading(false);
     };
     getRoadMap();
   }, []);
   return (
     <div className="w-full h-5/6 relative">
-      <ReactFlowProvider>
-        <ReactFlowRoadmapComponent
-          nodesDataList={nodesDataList}
-          loadNodeDetail={loadNodeDetail}
-        />
-        <MiniMap position="bottom-right" />
-      </ReactFlowProvider>
+      {isLoading && (
+        <div className="absolute top-1/2 left-1/2 text-center text-3xl -translate-x-1/2 -translate-y-1/2">
+          <span className="inline">
+            로딩중...
+            <AiOutlineLoading className="animate-spin inline" />
+          </span>
+        </div>
+      )}
+      {!isLoading && (
+        <ReactFlowProvider>
+          <ReactFlowRoadmapComponent
+            nodesDataList={nodesDataList}
+            loadNodeDetail={loadNodeDetail}
+          />
+          <MiniMap position="bottom-right" />
+        </ReactFlowProvider>
+      )}
     </div>
   );
 };
