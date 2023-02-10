@@ -67,7 +67,7 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
   const [isShown, setIsShown] = useState(false);
 
   /* 로드맵 관련 state들 */
-  const { setViewport, getNode, setCenter, getZoom } = useReactFlow();
+  const { setViewport, getNode, getNodes, setCenter, getZoom } = useReactFlow();
 
   useEffect(() => {
     let initialNodes = [];
@@ -288,6 +288,45 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
     };
     calcRoadMap();
   }, [nodesDataList]);
+  const [isSet, setIsSet] = useState(false);
+  useEffect(()=>{
+    if(isSet) return;
+    const setPanel = () => {
+      let maxX = 0;
+      let maxY = 0;
+      for(const node of getNodes()){
+        console.log(node);
+        if(node.data.depth === 2){
+          continue;
+        }
+        if(maxX < node.position.x){
+          maxX = node.position.x
+        }
+        if(maxY < node.position.y) {
+          maxY = node.position.y
+        }
+      }
+      setNodes((prevNodes)=>{
+        return [...prevNodes, {
+          id: "section",
+          data: {
+            depth: 1,
+          },
+          position: {
+            x: 0,
+            y: 0,
+          },
+          style: {
+            width: maxX,
+            height: maxY,
+          },
+          hidden: false,
+        }];
+      })
+    }
+    setPanel();
+    setIsSet(true);
+  }, [nodes])
 
   const handleNodeClick = useCallback(
     (event, eventNode) => {
@@ -440,7 +479,7 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
       onNodeMouseEnter={handleNodeMouseEnter}
       minZoom={0.1}
       maxZoom={3}
-      className="border"
+      className="border border-[rgb(71,79,88)]"
       style={{ backgroundImage: `url(${galaxyImage})` }}
     >
       <RoadmapPanel
@@ -452,19 +491,26 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
 };
 
 const ReactFlowRoadmap = ({ loadNodeDetail }) => {
-  const [nodesDataList, setNodesDataList] = useState({});
+  const [nodesDataList, setNodesDataList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   // 상황 선택될 때마다 로드맵 데이터를 가져온다
   useEffect(() => {
-    const getRoadMap = async () => {
-      setIsLoading(true);
-      const response = await HttpWithURL(process.env.REACT_APP_ROADMAP_URL).get(
-        `track/1`
-      );
-      setNodesDataList(response.data);
+    const getWholeRoadMap = async () =>{
+      const getRoadMap = async (id) => {
+        setIsLoading(true);
+        const response = await HttpWithURL(process.env.REACT_APP_ROADMAP_URL).get(
+          `track/${id}`
+        );
+        console.log(response.data);
+        setNodesDataList(prevData => [...prevData, response.data]);
+      };
+      for(let i=1; i<=3; i++){
+        await getRoadMap(i);
+        console.log(nodesDataList);
+      }
       setIsLoading(false);
-    };
-    getRoadMap();
+    }
+    getWholeRoadMap();
   }, []);
   return (
     <div className="w-full h-5/6 relative">

@@ -14,7 +14,7 @@ function isEmpty(obj) {
 }
 
 const RoadmapPanel = ({ onClickNodeButton, onSituationChange }) => {
-  const [trackInfo, setTrackInfo] = useState({});
+  const [trackInfo, setTrackInfo] = useState([]);
   const [situation, setSituation] = useState(null);
   const [situationList, setSituationList] = useState([]);
   const [subNodeList, setSubNodeList] = useState([]);
@@ -24,16 +24,18 @@ const RoadmapPanel = ({ onClickNodeButton, onSituationChange }) => {
   const userInfo = useSelector(state=>state.user.user);
 
   const getSituationList = () => {
-    HttpWithURL(process.env.REACT_APP_ROADMAP_URL)
-      .get("track/1")
-      .then((response) => {
-        console.log(response);
-        setTrackInfo(response.data);
-        setSituationList(response.data.nodesData);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    for(let i = 1 ; i<=3; i+=1){
+      HttpWithURL(process.env.REACT_APP_ROADMAP_URL)
+        .get(`track/${i}`)
+        .then((response) => {
+          console.log(response);
+          setTrackInfo((prevTracks)=>prevTracks ? [...prevTracks, response.data] : [response.data]);
+          setSituationList((prevSituations)=>prevSituations ? [...prevSituations, response.data.nodesData] : [response.data.nodesData]);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
   const getSubNodes = () => {
     setSituationLoading(true);
@@ -94,7 +96,7 @@ const RoadmapPanel = ({ onClickNodeButton, onSituationChange }) => {
               <ImCross className="text-white" />
             </button>
           </div>
-          <div className="h-[calc(100%-32px)] overflow-y-scroll">
+          <div className="h-[calc(100%-32px)] overflow-y-auto customscrollbar">
             {isEmpty(trackInfo) && (
               <div className="text-3xl font-bold">
                 현재 서버와 통신할 수 없습니다.
