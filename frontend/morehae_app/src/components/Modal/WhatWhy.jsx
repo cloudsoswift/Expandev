@@ -10,7 +10,7 @@ const WhatWhy = ({ reqData, nodeId }) => {
   const [checkbox, setCheckbox] = useState(false);
   const [showCheckbox, setShowCheckbox] = useState(false);
   const userInfo = useSelector((state) => state.user.user);
-  let navigate = useNavigate()
+  let navigate = useNavigate();
 
   const handleCheckbox = () => {
     HttpWithURL(process.env.REACT_APP_ROADMAP_URL)
@@ -27,7 +27,7 @@ const WhatWhy = ({ reqData, nodeId }) => {
       navigate("/blog/write");
     }
   };
-  
+
   useEffect(() => {
     setCheckbox(reqData.isComplete);
   }, [reqData.isComplete]);
@@ -62,7 +62,9 @@ const WhatWhy = ({ reqData, nodeId }) => {
               onChange={(e) => setCheckbox()}
               checked={checkbox}
             />
-          ) : <></>}
+          ) : (
+            <></>
+          )}
         </div>
         <div className="flex justify-end"></div>
       </div>
@@ -70,14 +72,12 @@ const WhatWhy = ({ reqData, nodeId }) => {
         <div className="my-5">
           <h2 className="text-xl mb-3 text-white ">WHAT</h2>
           <p className="mb-5 font-normal text-[rgb(191,192,194)] break-words ">
-            {reqData.content}
-            dladmldldmldladmldldmldladmldldmldladmldldmldladmldldmldladmldldmldladmldldmldladmldldmldladmldldmldladmldldml
+            {reqData.content ? reqData?.content : "해당 데이터가 없습니다"}
           </p>
 
           <h2 className="text-xl mb-3 text-white">WHY</h2>
           <p className="mb-5 font-normal text-[rgb(191,192,194)] break-words ">
-            {reqData.purpose}
-            dladmldldmldladmldldmldladmldldmldladmldldmldladmldldmldladmldldmldladmldldmldladmldldmldladmldldmldladmldldml
+            {reqData.purpose ? reqData?.purpose : "해당 데이터가 없습니다"}
           </p>
         </div>
       </div>
