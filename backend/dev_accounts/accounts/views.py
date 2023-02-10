@@ -132,16 +132,63 @@ def kakao_login(request):
     return redirect(f'{kakao_api}&client_id={client_id}&redirect_uri={redirect_uri}')
 
 
+
 @api_view(['GET'])
 def kakao_call_back(request):
+    print('call back')
     # 로그인 후 응답받은 code 를 통해 카카오 서버로 데이터 요청
     data = {
         'code': request.GET['code'],
         'grant_type': 'authorization_code',
         'client_id': get_secret('client_id'),
         'client_secret': get_secret('client_secret'),
-        # 'redirect_uri': f'{SERVER_DOMAIN}/accounts/login/kakao/callback/',
-        'redirect_uri': 'http://localhost:5173/done',
+        'redirect_uri': f'{SERVER_DOMAIN}/accounts/login/kakao/callback/',
+    }
+    context = {'code': request.GET['code']}
+    return Response(status=status.HTTP_302_FOUND)
+    # kakao_token_api = f'{KAKAO_OAUTH}/token'
+    # token_api_info = requests.post(kakao_token_api, data=data).json()
+    # id_token = token_api_info.get('id_token')
+    # # 회원정보 조회
+    # kakao_token_info_api = f'{KAKAO_OAUTH}/tokeninfo?id_token={id_token}'
+    # user_info = requests.post(kakao_token_info_api).json()
+    # nickname = user_info.get('nickname')
+    # email = user_info.get('email')
+    # sns_service_id = user_info.get('sub')
+    # login_type = 'kakao'
+    # # 회원가입 유무 조회
+    # if get_user_model().objects.filter(sns_service_id=sns_service_id).exists():
+    #     user = get_user_model().objects.get(sns_service_id=sns_service_id)
+    #     status = 200
+    # else:
+    #     user = get_user_model().objects.create(
+    #         username='user without password',
+    #         nickname=nickname,
+    #         email=email,
+    #         sns_service_id=sns_service_id,
+    #         login_type=login_type,
+    #     )
+    #     status = 201
+    # # JWT 발행
+    # JWT = get_tokens_for_user(user)
+    # access_token = JWT['access']
+    # refresh_token = JWT['refresh']
+    # context = {
+    #     'access_token': access_token,
+    #     'refresh_token': refresh_token,
+    # }
+    # # return Response(context, status=status)
+    # return redirect('http://localhost:5017/')
+
+
+@api_view(['GET'])
+def get_kakao_token(request, code):
+    data = {
+        'code': code,
+        'grant_type': 'authorization_code',
+        'client_id': get_secret('client_id'),
+        'client_secret': get_secret('client_secret'),
+        'redirect_uri': f'{SERVER_DOMAIN}/accounts/login/kakao/callback/',
     }
     kakao_token_api = f'{KAKAO_OAUTH}/token'
     token_api_info = requests.post(kakao_token_api, data=data).json()
@@ -156,7 +203,7 @@ def kakao_call_back(request):
     # 회원가입 유무 조회
     if get_user_model().objects.filter(sns_service_id=sns_service_id).exists():
         user = get_user_model().objects.get(sns_service_id=sns_service_id)
-        # status = 200
+        status = 200
     else:
         user = get_user_model().objects.create(
             username='user without password',
@@ -165,7 +212,7 @@ def kakao_call_back(request):
             sns_service_id=sns_service_id,
             login_type=login_type,
         )
-        # status = 201
+        status = 201
     # JWT 발행
     JWT = get_tokens_for_user(user)
     access_token = JWT['access']
@@ -174,9 +221,8 @@ def kakao_call_back(request):
         'access_token': access_token,
         'refresh_token': refresh_token,
     }
-    # return redirect('http://localhost:5173/done')
-    return Response(status=status.HTTP_302_FOUND)
-
+    return Response(context, status=status)
+    # return redirect('http://localhost:5017/')
 
 
 @api_view(['POST'])
