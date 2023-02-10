@@ -1,3 +1,5 @@
+from blogs.models import Article, Tag
+from blogs.serializers import ArticleSerializer
 from .models import Node, Track, RecommendContent, Interview, Review, Role, Situation
 
 from django.contrib.auth import get_user_model
@@ -48,10 +50,11 @@ class NodeDetailSerializer(serializers.ModelSerializer):
     review = ReviewSerializer(many=True)
     completion_count = serializers.IntegerField(source='completion.count', read_only=True)
     isComplete = serializers.SerializerMethodField()
+    articles = serializers.SerializerMethodField()
 
     class Meta:
         model = Node
-        fields = ('id', 'isEssential', 'isComplete', 'title', 'content', 'purpose', 'recommend_content', 'interview', 'review', 'completion_count', 'completion',)
+        fields = ('id', 'isEssential', 'isComplete', 'title', 'content', 'purpose', 'recommend_content', 'interview', 'review', 'completion_count', 'completion', 'articles')
 
     def get_isComplete(self, data):
         user = self.context['user']
@@ -61,6 +64,12 @@ class NodeDetailSerializer(serializers.ModelSerializer):
             return True if is_clear_node else False
         else:
             return False
+
+    def get_articles(self, data):
+        tag = Tag.objects.get(tag=data.title)
+        articles = Article.objects.filter(tags=tag)
+        serializer = ArticleSerializer(articles, many=True)
+        return serializer.data
 
 
 class Nodeserializer(serializers.ModelSerializer):
