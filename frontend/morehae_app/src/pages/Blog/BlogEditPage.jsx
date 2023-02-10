@@ -22,12 +22,12 @@ const BlogEditPage = () => {
   
   useEffect(() => {
     // 수정 버튼을 통해 이동해온게 아니거나, 원글 작성자와 현재 로그인한 유저 다른경우
-    // 블로그 페이지로 강제 이동시킴.
-    if (!locate.state || locate.state?.username !== userInfo.nickname) {
+    // 블로그 메인 페이지로 강제 이동시킴.
+    if (!locate.state || locate.state?.username !== userInfo.nickname || !userInfo?.nickname) {
       alert("비정상적인 접근입니다.");
       navigate("/blog");
     }
-  }, []);
+  }, [locate, userInfo]);
 
   // 제목 관련 State
   const [title, setTitle] = useState(originalPost?.title ? originalPost?.title : "");
@@ -55,7 +55,7 @@ const BlogEditPage = () => {
       body.append("overview", overview);
     }
     if (!thumbnail) {
-      body.append("thumnail", thumbnail);
+      body.append("thumbnail", thumbnail);
     }
     for (let tag of tags) {
       body.append("tags", tag.tag);

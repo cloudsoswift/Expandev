@@ -9,13 +9,17 @@ import ReactFlow, {
   applyEdgeChanges,
   useReactFlow,
   ReactFlowProvider,
+  Panel,
 } from "reactflow"; // 👇 you need to import the reactflow styles
 import "reactflow/dist/style.css";
 import ELK from "elkjs";
 import { useCallback, useEffect, useState } from "react";
+import HttpWithURL from "@/utils/http";
 import MainNode from "@/components/Roadmap/nodes/MainNode";
 import SubNode from "@/components/Roadmap/nodes/SubNode";
-import galaxyImage from "@/img/galaxy.jpg"
+import galaxyImage from "@/img/galaxy.jpg";
+import RoadmapPanel from "./RoadmapPanel";
+import { AiOutlineLoading } from "react-icons/ai";
 
 // Node Type 관련
 const nodeTypes = {
@@ -46,18 +50,14 @@ const elkLayout = (
       "elk.algorithm": algorithm,
       "elk.direction": direction,
       "nodePlacement.strategy": "SIMPLE",
-      ...(algorithm === "box" && { "elk.contentAlignment": "V_CENTER" })
+      ...(algorithm === "box" && { "elk.contentAlignment": "V_CENTER" }),
     },
     children: nodesForElk,
     edges: edges,
   };
   return elk.layout(graph);
 };
-const ReactFlowRoadmapComponent = ({
-  nodesDataList,
-  loadNodeDetail,
-  openAll,
-}) => {
+const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
   // reactFlow 관련 state
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
@@ -67,7 +67,7 @@ const ReactFlowRoadmapComponent = ({
   const [isShown, setIsShown] = useState(false);
 
   /* 로드맵 관련 state들 */
-  const { setViewport, zoomIn, zoomOut, setCenter, getZoom } = useReactFlow();
+  const { setViewport, getNode, setCenter, getZoom } = useReactFlow();
 
   useEffect(() => {
     let initialNodes = [];
@@ -288,24 +288,6 @@ const ReactFlowRoadmapComponent = ({
     };
     calcRoadMap();
   }, [nodesDataList]);
-  useEffect(() => {
-    setNodes((prevNodes) =>
-      prevNodes.map((node) => {
-        return {
-          ...node,
-          hidden: node.data.depth === 2 ? openAll : node.hidden,
-        };
-      })
-    );
-    setEdges((prevEdges) =>
-      prevEdges.map((edge) => {
-        return {
-          ...edge,
-          hidden: edge.data.depth === 2 ? openAll : edge.hidden,
-        };
-      })
-    );
-  }, [openAll]);
 
   const handleNodeClick = useCallback(
     (event, eventNode) => {
@@ -321,14 +303,13 @@ const ReactFlowRoadmapComponent = ({
         loadNodeDetail(eventNode.id);
         return;
       }
-      setCenter(eventNode.positionAbsolute.x + eventNode.width / 2, eventNode.positionAbsolute.y + eventNode.height / 2, {
-        zoom: 1.5,
-        duration: 800,
-      });
-      setZoomLevel(1.5);
+      setClickedNode(eventNode);
     },
     [loadNodeDetail, setViewport]
   );
+  const handleNodeClickButton = (id) => {
+    loadNodeDetail(id.toString());
+  };
   const handleMouseMoveEnd = useCallback(
     (event, viewport) => {
       // console.log("END", event, viewport);
@@ -342,10 +323,36 @@ const ReactFlowRoadmapComponent = ({
     [hoveredNode]
   );
 
-  const handleNodeMouseEnter = useCallback((e, n) => {
-    if (n.data.depth === 2 || n.id === hoveredNode?.id) return;
-    setHoveredNode(n);
-  }, [hoveredNode]);
+  const handleNodeMouseEnter = useCallback(
+    (e, n) => {
+      if (n.data.depth === 2 || n.id === hoveredNode?.id) return;
+      setHoveredNode(n);
+    },
+    [hoveredNode]
+  );
+  // 클릭된 메인노드 바뀔 때 마다 해당 노드를 화면의 메인으로 설정.
+  useEffect(() => {
+    if (clickedNode === null) {
+      return;
+    }
+    console.log(clickedNode);
+    setCenter(
+      clickedNode.positionAbsolute.x + clickedNode.width / 2,
+      clickedNode.positionAbsolute.y + clickedNode.height / 2,
+      {
+        zoom: 1.5,
+        duration: 800,
+      }
+    );
+    setZoomLevel(1.5);
+    if (clickedNode.id !== hoveredNode?.id) {
+      setHoveredNode(clickedNode);
+    }
+  }, [clickedNode]);
+
+  const onSituationChange = (situation) => {
+    setClickedNode(getNode(situation.id.toString()));
+  };
 
   // Zoom 값 또는 현재 hover된 노드 값이 바뀔 떄 마다 하위 노드를 보여주는 상태인지 아닌지를 Update
   useEffect(() => {
@@ -434,27 +441,50 @@ const ReactFlowRoadmapComponent = ({
       minZoom={0.1}
       maxZoom={3}
       className="border"
-      style={{backgroundImage: `url(${galaxyImage})`}}
-    />
+      style={{ backgroundImage: `url(${galaxyImage})` }}
+    >
+      <RoadmapPanel
+        onClickNodeButton={handleNodeClickButton}
+        onSituationChange={onSituationChange}
+      />
+    </ReactFlow>
   );
 };
 
-const ReactFlowRoadmap = ({ nodesDataList, loadNodeDetail }) => {
-  const [isOpenAll, setIsOpenAll] = useState(false);
-  const handleOpenAll = () => {
-    setIsOpenAll((prevState) => !prevState);
-  };
+const ReactFlowRoadmap = ({ loadNodeDetail }) => {
+  const [nodesDataList, setNodesDataList] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  // 상황 선택될 때마다 로드맵 데이터를 가져온다
+  useEffect(() => {
+    const getRoadMap = async () => {
+      setIsLoading(true);
+      const response = await HttpWithURL(process.env.REACT_APP_ROADMAP_URL).get(
+        `track/1`
+      );
+      setNodesDataList(response.data);
+      setIsLoading(false);
+    };
+    getRoadMap();
+  }, []);
   return (
-    <div className="w-full h-4/5 relative z-10 mt-40">
-      <button onClick={handleOpenAll}>전체 열기</button>
-      <ReactFlowProvider>
-        <ReactFlowRoadmapComponent
-          nodesDataList={nodesDataList}
-          loadNodeDetail={loadNodeDetail}
-          openAll={isOpenAll}
-        />
-        <MiniMap position="bottom-right"/>
-      </ReactFlowProvider>
+    <div className="w-full h-5/6 relative">
+      {isLoading && (
+        <div className="absolute top-1/2 left-1/2 text-center text-3xl -translate-x-1/2 -translate-y-1/2">
+          <span className="inline">
+            로딩중...
+            <AiOutlineLoading className="animate-spin inline" />
+          </span>
+        </div>
+      )}
+      {!isLoading && (
+        <ReactFlowProvider>
+          <ReactFlowRoadmapComponent
+            nodesDataList={nodesDataList}
+            loadNodeDetail={loadNodeDetail}
+          />
+          <MiniMap position="bottom-right" />
+        </ReactFlowProvider>
+      )}
     </div>
   );
 };
