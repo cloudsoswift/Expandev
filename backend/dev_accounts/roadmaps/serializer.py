@@ -68,7 +68,8 @@ class NodeDetailSerializer(serializers.ModelSerializer):
     def get_articles(self, data):
         tag = Tag.objects.get(tag=data.title)
         articles = Article.objects.filter(tags=tag)
-        serializer = ArticleSerializer(articles, many=True)
+        user = self.context['user']
+        serializer = ArticleSerializer(articles, many=True, context={'user': user})
         return serializer.data
 
 
