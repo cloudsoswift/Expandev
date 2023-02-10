@@ -5,11 +5,11 @@ from dj_rest_auth.registration.serializers import RegisterSerializer
 from dj_rest_auth.serializers import UserDetailsSerializer
 from django.utils.translation import gettext_lazy as _
 
+from django.conf import settings
 from rest_framework import serializers
+from allauth.account.adapter import get_adapter
 from dj_rest_auth.serializers import JWTSerializer
 from dj_rest_auth.serializers import UserDetailsSerializer
-
-from django.conf import settings
 from django.core.exceptions import ValidationError as DjangoValidationError
 
 import os
