@@ -21,10 +21,13 @@ const httpWithURL = (URL) => {
     headers: {
       "Content-Type": "application/json;charset=utf-8",
     },
+    xsrfCookieName: "csrftoken",
+    xsrfHeaderName: "X-CSRFTOKEN",
   });
   http.interceptors.request.use(
     (config) => {
       // 매 요청 전 AccessToken 있는지 확인하고, 있으면 header에 set하고 없으면 set 안 함.
+      console.log(document.cookie);
       const accessToken = loadAccessToken();
       config.headers["Authorization"] = accessToken
         ? `Bearer ${accessToken}`
