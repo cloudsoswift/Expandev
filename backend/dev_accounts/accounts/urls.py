@@ -17,4 +17,5 @@ urlpatterns = [
     path('login/kakao/token/<str:code>', views.get_kakao_token),
     path('verify/token/refresh/cookie', views.verify_refresh_token_in_cookie),
     path('cookie/login', views.include_refresh_token_in_cookie),
+    path('cookie/logout/', views.logout)
 ]
