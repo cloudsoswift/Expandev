@@ -16,7 +16,7 @@ const Links = ({ reqData }) => {
           <h2 className="text-xl my-1 text-white ">블로그</h2>
           {/* 추후 확인 */}
           <Link
-            to={{ pathname: `/blog/tag/${title.replaceAll("?","%3F")}`, search: `?count=1` }}
+            to={{ pathname: `/blog/tag/${encodeURIComponent(title)}`, search: `?count=1` }}
             className="rounded text-xs  text-[rgb(71,79,88)] hover:text-white"
           >
             more..
