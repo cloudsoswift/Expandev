@@ -21,6 +21,8 @@ const httpWithURL = (URL) => {
     headers: {
       "Content-Type": "application/json;charset=utf-8",
     },
+    xsrfCookieName: "csrftoken",
+    xsrfHeaderName: "X-CSRFTOKEN",
   });
   http.interceptors.request.use(
     (config) => {
