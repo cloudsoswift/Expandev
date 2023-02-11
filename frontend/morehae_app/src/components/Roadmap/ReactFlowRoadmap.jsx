@@ -17,6 +17,7 @@ import { useCallback, useEffect, useState } from "react";
 import HttpWithURL from "@/utils/http";
 import MainNode from "@/components/Roadmap/nodes/MainNode";
 import SubNode from "@/components/Roadmap/nodes/SubNode";
+import SectionNode from "@/components/Roadmap/nodes/SectionNode";
 import galaxyImage from "@/img/galaxy.jpg";
 import RoadmapPanel from "./RoadmapPanel";
 import { AiOutlineLoading } from "react-icons/ai";
@@ -26,6 +27,7 @@ const NODE_SIZE = 384;
 const nodeTypes = {
   main: MainNode,
   sub: SubNode,
+  section: SectionNode,
 };
 // Layout에 따른 노드 위치 계산을 위한 Elk Layout 설정
 const elk = new ELK();
@@ -215,8 +217,6 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
               (n) => n.id === node.parentNode
               );
             if(calcedNode && parentNode){
-              console.log(calcedNode);
-              console.log(parentNode);
               maxX = calcedNode.x > maxX ? calcedNode.x : maxX;
               maxY = calcedNode.y > maxY ? calcedNode.y : maxY;
             }
@@ -309,21 +309,24 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
           }
         };
         await tempFunction();
-        initialNodes.push({
-          id: `section-${id.toString()}`,
-          data: {
-            label: nodesDataList[id].title,
-          },
-          position: {
-            x: beforeMaxX,
-            y: beforeMaxY,
-          },
-          style: {
-            width: maxX - beforeMaxX,
-            height: maxY - beforeMaxY,
-          },
-          hidden: false,
-        })
+        if(id === 0){
+          initialNodes.push({
+            id: `section-${id.toString()}`,
+            type: "section",
+            data: {
+              label: nodesDataList[id].title,
+            },
+            position: {
+              x: beforeMaxX,
+              y: beforeMaxY,
+            },
+            style: {
+              width: maxX - beforeMaxX,
+              height: maxY - beforeMaxY,
+            },
+            hidden: false,
+          })
+        }
         setNodes(initialNodes);
         setEdges(initialEdges);
         console.log(initialNodes);
@@ -440,6 +443,9 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
   const onSituationChange = (situation) => {
     setClickedNode(getNode(situation.id.toString()));
   };
+  const onTrackChange = (trackTitle) => {
+    setClickedNode(getNode(trackTitle));
+  };
 
   // Zoom 값 또는 현재 hover된 노드 값이 바뀔 떄 마다 하위 노드를 보여주는 상태인지 아닌지를 Update
   useEffect(() => {
@@ -533,6 +539,7 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
       <RoadmapPanel
         onClickNodeButton={handleNodeClickButton}
         onSituationChange={onSituationChange}
+        onTrackChange={onTrackChange}
         nodesDataList={nodesDataList}
       />
     </ReactFlow>

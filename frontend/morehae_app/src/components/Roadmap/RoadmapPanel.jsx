@@ -13,34 +13,46 @@ function isEmpty(obj) {
   return obj instanceof Object && Object.keys(obj).length === 0;
 }
 
-const RoadmapPanel = ({ onClickNodeButton, onSituationChange }) => {
-  const [trackInfo, setTrackInfo] = useState([]);
-  const [situation, setSituation] = useState(null);
+const RoadmapPanel = ({
+  onClickNodeButton,
+  onSituationChange,
+  onTrackChange,
+  nodesDataList,
+}) => {
+  const [trackList, setTrackList] = useState([]);
+  const [track, setTrack] = useState(null);
   const [situationList, setSituationList] = useState([]);
+  const [situation, setSituation] = useState(null);
   const [subNodeList, setSubNodeList] = useState([]);
   const [isSituationLoading, setSituationLoading] = useState(false);
+  const [isSubNodeLoading, setSubNodeLoading] = useState(false);
   const [isShown, setIsShown] = useState(true);
 
-  const userInfo = useSelector(state=>state.user.user);
+  const userInfo = useSelector((state) => state.user.user);
 
+  // const getSituationList = () => {
+  //   for(let i = 1 ; i<=3; i+=1){
+  //     HttpWithURL(process.env.REACT_APP_ROADMAP_URL)
+  //       .get(`track/${i}`)
+  //       .then((response) => {
+  //         console.log(response);
+  //         setTrackInfo((prevTracks)=>prevTracks ? [...prevTracks, response.data] : [response.data]);
+  //         setSituationList((prevSituations)=>prevSituations ? [...prevSituations, response.data.nodesData] : [response.data.nodesData]);
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //       });
+  //   }
+  // };
   const getSituationList = () => {
-    for(let i = 1 ; i<=3; i+=1){
-      HttpWithURL(process.env.REACT_APP_ROADMAP_URL)
-        .get(`track/${i}`)
-        .then((response) => {
-          console.log(response);
-          setTrackInfo((prevTracks)=>prevTracks ? [...prevTracks, response.data] : [response.data]);
-          setSituationList((prevSituations)=>prevSituations ? [...prevSituations, response.data.nodesData] : [response.data.nodesData]);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+    setSituationLoading(true);
+    setSituationList(track.nodesData);
+    setSituationLoading(false);
   };
   const getSubNodes = () => {
-    setSituationLoading(true);
+    setSubNodeLoading(true);
     setSubNodeList(situation.childs);
-    setSituationLoading(false);
+    setSubNodeLoading(false);
   };
   const handleNodeButton = (e) => {
     // console.log(e.target.id);
@@ -58,8 +70,15 @@ const RoadmapPanel = ({ onClickNodeButton, onSituationChange }) => {
   //   })
   // };
   useEffect(() => {
-    getSituationList();
-  }, []);
+    // getSituationList();
+    console.log(nodesDataList);
+    setTrackList(
+      nodesDataList.map((track, index) => {
+        return { ...track, id: index + 1 };
+      })
+    );
+  }, [nodesDataList]);
+
   useEffect(() => {
     console.log(subNodeList, "subNodeList");
     console.log(situationList, "situationList");
@@ -73,6 +92,14 @@ const RoadmapPanel = ({ onClickNodeButton, onSituationChange }) => {
     onSituationChange(situation);
     getSubNodes();
   }, [situation]);
+
+  useEffect(() => {
+    if (track === null) {
+      return;
+    }
+    // onTrackChange(track);
+    getSituationList();
+  }, [track]);
   return (
     <Panel
       position="top-left"
@@ -97,16 +124,13 @@ const RoadmapPanel = ({ onClickNodeButton, onSituationChange }) => {
             </button>
           </div>
           <div className="h-[calc(100%-32px)] overflow-y-auto customscrollbar">
-            {isEmpty(trackInfo) && (
-              <div className="text-3xl font-bold">
+            {!trackList && (
+              <div className="text-md text-center font-bold text-white">
                 현재 서버와 통신할 수 없습니다.
               </div>
             )}
-            {!isEmpty(trackInfo) && (
-              <div className="text-white text-center py-2">{trackInfo?.title}</div>
-            )}
-            {situationList.map((s) => (
-              <Disclosure key={s.id}>
+            {trackList.map((t) => (
+              <Disclosure key={t.title}>
                 {({ open }) => (
                   <div className="items-center">
                     {/* <button
@@ -119,10 +143,10 @@ const RoadmapPanel = ({ onClickNodeButton, onSituationChange }) => {
                     <Disclosure.Button
                       className="grid grid-cols-10 rounded-t-xl justify-center items-center p-2 border border-white bg-black text-green-500 w-full"
                       onClick={() => {
-                        setSituation(s);
+                        setTrack(t);
                       }}
                     >
-                      <span className="col-span-9">{s.title}</span>
+                      <span className="col-span-9">{t.title}</span>
                       <BsCaretDownSquare
                         className={`justify-self-end inline ${
                           open ? "rotate-180" : ""
@@ -139,26 +163,45 @@ const RoadmapPanel = ({ onClickNodeButton, onSituationChange }) => {
                     >
                       <Disclosure.Panel className="border border-t-0 border-white w-full">
                         {({ close }) =>
-                          s.id === situation.id ? (
+                          t.id === track.id ? (
                             isSituationLoading ? (
                               <div className="flex justify-center items-center text-white">
                                 로딩중...{" "}
                                 <AiOutlineLoading className="animate-spin" />
                               </div>
                             ) : (
-                              subNodeList.map((sn) => (
-                                <div
-                                  key={sn.id}
-                                  className="text-center border-b"
-                                >
-                                  <button
-                                    id={sn.id}
-                                    onClick={handleNodeButton}
-                                    className="text-green-500 font-bold"
+                              situationList.map((s) => (
+                                <Disclosure key={s.id}>
+                                  <Disclosure.Button
+                                    className="rounded-t-xl justify-center items-center p-2 border border-white bg-black text-green-500 w-full"
+                                    id={s.id}
+                                    onClick={() => {
+                                      setSituation(s);
+                                    }}
                                   >
-                                    {sn.title}
-                                  </button>
-                                </div>
+                                    {s.title}
+                                  </Disclosure.Button>
+                                  <Disclosure.Panel>
+                                    {({close})=>(
+                                      s.id === situation.id ? (
+                                        isSubNodeLoading ? (
+                                          <div className="flex justify-center items-center text-white">
+                                          로딩중...{" "}
+                                          <AiOutlineLoading className="animate-spin" />
+                                        </div>
+                                        ) : (
+                                          subNodeList.map((sn)=>(
+                                          <div>
+                                            <button className="text-white">{sn.title}</button>
+                                          </div>
+                                          ))
+                                        )
+                                      ): (
+                                        close()
+                                      )
+                                    )}
+                                  </Disclosure.Panel>
+                                </Disclosure>
                               ))
                             )
                           ) : (
