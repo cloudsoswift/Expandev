@@ -21,8 +21,8 @@ const httpWithURL = (URL) => {
     headers: {
       "Content-Type": "application/json;charset=utf-8",
     },
-    xsrfCookieName: "csrftoken",
-    xsrfHeaderName: "X-CSRFTOKEN",
+    xsrfCookieName:'csrftoken',
+    xsrfHeaderName:"X-CSRFTOKEN"
   });
   http.interceptors.request.use(
     (config) => {
@@ -52,6 +52,8 @@ const httpWithURL = (URL) => {
               {},
               {
                 withCredentials: true,
+                xsrfCookieName:"csrftoken",
+                xsrfHeaderName:"X-CSRFTOKEN"
               }
             )
             .then((response) => {
