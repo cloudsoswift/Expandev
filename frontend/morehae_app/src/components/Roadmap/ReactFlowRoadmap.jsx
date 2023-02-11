@@ -17,14 +17,17 @@ import { useCallback, useEffect, useState } from "react";
 import HttpWithURL from "@/utils/http";
 import MainNode from "@/components/Roadmap/nodes/MainNode";
 import SubNode from "@/components/Roadmap/nodes/SubNode";
+import SectionNode from "@/components/Roadmap/nodes/SectionNode";
 import galaxyImage from "@/img/galaxy.jpg";
 import RoadmapPanel from "./RoadmapPanel";
 import { AiOutlineLoading } from "react-icons/ai";
 
+const NODE_SIZE = 384;
 // Node Type 관련
 const nodeTypes = {
   main: MainNode,
   sub: SubNode,
+  section: SectionNode,
 };
 // Layout에 따른 노드 위치 계산을 위한 Elk Layout 설정
 const elk = new ELK();
@@ -33,8 +36,8 @@ const elkLayout = (
   edges,
   direction = "DOWN",
   algorithm = "mrtree",
-  width = 384,
-  height = 384
+  width = NODE_SIZE,
+  height = NODE_SIZE
 ) => {
   const nodesForElk = nodes.map((node) => {
     // console.log(node);
@@ -51,6 +54,7 @@ const elkLayout = (
       "elk.direction": direction,
       "nodePlacement.strategy": "SIMPLE",
       ...(algorithm === "box" && { "elk.contentAlignment": "V_CENTER" }),
+      ...(algorithm === "random" && { "spacing.nodeNode": NODE_SIZE, "randomSeed": 2})
     },
     children: nodesForElk,
     edges: edges,
@@ -67,24 +71,36 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
   const [isShown, setIsShown] = useState(false);
 
   /* 로드맵 관련 state들 */
-  const { setViewport, getNode, setCenter, getZoom } = useReactFlow();
+  const { setViewport, getNode, getNodes, setCenter, getZoom } = useReactFlow();
 
+  // nodesDataList 변경시 작동하는 useEffect ============================================================================================
   useEffect(() => {
+    if(!nodesDataList) return;
+    console.log(nodesDataList);
     let initialNodes = [];
     let initialEdges = [];
+    let maxX = 0;
+    let maxY = 0;
+    let beforeMaxX = 0;
+    let beforeMaxY = 0;
+    let readNodeCount = 0;
     // depth = 0 노드( 최-상단 주제 노드 )
-    const calcRoadMap = async () => {
-      setCenter(0 + 384 / 2, 0 + 384 / 2, { duration: 800, zoom: 1 });
+    const calcRoadMap = async (id) => {
+      // setCenter(0 + NODE_SIZE / 2, 0 + NODE_SIZE / 2, { duration: 800, zoom: 1 });
+      beforeMaxX = maxX;
+      beforeMaxY = maxY;
+      console.log(id);
+      console.log(nodesDataList[id]);
       let before_node = {
-        id: "0",
+        id: `main-${id}`,
         type: "main",
         data: {
-          label: nodesDataList.title,
+          label: nodesDataList[id].title,
         },
         parentNode: null,
         position: {
-          x: 0,
-          y: 0,
+          x: maxX,
+          y: maxY,
         },
         hidden: false,
       };
@@ -92,7 +108,7 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
         ...before_node,
       });
       // 메인 노드 순회
-      nodesDataList.nodesData?.forEach((main_node) => {
+      nodesDataList[id].nodesData?.forEach((main_node) => {
         // 메인 노드를 노드 목록에 추가
         initialNodes.push({
           id: main_node.id.toString(),
@@ -112,6 +128,7 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
           hidden: false,
         });
         // 현재 메인 노드의 하위 서브 노드 순회
+        let before_sub_node = null;
         main_node.childs?.forEach((sub_node) => {
           // 서브 노드를 노드 목록에 추가
           initialNodes.push({
@@ -130,25 +147,37 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
             },
             hidden: true,
           });
-          initialNodes.forEach((other_node) => {
-            if (
-              other_node.parentNode === main_node.id.toString() &&
-              other_node.id !== sub_node.id.toString()
-            ) {
-              // 부모가 같은 서브 노드 -> 서브 노드로 향하는 엣지를 엣지 목록에 추가
-              initialEdges.push({
-                id: `e${sub_node.id}-${other_node.id}`,
-                data: {
-                  depth: sub_node.depth,
-                  parentNode: main_node.id.toString(),
-                },
-                source: sub_node.id.toString(),
-                target: other_node.id.toString(),
-                hidden: true,
-                sourceHandle: "sub",
-              });
-            }
+          // console.log(`${sub_node.id} 번째 서브 노드`,sub_node, initialNodes.at(-1));
+          // 이전 서브 노드 -> 방금 추가한 서브 노드로 향하는 엣지를 엣지 목록에 추가. 
+          if(before_sub_node == null ){
+            // 이전 서브 노드가 없는 경우 (즉 현재 메인 노드의 첫 번째 서브 노드를 막 추가한 상태)면
+            // 현재 메인 노드 -> 방금 추가한 서브 노드로 향하는 엣지를 엣지 목록에 추가.
+            initialEdges.push({
+              id: `e${main_node.id}-${sub_node.id}`,
+              data: {
+                depth: sub_node.depth,
+                parentNode: main_node.id.toString(),
+              },
+              source: main_node.id.toString(),
+              target: sub_node.id.toString(),
+              hidden: true,
+              sourceHandle: "sub",
+            });
+            before_sub_node = initialNodes.at(-1);
+            return;
+          }
+          initialEdges.push({
+            id: `e${before_sub_node.id}-${sub_node.id}`,
+            data: {
+              depth: sub_node.depth,
+              parentNode: main_node.id.toString(),
+            },
+            source: before_sub_node.id.toString(),
+            target: sub_node.id.toString(),
+            hidden: true,
+            sourceHandle: "sub",
           });
+          before_sub_node = initialNodes.at(-1);
         });
         // 이전 메인 노드 -> 현재 메인 노드로 향하는 엣지를 엣지 목록에 추가
         initialEdges.push({
@@ -166,50 +195,51 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
 
       // 메인 노드 = 노드 중 id가 0 ( 최 상단) 이거나 depth 가 1
       const mainNodes = initialNodes.filter(
-        (node) => node.id === "0" || node.data.depth === 1
+        // (node) => node.id === `main-${id}` || node.data.depth === 1
+        (node) => node.type === 'main'
       );
       // 메인 엣지 = 엣지 중 target이 메인 노드들 중 하나의 id와 일치하는 것
       // ( = [메인 노드 id 리스트] 안에 포함된 노드 id를 target으로 하는 엣지 )
       const mainEdges = initialEdges.filter((edge) =>
         mainNodes.map((node) => node.id).includes(edge.target)
       );
-      // console.log(mainNodes, mainEdges);
+      // console.log("메인 노드 및 메인 엣지",mainNodes, mainEdges);
       // 먼저 메인 노드, 엣지에 대하여 Elk를 통한 Position 계산
       const outerFunction = async () => {
         const tempFunction = async () => {
-          const graph = await elkLayout(mainNodes, mainEdges, "DOWN", "mrtree");
+          const graph = await elkLayout(mainNodes, mainEdges, "DOWN", "random");
           // console.log("1. 그래프 계산");
           // console.log(graph);
           // Main Node에만 계산한 position 값 추가 반경, 이외에는 그냥 원래 노드값만.
-          let count = 0;
-          let diff = -600;
           initialNodes = initialNodes.map((node) => {
             const calcedNode = graph.children.find((n) => n.id === node.id);
             const parentNode = graph.children.find(
               (n) => n.id === node.parentNode
-            );
-            if (calcedNode) {
-              diff = count % 4 === 0 ? diff * -1 : diff;
-              count++;
+              );
+            if(calcedNode && parentNode){
+              maxX = calcedNode.x > maxX ? calcedNode.x : maxX;
+              maxY = calcedNode.y > maxY ? calcedNode.y : maxY;
             }
             const newNode = {
               ...node,
               // 최-상단 노드인 경우.
               ...(calcedNode && {
-                position: { x: calcedNode.x, y: calcedNode.y },
+                position: { x: 0, y: 0 },
                 data: {
                   ...node.data,
-                  direction: diff > 0 ? "RIGHT" : "LEFT",
+                  direction: "RIGHT",
                 },
               }),
               // 일반 메인 노드인 경우. 우측으로 진행중이면 양의 diff값을, 왼쪽으로 진행중이면 음의 diff값을 x 값에 지정.
               ...(calcedNode &&
                 parentNode && {
-                  position: { x: diff, y: calcedNode.y - parentNode.y },
+                  position: {
+                    x: calcedNode.x - parentNode.x,
+                    y: calcedNode.y - parentNode.y,
+                  },
                   data: {
                     ...node.data,
-                    direction:
-                      count % 4 === 0 ? "MIDDLE" : diff > 0 ? "RIGHT" : "LEFT",
+                    direction: "RIGHT",
                   },
                 }),
             };
@@ -228,7 +258,7 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
           for (let mainNode of mainNodes) {
             // console.log(mainNode);
             // 루트 노드("웹 공통" 같은 것)의 경우 스킵
-            if (mainNode.id === "0") {
+            if (mainNode.id === `main-${id}`) {
               continue;
             }
             //
@@ -241,7 +271,7 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
               (edge) =>
                 edge.data?.parent === mainNode.id && edge.data.depth === 2
             );
-            // console.log(subNodes, subEdges);
+            // console.log(`${mainNode.id}의 서브 노드, 서브 엣지`,subNodes, subEdges);
             const subGraph = await elkLayout(
               subNodes,
               subEdges,
@@ -279,15 +309,75 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
           }
         };
         await tempFunction();
+        if(id === 0){
+          initialNodes.push({
+            id: `section-${id.toString()}`,
+            type: "section",
+            data: {
+              label: nodesDataList[id].title,
+            },
+            position: {
+              x: beforeMaxX,
+              y: beforeMaxY,
+            },
+            style: {
+              width: maxX - beforeMaxX,
+              height: maxY - beforeMaxY,
+            },
+            hidden: false,
+          })
+        }
         setNodes(initialNodes);
         setEdges(initialEdges);
-        // console.log(initialNodes);
-        // console.log(initialEdges);
+        console.log(initialNodes);
+        console.log(initialEdges);
       };
       outerFunction();
     };
-    calcRoadMap();
+    for(let i=0; i<nodesDataList.length; i++){
+      calcRoadMap(i);
+    }
   }, [nodesDataList]);
+  // =========================================================================================
+  // const [isSet, setIsSet] = useState(false);
+  // useEffect(()=>{
+  //   if(isSet) return;
+  //   const setPanel = () => {
+  //     let maxX = 0;
+  //     let maxY = 0;
+  //     for(const node of getNodes()){
+  //       console.log(node);
+  //       if(node.data.depth === 2){
+  //         continue;
+  //       }
+  //       if(maxX < node.position.x){
+  //         maxX = node.position.x
+  //       }
+  //       if(maxY < node.position.y) {
+  //         maxY = node.position.y
+  //       }
+  //     }
+  //     setNodes((prevNodes)=>{
+  //       return [...prevNodes, {
+  //         id: "section",
+  //         data: {
+  //           depth: 1,
+  //         },
+  //         position: {
+  //           x: 0,
+  //           y: 0,
+  //         },
+  //         style: {
+  //           width: maxX,
+  //           height: maxY,
+  //         },
+  //         hidden: false,
+  //       }];
+  //     })
+  //   }
+  //   setPanel();
+  //   setIsSet(true);
+  // }, [nodes])
 
   const handleNodeClick = useCallback(
     (event, eventNode) => {
@@ -352,6 +442,9 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
 
   const onSituationChange = (situation) => {
     setClickedNode(getNode(situation.id.toString()));
+  };
+  const onTrackChange = (trackTitle) => {
+    setClickedNode(getNode(trackTitle));
   };
 
   // Zoom 값 또는 현재 hover된 노드 값이 바뀔 떄 마다 하위 노드를 보여주는 상태인지 아닌지를 Update
@@ -440,34 +533,46 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
       onNodeMouseEnter={handleNodeMouseEnter}
       minZoom={0.1}
       maxZoom={3}
-      className="border"
+      className="border border-[rgb(71,79,88)]"
       style={{ backgroundImage: `url(${galaxyImage})` }}
     >
       <RoadmapPanel
         onClickNodeButton={handleNodeClickButton}
         onSituationChange={onSituationChange}
+        onTrackChange={onTrackChange}
+        nodesDataList={nodesDataList}
       />
     </ReactFlow>
   );
 };
 
 const ReactFlowRoadmap = ({ loadNodeDetail }) => {
-  const [nodesDataList, setNodesDataList] = useState({});
+  const [nodesDataList, setNodesDataList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   // 상황 선택될 때마다 로드맵 데이터를 가져온다
   useEffect(() => {
-    const getRoadMap = async () => {
-      setIsLoading(true);
-      const response = await HttpWithURL(process.env.REACT_APP_ROADMAP_URL).get(
-        `track/1`
-      );
-      setNodesDataList(response.data);
+    let roadmapList = [];
+    const getWholeRoadMap = async () => {
+      const getRoadMap = async (id) => {
+        setIsLoading(true);
+        const response = await HttpWithURL(
+          process.env.REACT_APP_ROADMAP_URL
+        ).get(`track/${id}`);
+        console.log(response.data);
+        // setNodesDataList(prevData => [...prevData, response.data]);
+        roadmapList = [...roadmapList, response.data];
+      };
+      for (let i = 1; i <= 3; i++) {
+        await getRoadMap(i);
+        console.log(roadmapList);
+      }
+      setNodesDataList(roadmapList);
       setIsLoading(false);
     };
-    getRoadMap();
+    getWholeRoadMap();
   }, []);
   return (
-    <div className="w-full h-5/6 relative">
+    <div className="w-full h-[calc(100vh-80px)] relative">
       {isLoading && (
         <div className="absolute top-1/2 left-1/2 text-center text-3xl -translate-x-1/2 -translate-y-1/2">
           <span className="inline">
