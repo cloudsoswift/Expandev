@@ -188,7 +188,7 @@ def kakao_call_back(request):
 def verify_refresh_token_in_cookie(request):
     cookies = request.META.get('HTTP_COOKIE').split()
     for cookie in cookies:
-        if 'refresh-token' in cookie:
+        if 'refresh_token' in cookie:
             refresh_token = cookie.split('=')[1][:-1]
 
     url = f'{SERVER_DOMAIN}/accounts/token/verify/'
