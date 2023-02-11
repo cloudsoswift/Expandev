@@ -16,6 +16,7 @@ from django.contrib.auth import get_user_model
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.shortcuts import get_list_or_404, get_object_or_404, redirect 
+from django.http import HttpResponse
 
 import re
 import requests                       
@@ -32,6 +33,14 @@ def userlist(request):
     serializer = UserSerializer(user_list, many=True)
     return Response(serializer.data)
 
+@api_view(['POST'])
+def logout(request):
+    if 'refresh_token' in request.COOKIES:
+        response = HttpResponse(status=status.HTTP_200_OK)
+        response.delete_cookie('refresh_token')
+        return response
+    else:
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
 def userchange(request):
