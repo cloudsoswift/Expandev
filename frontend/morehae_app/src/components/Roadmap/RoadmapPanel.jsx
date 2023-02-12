@@ -5,6 +5,9 @@ import HttpWithURL from "@/utils/http";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { BsBookmarkStar, BsCaretDownSquare } from "react-icons/bs";
+import { GiMoonOrbit, GiStarSwirl } from "react-icons/gi";
+import { FaAngleRight } from "react-icons/fa";
+import { IoPlanetOutline, IoPlanet } from "react-icons/io5";
 import { ImCross } from "react-icons/im";
 import { AiOutlineLoading } from "react-icons/ai";
 import { TbLayoutSidebarLeftExpand } from "react-icons/tb";
@@ -103,7 +106,7 @@ const RoadmapPanel = ({
   return (
     <Panel
       position="top-left"
-      className={isShown ? "h-[calc(100%-50px)] w-1/4 mb-10" : ""}
+      className={isShown ? "h-[calc(100%-50px)] w-1/4 mt-10 ml-0" : ""}
       style={{ minWidth: "280px" }}
     >
       {!isShown && (
@@ -117,7 +120,7 @@ const RoadmapPanel = ({
         </div>
       )}
       {isShown && (
-        <div className="bg-black text-black h-full w-full rounded-3xl p-4 border border-white shadow-sm">
+        <div className="bg-black h-full w-full p-4 border border-double border-green-500 shadow-sm">
           <div className="flex justify-end mb-4">
             <button onClick={handleToggleOverlay}>
               <ImCross className="text-white" />
@@ -129,7 +132,7 @@ const RoadmapPanel = ({
                 현재 서버와 통신할 수 없습니다.
               </div>
             )}
-            {trackList.map((t) => (
+            {trackList.map((t, index) => (
               <Disclosure key={t.title}>
                 {({ open }) => (
                   <div className="items-center">
@@ -141,17 +144,20 @@ const RoadmapPanel = ({
                       <BsBookmarkStar className="pointer-events-none"/>
                     </button> */}
                     <Disclosure.Button
-                      className="grid grid-cols-10 rounded-t-xl justify-center items-center p-2 border border-white bg-black text-green-500 w-full"
+                      className={`grid grid-cols-12 rounded-sm items-center space-x-1 p-2 border ${
+                        index === 0 ? "" : "border-t-0"
+                      } border-white bg-gray-900 text-green-500 w-full`}
                       onClick={() => {
                         setTrack(t);
                       }}
                     >
-                      <span className="col-span-9">{t.title}</span>
-                      <BsCaretDownSquare
+                      <FaAngleRight
                         className={`justify-self-end inline ${
-                          open ? "rotate-180" : ""
+                          open ? "rotate-90" : ""
                         }`}
                       />
+                      <GiStarSwirl className={open ? "" : "grayscale"} />
+                      <span className="col-span-10 text-left">{t.title}</span>
                     </Disclosure.Button>
                     <Transition
                       enter="transition duration-100 ease-out"
@@ -172,35 +178,57 @@ const RoadmapPanel = ({
                             ) : (
                               situationList.map((s) => (
                                 <Disclosure key={s.id}>
-                                  <Disclosure.Button
-                                    className="rounded-t-xl justify-center items-center p-2 border border-white bg-black text-green-500 w-full"
-                                    id={s.id}
-                                    onClick={() => {
-                                      setSituation(s);
-                                    }}
-                                  >
-                                    {s.title}
-                                  </Disclosure.Button>
-                                  <Disclosure.Panel>
-                                    {({close})=>(
-                                      s.id === situation.id ? (
-                                        isSubNodeLoading ? (
-                                          <div className="flex justify-center items-center text-white">
-                                          로딩중...{" "}
-                                          <AiOutlineLoading className="animate-spin" />
-                                        </div>
-                                        ) : (
-                                          subNodeList.map((sn)=>(
-                                          <div>
-                                            <button className="text-white">{sn.title}</button>
-                                          </div>
-                                          ))
-                                        )
-                                      ): (
-                                        close()
-                                      )
-                                    )}
-                                  </Disclosure.Panel>
+                                  {({ open }) => (
+                                    <>
+                                      <Disclosure.Button
+                                        className="grid grid-cols-12 p-2 border items-center space-x-1 border-white bg-black text-green-500 w-full"
+                                        id={s.id}
+                                        onClick={() => {
+                                          setSituation(s);
+                                        }}
+                                      >
+                                        <div className="col-span-1" />
+                                        <FaAngleRight
+                                          className={`justify-self-end place-self-center inline ${
+                                            open ? "rotate-90" : ""
+                                          }`}
+                                        />
+                                        <GiMoonOrbit
+                                          className={open ? "" : "grayscale"}
+                                        />
+                                        <span className="col-span-9 text-xs text-left">
+                                          {s.title}
+                                        </span>
+                                      </Disclosure.Button>
+                                      <Disclosure.Panel>
+                                        {({ close }) =>
+                                          s.id === situation.id ? (
+                                            isSubNodeLoading ? (
+                                              <div className="flex justify-center items-center text-white">
+                                                로딩중...{" "}
+                                                <AiOutlineLoading className="animate-spin" />
+                                              </div>
+                                            ) : (
+                                              subNodeList.map((sn) => (
+                                                <div className="grid grid-cols-12 border-t first:border-t-0">
+                                                  <div className="col-span-4"></div>
+                                                  <button
+                                                    className="text-white col-span-8 text-left text-sm"
+                                                    id={sn.id}
+                                                    onClick={handleNodeButton}
+                                                  >
+                                                    {sn.title}
+                                                  </button>
+                                                </div>
+                                              ))
+                                            )
+                                          ) : (
+                                            close()
+                                          )
+                                        }
+                                      </Disclosure.Panel>
+                                    </>
+                                  )}
                                 </Disclosure>
                               ))
                             )
