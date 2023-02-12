@@ -54,7 +54,8 @@ const elkLayout = (
       "elk.direction": direction,
       "nodePlacement.strategy": "SIMPLE",
       ...(algorithm === "box" && { "elk.contentAlignment": "V_CENTER" }),
-      ...(algorithm === "random" && { "spacing.nodeNode": NODE_SIZE, "randomSeed": 2})
+      ...(algorithm === "random" && { "spacing.nodeNode": NODE_SIZE, "randomSeed": 2}),
+      ...(algorithm === "radial" && { "radial.radius": -90, "radial.wedgeCriteria": "LEAF_NUMBER"})
     },
     children: nodesForElk,
     edges: edges,
@@ -179,6 +180,17 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
           });
           before_sub_node = initialNodes.at(-1);
         });
+        console.log(before_sub_node);
+        initialEdges.push({
+          id: `e${before_sub_node.id}-${main_node.id}`,
+          data: {
+            depth: main_node.depth,
+          },
+          source: before_sub_node.id.toString(),
+          target: main_node.id.toString(),
+          sourceHandle: "sub",
+        });
+        
         // 이전 메인 노드 -> 현재 메인 노드로 향하는 엣지를 엣지 목록에 추가
         initialEdges.push({
           id: `e${before_node.id}-${main_node.id}`,
@@ -269,18 +281,19 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
             );
             const subEdges = initialEdges.filter(
               (edge) =>
-                edge.data?.parent === mainNode.id && edge.data.depth === 2
+                edge.data?.parentNode === mainNode.id && edge.data.depth === 2
             );
             // console.log(`${mainNode.id}의 서브 노드, 서브 엣지`,subNodes, subEdges);
             const subGraph = await elkLayout(
               subNodes,
               subEdges,
-              "DOWN",
-              "box",
+              "",
+              "radial",
               68,
               68
             );
             // console.log("돌았다");
+            // console.log(subGraph);
             // 현재 메인 노드 및 서브노드에만 계산한 position 값 추가 반경, 이외에는 그냥 원래 노드값만.
             initialNodes = initialNodes.map((node) => {
               const calcedNode = subGraph.children.find(
