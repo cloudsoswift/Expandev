@@ -55,8 +55,9 @@ const elkLayout = (
       "nodePlacement.strategy": "SIMPLE",
       ...(algorithm === "box" && { "elk.contentAlignment": "V_CENTER" }),
       ...(algorithm === "random" && {
-        "spacing.nodeNode": NODE_SIZE,
+        "elk.spacing.nodeNode": NODE_SIZE,
         randomSeed: 2,
+        "elk.aspectRatio": Math.random() * 1.5 + 0.5
       }),
       ...(algorithm === "radial" && {
         "radial.radius": -90,
@@ -104,22 +105,23 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
         console.log(id);
         console.log(nodesDataList[id]);
         console.log("maxX, maxY ",maxX, maxY);
-        let before_node = {
-          id: `main-${id}`,
-          type: "main",
-          data: {
-            label: nodesDataList[id].title,
-          },
-          parentNode: null,
-          position: {
-            x: beforeMaxX,
-            y: beforeMaxY,
-          },
-          hidden: false,
-        };
-        presentNodes.push({
-          ...before_node,
-        });
+        // let before_node = {
+        //   id: `main-${id}`,
+        //   type: "main",
+        //   data: {
+        //     label: nodesDataList[id].title,
+        //   },
+        //   // parentNode: null,
+        //   position: {
+        //     x: beforeMaxX,
+        //     y: beforeMaxY,
+        //   },
+        //   hidden: false,
+        // };
+        // presentNodes.push({
+        //   ...before_node,
+        // });
+        let before_node = null;
         // 메인 노드 순회
         nodesDataList[id].nodesData?.forEach((main_node) => {
           // 메인 노드를 노드 목록에 추가
@@ -131,13 +133,14 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
               isComplete: main_node.isComplete,
               isEssential: main_node.isEssential,
               depth: main_node.depth,
+              parentNode: before_node?.id.toString(),
             },
-            parentNode: before_node.id.toString(),
+            // parentNode: before_node.id.toString(),
             position: {
               x: beforeMaxX,
               y: beforeMaxY,
             },
-            extent: "parent",
+            // extent: "parent",
             hidden: false,
           });
           // 현재 메인 노드의 하위 서브 노드 순회
@@ -193,26 +196,31 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
             before_sub_node = presentNodes.at(-1);
           });
           // console.log(main_node, before_sub_node);
+          // 마지막 서브 노드 -> 현제 메인 노드로 향하는 엣지를 엣지 목록에 추가
           presentEdges.push({
             id: `e${before_sub_node.id}-${main_node.id}`,
             data: {
               depth: main_node.depth,
+              parentNode: main_node.id.toString(),
             },
             source: before_sub_node.id.toString(),
             target: main_node.id.toString(),
+            hidden: true,
             sourceHandle: "sub",
           });
 
           // 이전 메인 노드 -> 현재 메인 노드로 향하는 엣지를 엣지 목록에 추가
-          presentEdges.push({
-            id: `e${before_node.id}-${main_node.id}`,
-            data: {
-              depth: main_node.depth,
-            },
-            source: before_node.id.toString(),
-            target: main_node.id.toString(),
-            sourceHandle: "main",
-          });
+          if(before_node){
+            presentEdges.push({
+              id: `e${before_node.id}-${main_node.id}`,
+              data: {
+                depth: main_node.depth,
+              },
+              source: before_node.id.toString(),
+              target: main_node.id.toString(),
+              sourceHandle: "main",
+            });
+          }
           // 현재 메인 노드를 이전 메인 노드로 기록
           before_node = main_node;
         });
@@ -239,21 +247,21 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
             // Main Node에만 계산한 position 값 추가 반경, 이외에는 그냥 원래 노드값만.
             presentNodes = presentNodes.map((node) => {
               const calcedNode = graph.children.find((n) => n.id === node.id);
-              const parentNode = graph.children.find(
-                (n) => n.id === node.parentNode
-              );
-              if (calcedNode && parentNode) {
-                console.log(node.id, calcedNode.x, calcedNode.y);
-                maxX = calcedNode.x > maxX ? calcedNode.x : maxX;
-                maxY = calcedNode.y > maxY ? calcedNode.y : maxY;
-                lowestX = (calcedNode.x - beforeMaxX ) < lowestX ? (calcedNode.x - beforeMaxX ) : lowestX;
-                lowestY = (calcedNode.y - beforeMaxY) < lowestY ? (calcedNode.y - beforeMaxY) : lowestY;
-              }
+              // const parentNode = graph.children.find(
+              //   (n) => n.id === node.parentNode
+              // );
+              // if (calcedNode && parentNode) {
+              if (calcedNode) {
+                // if(parentNode){
+                  console.log(node.id, calcedNode.x - beforeMaxX, calcedNode.y - beforeMaxY);
+                  lowestX = (calcedNode.x - beforeMaxX ) < lowestX ? (calcedNode.x - beforeMaxX ) : lowestX;
+                  lowestY = (calcedNode.y - beforeMaxY) < lowestY ? (calcedNode.y - beforeMaxY) : lowestY;
+                }
               const newNode = {
                 ...node,
                 // 최-상단 노드인 경우.
                 ...(calcedNode && {
-                  position: { x: beforeMaxX, y: beforeMaxY },
+                  position: { x: calcedNode.x , y: calcedNode.y },
                   data: {
                     ...node.data,
                     direction: "RIGHT",
@@ -261,10 +269,10 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
                 }),
                 // 일반 메인 노드인 경우. 우측으로 진행중이면 양의 diff값을, 왼쪽으로 진행중이면 음의 diff값을 x 값에 지정.
                 ...(calcedNode &&
-                  parentNode && {
+                  node.data.parentNode && {
                     position: {
-                      x: calcedNode.x - parentNode.x,
-                      y: calcedNode.y - parentNode.y,
+                      x: calcedNode.x,
+                      y: calcedNode.y,
                     },
                     data: {
                       ...node.data,
@@ -281,15 +289,15 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
             lowestY = lowestY < 0 ? lowestY * -1 : lowestY;
 
             presentNodes = presentNodes.map((node)=>{
-              const newX = (node.position.x + lowestX) * 0.6
-              const newY = (node.position.y + lowestY) * 0.6
+              const newX = (node.position.x + lowestX)
+              const newY = (node.position.y + lowestY)
               maxX = maxX > newX ? maxX : newX;
               maxY = maxY > newY ? maxY : newY;
               return {
                 ...node,
                 position: {
-                  x: (node.position.x + lowestX) * 0.6,
-                  y: (node.position.y + lowestY) * 0.6
+                  x: newX,
+                  y: newY
                 }
               }
             })
@@ -358,6 +366,8 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
             }
           };
           await tempFunction();
+          maxX += NODE_SIZE;
+          maxY += NODE_SIZE;
           initialNodes.push({
             id: `section-${id.toString()}`,
             type: "section",
@@ -373,6 +383,7 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
               height: maxY - beforeMaxY,
             },
             hidden: false,
+            zIndex: -1,
           });
         };
         await outerFunction();
@@ -430,7 +441,7 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
 
   const handleNodeMouseEnter = useCallback(
     (e, n) => {
-      if (n.data.depth === 2 || n.id === hoveredNode?.id) return;
+      if (n.data.depth === 2 || n.id === hoveredNode?.id || n.type === "section") return;
       setHoveredNode(n);
     },
     [hoveredNode]
@@ -510,7 +521,8 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
     } else {
       // 메인 노드 = 노드 중 id가 0 ( 최 상단) 이거나 depth 가 1
       const mainNodes = nodes.filter(
-        (node) => node.id === "0" || node.data.depth === 1
+        // (node) => node.id === "0" || node.data.depth === 1
+        (node) => node.type === "main" || node.type === "section"
       );
       setNodes((prevNodes) =>
         prevNodes?.map((node) => {
