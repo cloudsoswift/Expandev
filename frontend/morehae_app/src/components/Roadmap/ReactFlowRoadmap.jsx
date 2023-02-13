@@ -54,8 +54,14 @@ const elkLayout = (
       "elk.direction": direction,
       "nodePlacement.strategy": "SIMPLE",
       ...(algorithm === "box" && { "elk.contentAlignment": "V_CENTER" }),
-      ...(algorithm === "random" && { "spacing.nodeNode": NODE_SIZE, "randomSeed": 2}),
-      ...(algorithm === "radial" && { "radial.radius": -90, "radial.wedgeCriteria": "LEAF_NUMBER"})
+      ...(algorithm === "random" && {
+        "spacing.nodeNode": NODE_SIZE,
+        randomSeed: 2,
+      }),
+      ...(algorithm === "radial" && {
+        "radial.radius": -90,
+        "radial.wedgeCriteria": "LEAF_NUMBER",
+      }),
     },
     children: nodesForElk,
     edges: edges,
@@ -76,253 +82,282 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
 
   // nodesDataList 변경시 작동하는 useEffect ============================================================================================
   useEffect(() => {
-    if(!nodesDataList) return;
+    if (!nodesDataList) return;
     console.log(nodesDataList);
-    let initialNodes = [];
-    let initialEdges = [];
-    let maxX = 0;
-    let maxY = 0;
-    let beforeMaxX = 0;
-    let beforeMaxY = 0;
-    let readNodeCount = 0;
-    // depth = 0 노드( 최-상단 주제 노드 )
-    const calcRoadMap = async (id) => {
-      // setCenter(0 + NODE_SIZE / 2, 0 + NODE_SIZE / 2, { duration: 800, zoom: 1 });
-      beforeMaxX = maxX;
-      beforeMaxY = maxY;
-      console.log(id);
-      console.log(nodesDataList[id]);
-      let before_node = {
-        id: `main-${id}`,
-        type: "main",
-        data: {
-          label: nodesDataList[id].title,
-        },
-        parentNode: null,
-        position: {
-          x: maxX,
-          y: maxY,
-        },
-        hidden: false,
-      };
-      initialNodes.push({
-        ...before_node,
-      });
-      // 메인 노드 순회
-      nodesDataList[id].nodesData?.forEach((main_node) => {
-        // 메인 노드를 노드 목록에 추가
-        initialNodes.push({
-          id: main_node.id.toString(),
+    const calcWholeRoadMap = async () => {
+      let initialNodes = [];
+      let initialEdges = [];
+      let maxX = 0;
+      let maxY = 0;
+      let beforeMaxX = 0;
+      let beforeMaxY = 0;
+      let lowestX = 0;
+      let lowestY = 0;
+      // depth = 0 노드( 최-상단 주제 노드 )
+      const calcRoadMap = async (id) => {
+        // setCenter(0 + NODE_SIZE / 2, 0 + NODE_SIZE / 2, { duration: 800, zoom: 1 });
+        let presentNodes = [];
+        let presentEdges = [];
+
+        beforeMaxX = maxX;
+        beforeMaxY = maxY;
+        console.log(id);
+        console.log(nodesDataList[id]);
+        console.log("maxX, maxY ",maxX, maxY);
+        let before_node = {
+          id: `main-${id}`,
           type: "main",
           data: {
-            label: main_node.title,
-            isComplete: main_node.isComplete,
-            isEssential: main_node.isEssential,
-            depth: main_node.depth,
+            label: nodesDataList[id].title,
           },
-          parentNode: before_node.id.toString(),
+          parentNode: null,
           position: {
-            x: 0,
-            y: 0,
+            x: beforeMaxX,
+            y: beforeMaxY,
           },
-          extent: "parent",
           hidden: false,
+        };
+        presentNodes.push({
+          ...before_node,
         });
-        // 현재 메인 노드의 하위 서브 노드 순회
-        let before_sub_node = null;
-        main_node.childs?.forEach((sub_node) => {
-          // 서브 노드를 노드 목록에 추가
-          initialNodes.push({
-            id: sub_node.id.toString(),
-            type: "sub",
+        // 메인 노드 순회
+        nodesDataList[id].nodesData?.forEach((main_node) => {
+          // 메인 노드를 노드 목록에 추가
+          presentNodes.push({
+            id: main_node.id.toString(),
+            type: "main",
             data: {
-              label: sub_node.title,
-              isComplete: sub_node.isComplete,
-              isEssential: sub_node.isEssential,
-              depth: sub_node.depth,
+              label: main_node.title,
+              isComplete: main_node.isComplete,
+              isEssential: main_node.isEssential,
+              depth: main_node.depth,
             },
-            parentNode: main_node.id.toString(),
+            parentNode: before_node.id.toString(),
             position: {
-              x: 0,
-              y: 0,
+              x: beforeMaxX,
+              y: beforeMaxY,
             },
-            hidden: true,
+            extent: "parent",
+            hidden: false,
           });
-          // console.log(`${sub_node.id} 번째 서브 노드`,sub_node, initialNodes.at(-1));
-          // 이전 서브 노드 -> 방금 추가한 서브 노드로 향하는 엣지를 엣지 목록에 추가. 
-          if(before_sub_node == null ){
-            // 이전 서브 노드가 없는 경우 (즉 현재 메인 노드의 첫 번째 서브 노드를 막 추가한 상태)면
-            // 현재 메인 노드 -> 방금 추가한 서브 노드로 향하는 엣지를 엣지 목록에 추가.
-            initialEdges.push({
-              id: `e${main_node.id}-${sub_node.id}`,
+          // 현재 메인 노드의 하위 서브 노드 순회
+          let before_sub_node = null;
+          main_node.childs?.forEach((sub_node) => {
+            // 서브 노드를 노드 목록에 추가
+            presentNodes.push({
+              id: sub_node.id.toString(),
+              type: "sub",
+              data: {
+                label: sub_node.title,
+                isComplete: sub_node.isComplete,
+                isEssential: sub_node.isEssential,
+                depth: sub_node.depth,
+              },
+              parentNode: main_node.id.toString(),
+              position: {
+                x: 0,
+                y: 0,
+              },
+              hidden: true,
+            });
+            // console.log(`${sub_node.id} 번째 서브 노드`,sub_node, initialNodes.at(-1));
+            // 이전 서브 노드 -> 방금 추가한 서브 노드로 향하는 엣지를 엣지 목록에 추가.
+            if (before_sub_node == null) {
+              // 이전 서브 노드가 없는 경우 (즉 현재 메인 노드의 첫 번째 서브 노드를 막 추가한 상태)면
+              // 현재 메인 노드 -> 방금 추가한 서브 노드로 향하는 엣지를 엣지 목록에 추가.
+              presentEdges.push({
+                id: `e${main_node.id}-${sub_node.id}`,
+                data: {
+                  depth: sub_node.depth,
+                  parentNode: main_node.id.toString(),
+                },
+                source: main_node.id.toString(),
+                target: sub_node.id.toString(),
+                hidden: true,
+                sourceHandle: "sub",
+              });
+              before_sub_node = presentNodes.at(-1);
+              return;
+            }
+            presentEdges.push({
+              id: `e${before_sub_node.id}-${sub_node.id}`,
               data: {
                 depth: sub_node.depth,
                 parentNode: main_node.id.toString(),
               },
-              source: main_node.id.toString(),
+              source: before_sub_node.id.toString(),
               target: sub_node.id.toString(),
               hidden: true,
               sourceHandle: "sub",
             });
-            before_sub_node = initialNodes.at(-1);
-            return;
-          }
-          initialEdges.push({
-            id: `e${before_sub_node.id}-${sub_node.id}`,
+            before_sub_node = presentNodes.at(-1);
+          });
+          // console.log(main_node, before_sub_node);
+          presentEdges.push({
+            id: `e${before_sub_node.id}-${main_node.id}`,
             data: {
-              depth: sub_node.depth,
-              parentNode: main_node.id.toString(),
+              depth: main_node.depth,
             },
             source: before_sub_node.id.toString(),
-            target: sub_node.id.toString(),
-            hidden: true,
+            target: main_node.id.toString(),
             sourceHandle: "sub",
           });
-          before_sub_node = initialNodes.at(-1);
-        });
-        console.log(before_sub_node);
-        initialEdges.push({
-          id: `e${before_sub_node.id}-${main_node.id}`,
-          data: {
-            depth: main_node.depth,
-          },
-          source: before_sub_node.id.toString(),
-          target: main_node.id.toString(),
-          sourceHandle: "sub",
-        });
-        
-        // 이전 메인 노드 -> 현재 메인 노드로 향하는 엣지를 엣지 목록에 추가
-        initialEdges.push({
-          id: `e${before_node.id}-${main_node.id}`,
-          data: {
-            depth: main_node.depth,
-          },
-          source: before_node.id.toString(),
-          target: main_node.id.toString(),
-          sourceHandle: "main",
-        });
-        // 현재 메인 노드를 이전 메인 노드로 기록
-        before_node = main_node;
-      });
 
-      // 메인 노드 = 노드 중 id가 0 ( 최 상단) 이거나 depth 가 1
-      const mainNodes = initialNodes.filter(
-        // (node) => node.id === `main-${id}` || node.data.depth === 1
-        (node) => node.type === 'main'
-      );
-      // 메인 엣지 = 엣지 중 target이 메인 노드들 중 하나의 id와 일치하는 것
-      // ( = [메인 노드 id 리스트] 안에 포함된 노드 id를 target으로 하는 엣지 )
-      const mainEdges = initialEdges.filter((edge) =>
-        mainNodes.map((node) => node.id).includes(edge.target)
-      );
-      // console.log("메인 노드 및 메인 엣지",mainNodes, mainEdges);
-      // 먼저 메인 노드, 엣지에 대하여 Elk를 통한 Position 계산
-      const outerFunction = async () => {
-        const tempFunction = async () => {
-          const graph = await elkLayout(mainNodes, mainEdges, "DOWN", "random");
-          // console.log("1. 그래프 계산");
-          // console.log(graph);
-          // Main Node에만 계산한 position 값 추가 반경, 이외에는 그냥 원래 노드값만.
-          initialNodes = initialNodes.map((node) => {
-            const calcedNode = graph.children.find((n) => n.id === node.id);
-            const parentNode = graph.children.find(
-              (n) => n.id === node.parentNode
+          // 이전 메인 노드 -> 현재 메인 노드로 향하는 엣지를 엣지 목록에 추가
+          presentEdges.push({
+            id: `e${before_node.id}-${main_node.id}`,
+            data: {
+              depth: main_node.depth,
+            },
+            source: before_node.id.toString(),
+            target: main_node.id.toString(),
+            sourceHandle: "main",
+          });
+          // 현재 메인 노드를 이전 메인 노드로 기록
+          before_node = main_node;
+        });
+        // console.log(initialEdges);
+        // 메인 노드 = 노드 중 id가 0 ( 최 상단) 이거나 depth 가 1
+        const mainNodes = presentNodes.filter(
+          // (node) => node.id === `main-${id}` || node.data.depth === 1
+          (node) => node.type === "main"
+        );
+        // 메인 엣지 = 엣지 중 target이 메인 노드들 중 하나의 id와 일치하는 것
+        // ( = [메인 노드 id 리스트] 안에 포함된 노드 id를 target으로 하는 엣지 )
+        const mainEdges = presentEdges.filter(
+          (edge) =>
+            mainNodes.map((node) => node.id).includes(edge.target) &&
+            edge.sourceHandle === "main"
+        );
+        // console.log("메인 노드 및 메인 엣지",mainNodes, mainEdges);
+        // 먼저 메인 노드, 엣지에 대하여 Elk를 통한 Position 계산
+        const outerFunction = async () => {
+          const tempFunction = async () => {
+            const graph = await elkLayout(mainNodes, mainEdges, "", "random");
+            console.log("1. 그래프 계산");
+            console.log(graph);
+            // Main Node에만 계산한 position 값 추가 반경, 이외에는 그냥 원래 노드값만.
+            presentNodes = presentNodes.map((node) => {
+              const calcedNode = graph.children.find((n) => n.id === node.id);
+              const parentNode = graph.children.find(
+                (n) => n.id === node.parentNode
               );
-            if(calcedNode && parentNode){
-              maxX = calcedNode.x > maxX ? calcedNode.x : maxX;
-              maxY = calcedNode.y > maxY ? calcedNode.y : maxY;
-            }
-            const newNode = {
-              ...node,
-              // 최-상단 노드인 경우.
-              ...(calcedNode && {
-                position: { x: 0, y: 0 },
-                data: {
-                  ...node.data,
-                  direction: "RIGHT",
-                },
-              }),
-              // 일반 메인 노드인 경우. 우측으로 진행중이면 양의 diff값을, 왼쪽으로 진행중이면 음의 diff값을 x 값에 지정.
-              ...(calcedNode &&
-                parentNode && {
-                  position: {
-                    x: calcedNode.x - parentNode.x,
-                    y: calcedNode.y - parentNode.y,
-                  },
+              if (calcedNode && parentNode) {
+                console.log(node.id, calcedNode.x, calcedNode.y);
+                maxX = calcedNode.x > maxX ? calcedNode.x : maxX;
+                maxY = calcedNode.y > maxY ? calcedNode.y : maxY;
+                lowestX = (calcedNode.x - beforeMaxX ) < lowestX ? (calcedNode.x - beforeMaxX ) : lowestX;
+                lowestY = (calcedNode.y - beforeMaxY) < lowestY ? (calcedNode.y - beforeMaxY) : lowestY;
+              }
+              const newNode = {
+                ...node,
+                // 최-상단 노드인 경우.
+                ...(calcedNode && {
+                  position: { x: beforeMaxX, y: beforeMaxY },
                   data: {
                     ...node.data,
                     direction: "RIGHT",
                   },
                 }),
-            };
-            // console.log(count, diff);
-            return newNode;
-          });
-          // Main Edge에만 계산한 위치값(selection) 추가 반경, 이외에는 그냥 원래 노드값만.
-          initialEdges = initialEdges.map((edge) => {
-            const calcedEdge = graph.edges.map((e) => e.id === edge.id);
-            return {
-              ...edge,
-              ...(calcedEdge && { ...calcedEdge }),
-            };
-          });
-          // 각 메인 노드들에 대해 해당 메인 노드와 서브 노드에 대해 ELk를 통한 Position 계산
-          for (let mainNode of mainNodes) {
-            // console.log(mainNode);
-            // 루트 노드("웹 공통" 같은 것)의 경우 스킵
-            if (mainNode.id === `main-${id}`) {
-              continue;
-            }
-            //
-            const subNodes = initialNodes.filter(
-              (node) =>
-                node.id === mainNode.id ||
-                (node.parentNode === mainNode.id && node.data.depth === 2)
-            );
-            const subEdges = initialEdges.filter(
-              (edge) =>
-                edge.data?.parentNode === mainNode.id && edge.data.depth === 2
-            );
-            // console.log(`${mainNode.id}의 서브 노드, 서브 엣지`,subNodes, subEdges);
-            const subGraph = await elkLayout(
-              subNodes,
-              subEdges,
-              "",
-              "radial",
-              68,
-              68
-            );
-            // console.log("돌았다");
-            // console.log(subGraph);
-            // 현재 메인 노드 및 서브노드에만 계산한 position 값 추가 반경, 이외에는 그냥 원래 노드값만.
-            initialNodes = initialNodes.map((node) => {
-              const calcedNode = subGraph.children.find(
-                (n) => n.id === node.id
-              );
-              return {
-                ...node,
+                // 일반 메인 노드인 경우. 우측으로 진행중이면 양의 diff값을, 왼쪽으로 진행중이면 음의 diff값을 x 값에 지정.
                 ...(calcedNode &&
-                  calcedNode.id !== mainNode.id && {
+                  parentNode && {
                     position: {
-                      x: calcedNode.x,
-                      y: calcedNode.y,
+                      x: calcedNode.x - parentNode.x,
+                      y: calcedNode.y - parentNode.y,
+                    },
+                    data: {
+                      ...node.data,
+                      direction: "RIGHT",
                     },
                   }),
               };
+              // console.log(count, diff);
+              return newNode;
             });
-            // 현재 메인 노드 및 서브노드에 관련된 엣지만 계산한 위치값(selection) 추가 반경,
-            // 이외에는 그냥 원래 노드값만.
-            initialEdges = initialEdges.map((edge) => {
-              const calcedEdge = subGraph.edges.map((e) => e.id === edge.id);
+            // lowestX, lowestY 만큼 위치 보정해주고, 60% 수준으로 범위 축소.
+            console.log('최소값들', id, lowestX, lowestY);
+            lowestX = lowestX < 0 ? lowestX * -1 : lowestX;
+            lowestY = lowestY < 0 ? lowestY * -1 : lowestY;
+
+            presentNodes = presentNodes.map((node)=>{
+              const newX = (node.position.x + lowestX) * 0.6
+              const newY = (node.position.y + lowestY) * 0.6
+              maxX = maxX > newX ? maxX : newX;
+              maxY = maxY > newY ? maxY : newY;
+              return {
+                ...node,
+                position: {
+                  x: (node.position.x + lowestX) * 0.6,
+                  y: (node.position.y + lowestY) * 0.6
+                }
+              }
+            })
+            console.log("계산 끝난 노드 ", id, presentNodes);
+            // Main Edge에만 계산한 위치값(selection) 추가 반경, 이외에는 그냥 원래 노드값만.
+            presentEdges = presentEdges.map((edge) => {
+              const calcedEdge = graph.edges.map((e) => e.id === edge.id);
               return {
                 ...edge,
                 ...(calcedEdge && { ...calcedEdge }),
               };
             });
-          }
-        };
-        await tempFunction();
-        if(id === 0){
+            // 각 메인 노드들에 대해 해당 메인 노드와 서브 노드에 대해 ELk를 통한 Position 계산
+            for (let mainNode of mainNodes) {
+              // console.log(mainNode);
+              // 루트 노드("웹 공통" 같은 것)의 경우 스킵
+              if (mainNode.id === `main-${id}`) {
+                continue;
+              }
+              //
+              const subNodes = presentNodes.filter(
+                (node) =>
+                  node.id === mainNode.id ||
+                  (node.parentNode === mainNode.id && node.data.depth === 2)
+              );
+              const subEdges = presentEdges.filter(
+                (edge) =>
+                  edge.data?.parentNode === mainNode.id && edge.data.depth === 2
+              );
+              // console.log(`${mainNode.id}의 서브 노드, 서브 엣지`,subNodes, subEdges);
+              const subGraph = await elkLayout(
+                subNodes,
+                subEdges,
+                "",
+                "radial",
+                68,
+                68
+              );
+              // console.log("돌았다");
+              // console.log(subGraph);
+              // 현재 메인 노드 및 서브노드에만 계산한 position 값 추가 반경, 이외에는 그냥 원래 노드값만.
+              presentNodes = presentNodes.map((node) => {
+                const calcedNode = subGraph.children.find(
+                  (n) => n.id === node.id
+                );
+                return {
+                  ...node,
+                  ...(calcedNode &&
+                    calcedNode.id !== mainNode.id && {
+                      position: {
+                        x: calcedNode.x,
+                        y: calcedNode.y,
+                      },
+                    }),
+                };
+              });
+              // 현재 메인 노드 및 서브노드에 관련된 엣지만 계산한 위치값(selection) 추가 반경,
+              // 이외에는 그냥 원래 노드값만.
+              presentEdges = presentEdges.map((edge) => {
+                const calcedEdge = subGraph.edges.map((e) => e.id === edge.id);
+                return {
+                  ...edge,
+                  ...(calcedEdge && { ...calcedEdge }),
+                };
+              });
+            }
+          };
+          await tempFunction();
           initialNodes.push({
             id: `section-${id.toString()}`,
             type: "section",
@@ -338,59 +373,26 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
               height: maxY - beforeMaxY,
             },
             hidden: false,
-          })
-        }
-        setNodes(initialNodes);
-        setEdges(initialEdges);
-        console.log(initialNodes);
-        console.log(initialEdges);
+          });
+        };
+        await outerFunction();
+        console.log(lowestX, lowestY);
+        initialNodes = [...initialNodes, ...presentNodes];
+        initialEdges = [...initialEdges, ...presentEdges];
       };
-      outerFunction();
+      const counts = Array(nodesDataList.length)
+        .fill()
+        .map((n, i) => i);
+      for await (let i of counts) {
+        await calcRoadMap(i);
+      }
+      setNodes(initialNodes);
+      setEdges(initialEdges);
+      console.log(initialNodes);
+      console.log(initialEdges);
     };
-    for(let i=0; i<nodesDataList.length; i++){
-      calcRoadMap(i);
-    }
+    calcWholeRoadMap();
   }, [nodesDataList]);
-  // =========================================================================================
-  // const [isSet, setIsSet] = useState(false);
-  // useEffect(()=>{
-  //   if(isSet) return;
-  //   const setPanel = () => {
-  //     let maxX = 0;
-  //     let maxY = 0;
-  //     for(const node of getNodes()){
-  //       console.log(node);
-  //       if(node.data.depth === 2){
-  //         continue;
-  //       }
-  //       if(maxX < node.position.x){
-  //         maxX = node.position.x
-  //       }
-  //       if(maxY < node.position.y) {
-  //         maxY = node.position.y
-  //       }
-  //     }
-  //     setNodes((prevNodes)=>{
-  //       return [...prevNodes, {
-  //         id: "section",
-  //         data: {
-  //           depth: 1,
-  //         },
-  //         position: {
-  //           x: 0,
-  //           y: 0,
-  //         },
-  //         style: {
-  //           width: maxX,
-  //           height: maxY,
-  //         },
-  //         hidden: false,
-  //       }];
-  //     })
-  //   }
-  //   setPanel();
-  //   setIsSet(true);
-  // }, [nodes])
 
   const handleNodeClick = useCallback(
     (event, eventNode) => {
@@ -577,7 +579,7 @@ const ReactFlowRoadmap = ({ loadNodeDetail }) => {
       };
       for (let i = 1; i <= 3; i++) {
         await getRoadMap(i);
-        console.log(roadmapList);
+        // console.log(roadmapList);
       }
       setNodesDataList(roadmapList);
       setIsLoading(false);

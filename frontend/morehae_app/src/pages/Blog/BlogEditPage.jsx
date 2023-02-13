@@ -27,6 +27,15 @@ const BlogEditPage = () => {
       alert("비정상적인 접근입니다.");
       navigate("/blog");
     }
+    const abc = async() => {
+      const bcd = await fetch("http://i8d212.p.ssafy.io:8000/media/article/planet2_LtOFpyr.png");
+      const cde = await bcd.blob();
+      console.log(cde);
+      console.log(cde.type);
+      console.log(bcd.url.split('/').at(-1));
+      console.log(new File(cde, bcd.url.split('/').at(-1), { type:cde.type}));
+    }
+    abc();
   }, [locate, userInfo]);
 
   // 제목 관련 State
@@ -42,7 +51,8 @@ const BlogEditPage = () => {
   const [editor, setEditor] = useState();
   const request = httpWithURL(process.env.REACT_APP_BLOG_URL);
   // const request = httpWithURL("http://i8d212.p.ssafy.io:9000/blogs");
-  //
+  
+  console.log(originalPost);
   const handleSendEditPost = () => {
     if (!titleIsValid) {
       return;
