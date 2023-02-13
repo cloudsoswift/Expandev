@@ -19,6 +19,11 @@ const InputOverview = ({ onChange, value, setValid }) => {
     <div className="h-60 py-2 ">
       <span className="text-sm text-gray-500">
         글 요약
+      { !overviewMaxLengthValid && (
+        <span className="text-xs text-red-500 ml-2 mb-1">
+          요약글은 150자 이하여야 합니다.
+        </span>
+      )}
         <br />
       </span>
       <textarea
@@ -27,11 +32,6 @@ const InputOverview = ({ onChange, value, setValid }) => {
         value={value}
         onChange={handleOverviewChange}
       />
-      { !overviewMaxLengthValid && (
-        <div className="text-xs text-red-500">
-          요약글은 150자 이하여야 합니다.
-        </div>
-      )}
     </div>
   );
 };

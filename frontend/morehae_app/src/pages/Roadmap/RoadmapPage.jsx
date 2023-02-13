@@ -80,7 +80,7 @@ const RoadmapPage = () => {
 
   return (
     <div className="bg-dark">
-      <div className="w-screen h-screen">
+      <div className="w-screen h-[calc(100vh-80px)]">
         <ReactFlowRoadmap loadNodeDetail={loadNodeDetail} />
         <Modal
           id={reqData.id}
