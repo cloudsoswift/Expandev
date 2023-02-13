@@ -47,8 +47,8 @@ class ArticleSerializer(serializers.ModelSerializer):
 
         article = ModelClass._default_manager.create(**validated_data)
 
-        if os.path.exists(f'{BASE_DIR}/article/thumbnail/{article.thumbnail}'):
-            os.remove(f'{BASE_DIR}/article/thumbnail/{article.thumbnail}')
+        if os.path.exists(f'{BASE_DIR}/article/{article.thumbnail}'):
+            os.remove(f'{BASE_DIR}/article/{article.thumbnail}')
 
         
         article.thumbnail = validated_data.get('thumbnail', article.thumbnail)
