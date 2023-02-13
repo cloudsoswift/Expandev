@@ -1,14 +1,16 @@
-import { useState } from "react";
-import {useSearchParams} from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import Modal from "@/components/Modal/Modal";
 import WhatWhy from "@/components/Modal/WhatWhy";
 import Links from "@/components/Modal/Links";
 import Review from "@/components/Modal/Review";
+import ReactFlowRoadmap from "@/components/Roadmap/ReactFlowRoadmap";
+
 import HttpWithURL from "@/utils/http";
 
-import { useEffect } from "react";
-import ReactFlowRoadmap from "@/components/Roadmap/ReactFlowRoadmap";
+import { GiRingedPlanet } from "react-icons/gi";
 
 const RoadmapPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -17,8 +19,6 @@ const RoadmapPage = () => {
 
   const [reqData, setReqData] = useState([]);
   const [nodeId, setNodeId] = useState(null);
-
-  
 
   // 로드맵 상세 모달 데이터 가져오기
   const loadNodeDetail = async (id) => {
@@ -39,13 +39,45 @@ const RoadmapPage = () => {
   // Component 첫 Rendering시 Initialize
   // 1. 메인 노드들 Elkjs를 이용해 위치 계산
   // 2. 각 메인 노드 및 해당 메인 노드에 연결된 서브 노드
-  useEffect(()=>{
+  useEffect(() => {
     // QueryString에 nodeId 값 있을 경우 ( 마이페이지에서 노드 버튼 눌러서 넘어온 경우 )
     // 해당 Node Id를 갖는 노드에 대한 모달 띄움.
-    if(searchParams.get("nodeId")){
+    if (searchParams.get("nodeId")) {
       loadNodeDetail(searchParams.get("nodeId"));
     }
-  }, [searchParams])
+  }, [searchParams]);
+
+  const [checkbox, setCheckbox] = useState(false);
+  const [showCheckbox, setShowCheckbox] = useState(false);
+  const userInfo = useSelector((state) => state.user.user);
+  let navigate = useNavigate();
+
+  const handleCheckbox = () => {
+    HttpWithURL(process.env.REACT_APP_ROADMAP_URL)
+      .post(`node/${nodeId}/clear`, { withCredentials: true })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
+  const handleWritePost = () => {
+    if (!userInfo?.nickname) {
+      alert("로그인이 필요합니다.");
+      navigate("/login");
+    } else {
+      navigate("/blog/write");
+    }
+  };
+
+  useEffect(() => {
+    setCheckbox(reqData.isComplete);
+  }, [reqData.isComplete]);
+
+  useEffect(() => {
+    if (userInfo?.nickname) {
+      setShowCheckbox(true);
+    }
+  }, [userInfo]);
+
   return (
     <div className="bg-dark">
       <div className="w-screen h-screen">
@@ -53,11 +85,41 @@ const RoadmapPage = () => {
         <Modal
           id={reqData.id}
           data={reqData}
-          isVisible={showModal}
-          onClose={() => setShowModal(false)}
+          showModal={showModal}
+          setShowModal={setShowModal}
         >
           <div className="">
-            <div className=" rounded-lg">
+            <div className="rounded-lg ">
+              <div className="sticky top-0 z-30 h-[81px] w-[600px] drop-shadow-lg bg-[rgb(48,54,61)] px-4 py-[1.6rem] border-b">
+                <div className=" flex justify-between">
+                  <div className=" flex">
+                    <div className="flex text-xl font-semibold mr-3 text-white">
+                      <GiRingedPlanet className="mt-0.5 mr-1 text-2xl" />
+                      {reqData.title}
+                    </div>
+                    <div
+                      onClick={handleWritePost}
+                      className="bg-[rgb(42,42,50)] hover:bg-[rgb(50,50,50)] px-3 py-1 rounded-full text-xs font-bold text-[rgb(131,132,139)] hover:text-green-400 drop-shadow-md border-2 border-[rgb(131,132,139)] hover:border-green-400 ease-in-out duration-300"
+                    >
+                      POST
+                    </div>
+                  </div>
+                  {showCheckbox ? (
+                    <>
+                      <input
+                        className="w-5 h-5 mx-2 mt-1 text-black"
+                        type="checkbox"
+                        onClick={handleCheckbox}
+                        onChange={(e) => setCheckbox()}
+                        checked={checkbox}
+                      />
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </div>
+                <div className="flex justify-end"></div>
+              </div>
               <WhatWhy reqData={reqData} nodeId={nodeId} />
               <Links reqData={reqData} />
               <Review reqData={reqData} nodeId={nodeId} />
