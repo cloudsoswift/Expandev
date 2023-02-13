@@ -256,7 +256,9 @@ def verify_refresh_token_in_cookie(request):
         if 'refresh_token' in cookie:
             refresh_token = cookie.split('=')[1][:-1]
 
-    url = f'{SERVER_DOMAIN}/accounts/token/verify/'
+    # url = f'{SERVER_DOMAIN}/accounts/token/verify/'
+    url = 'http://localhost:8000/accounts/token/verify/'
+
     data = {
         'token': refresh_token
     }
