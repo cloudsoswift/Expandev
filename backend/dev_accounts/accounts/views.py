@@ -17,6 +17,7 @@ from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.shortcuts import get_list_or_404, get_object_or_404, redirect 
 from django.http import HttpResponse
+from django.http import JsonResponse
 
 import re
 import requests          
@@ -241,8 +242,10 @@ def get_kakao_token(request, code):
     COOKIE['refresh_token'] = refresh_token
     # return Response(context, status=status)
     # return redirect('http://localhost:5017/')
-    return HttpResponse.set_cookie(key='refresh_token', value=refresh_token, max_age=None, expires=None, path='/', domain=None, secure=False, httponly=False, samesite=None)
-
+    # return HttpResponse.set_cookie(key='refresh_token', value=refresh_token, max_age=None, expires=None, path='/', domain=None, secure=False, httponly=False, samesite=None)
+    response = JsonResponse(context)
+    response.set_cookie('refresh_token', refresh_token)
+    return response
 
 
 
