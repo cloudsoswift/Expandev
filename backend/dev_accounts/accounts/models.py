@@ -16,7 +16,7 @@ class User(AbstractUser):
     sns_service_id = models.CharField(max_length=100)
     nickname = models.CharField(max_length=10)
     email = models.EmailField(_('email address'), unique=True)
-    profile_image = models.ImageField(default='media/default.png')
+    profile_image = models.ImageField(default='media/profile_default.png', upload_to='profile/')
     introduce = models.TextField(default='아직 자기소개가 없습니다.', blank=True, null=True)
 
     objects = UserManager()

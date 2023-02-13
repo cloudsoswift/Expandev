@@ -11,6 +11,7 @@ from allauth.account.adapter import get_adapter
 from dj_rest_auth.serializers import JWTSerializer
 from dj_rest_auth.serializers import UserDetailsSerializer
 from django.core.exceptions import ValidationError as DjangoValidationError
+from allauth.account.utils import setup_user_email
 
 import os
 from pathlib import Path

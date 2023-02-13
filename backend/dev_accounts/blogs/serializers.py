@@ -3,6 +3,8 @@ from .models import Article, Comment, Tag, ArticleTempImage, ArticleImage
 from rest_framework import serializers
 from rest_framework.utils import model_meta
 
+import os
+from pathlib import Path
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -34,6 +36,8 @@ class ArticleSerializer(serializers.ModelSerializer):
         return False
 
     def create(self, validated_data):
+        BASE_DIR = Path(__file__).resolve().parent.parent
+
         ModelClass = self.Meta.model
         info = model_meta.get_field_info(ModelClass)
         many_to_many = {}
@@ -42,6 +46,13 @@ class ArticleSerializer(serializers.ModelSerializer):
                 many_to_many[field_name] = validated_data.pop(field_name)
 
         article = ModelClass._default_manager.create(**validated_data)
+
+        if os.path.exists(f'{BASE_DIR}/article/thumbnail/{article.thumbnail}'):
+            os.remove(f'{BASE_DIR}/article/thumbnail/{article.thumbnail}')
+
+        
+        article.thumbnail = validated_data.get('thumbnail', article.thumbnail)
+
         if many_to_many:
             for field_name, value in many_to_many.items():
                 field = getattr(article, field_name)
