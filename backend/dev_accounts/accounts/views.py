@@ -139,7 +139,7 @@ def get_user_roadmaps(request, nickname):
 def kakao_login(request):
     kakao_api = f'{KAKAO_OAUTH}/authorize?response_type=code'
     # redirect_uri = f'{SERVER_DOMAIN}/accounts/login/kakao/callback/'
-    redirect_uri = 'http://i8d212.p.ssafy.io/'
+    redirect_uri = 'http://i8d212.p.ssafy.io/done'
     client_id = get_secret('client_id')
     return redirect(f'{kakao_api}&client_id={client_id}&redirect_uri={redirect_uri}')
 
@@ -200,7 +200,7 @@ def get_kakao_token(request, code):
         'grant_type': 'authorization_code',
         'client_id': get_secret('client_id'),
         'client_secret': get_secret('client_secret'),
-        'redirect_uri': f'http://i8d212.p.ssafy.io/',
+        'redirect_uri': f'http://i8d212.p.ssafy.io/done',
     }
     kakao_token_api = f'{KAKAO_OAUTH}/token'
     token_api_info = requests.post(kakao_token_api, data=data).json()
