@@ -19,7 +19,9 @@ from django.shortcuts import get_list_or_404, get_object_or_404, redirect
 from django.http import HttpResponse
 
 import re
-import requests                       
+import requests          
+from http import cookies
+
 
 
 KAKAO_OAUTH = 'https://kauth.kakao.com/oauth'
@@ -231,8 +233,10 @@ def get_kakao_token(request, code):
     refresh_token = JWT['refresh']
     context = {
         'access_token': access_token,
-        'refresh_token': refresh_token,
+        # 'refresh_token': refresh_token,
     }
+    COOKIE = cookies.SimpleCookie()
+    COOKIE['refresh_token'] = refresh_token
     return Response(context, status=status)
     # return redirect('http://localhost:5017/')
 
