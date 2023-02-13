@@ -96,6 +96,7 @@ CORS_ORIGIN_WHITELIST= [
     'http://i8d212.p.ssafy.io:80',
     'http://i8d212.p.ssafy.io:3000',
     'http://i8d212.p.ssafy.io',
+    'http://i8d212.p.ssafy.io:8000',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
