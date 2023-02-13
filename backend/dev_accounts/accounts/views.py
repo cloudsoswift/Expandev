@@ -205,6 +205,7 @@ def get_kakao_token(request, code):
     # 회원정보 조회
     kakao_token_info_api = f'{KAKAO_OAUTH}/tokeninfo?id_token={id_token}'
     user_info = requests.post(kakao_token_info_api).json()
+    print(user_info)
     nickname = user_info.get('nickname')
     email = user_info.get('email')
     sns_service_id = user_info.get('sub')
