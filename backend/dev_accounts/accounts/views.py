@@ -248,6 +248,19 @@ def get_kakao_token(request, code):
     return response
 
 
+@api_view(['POST'])
+def test(request, refresh_token):
+    url = f'http://localhost:8000/accounts/token/verify/'
+    data = {
+        'token': refresh_token
+    }
+    response = requests.post(url=url, data=data)
+    if response.status_code == 200:
+        status = 200
+    else:
+        status = 401
+    return Response(status=status)
+
 
 @api_view(['POST'])
 def verify_refresh_token_in_cookie(request):
@@ -255,16 +268,7 @@ def verify_refresh_token_in_cookie(request):
     for cookie in cookies:
         if 'refresh_token' in cookie:
             refresh_token = cookie.split('=')[1][:-1]
-
-    url = f'{SERVER_DOMAIN}/accounts/token/verify/'
-    data = {
-        'token': refresh_token
-    }
-    response = requests.post(url=url, data=data)
-    if response.status_code == 200:
-        return Response(status=status.HTTP_200_OK)   
-    else:
-        return Response(status=status.HTTP_401_UNAUTHORIZED)   
+    return redirect(f'http://localhost:8000/accounts/test/{refresh_token}')
 
 
 @api_view(['POST'])
