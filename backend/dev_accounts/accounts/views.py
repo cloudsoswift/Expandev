@@ -255,14 +255,19 @@ def verify_refresh_token_in_cookie(request):
     for cookie in cookies:
         if 'refresh_token' in cookie:
             refresh_token = cookie.split('=')[1][:-1]
-
+    print(refresh_token)
     # url = f'{SERVER_DOMAIN}/accounts/token/verify/'
     url = 'http://localhost:8000/accounts/token/verify/'
-
+    print()
     data = {
         'token': refresh_token
     }
     response = requests.post(url=url, data=data)
+    print(response)
+    print()
+    print(response.__dict__)
+    print()
+    print(response.status_code)
     if response.status_code == 200:
         return Response(status=status.HTTP_200_OK)   
     else:
