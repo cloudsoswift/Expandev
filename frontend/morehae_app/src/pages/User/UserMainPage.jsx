@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import Tabs from "@/components/Tab/Tabs";
 import HttpWithURL from "@/utils/http";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
-import { useSelector } from "react-redux";
+
 
 const UserMainPage = () => {
   const [userProfile, setUserProfile] = useState();
@@ -66,7 +66,7 @@ const UserMainPage = () => {
           <div className="relative grid grid-cols-3 h-20 bg-[rgb(32,37,42)] justify-center">
             <div>
               <img
-                className=" mt-2 h-36 w-36 rounded-full m-auto border-8 border-green-500 bg-auto "
+                className=" mt-2 h-36 w-36 rounded-full m-auto border-8 border-green-500 "
                 // src={`http://i8d212.p.ssafy.io:8000${userProfile?.profile_image}`}
                 src="https://ilovecharacter.com/news/data/20200717/p179567596843535_917_h.jpg?1625108055389"
                 alt="img"
