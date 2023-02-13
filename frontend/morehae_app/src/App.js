@@ -16,6 +16,7 @@ import UserInfoEditPage from "./pages/User/UserInfoEditPage";
 import "@/style/basic.css";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
+import SignDone from "./pages/Sign/SignDone";
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
         <Route index element={<WelcomePage />} />
         <Route path="roadmap" element={<RoadmapPage />} />
         <Route path="login" element={<SignIn />} />
+        <Route path="done" element={<SignDone />} />
         <Route path="signup" element={<SignUp />} />
         <Route path="blog" element={<Outlet />}>
           <Route index element={<BlogListPage />} />

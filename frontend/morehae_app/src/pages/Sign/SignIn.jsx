@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import httpWithURL from "@/utils/http";
 
 const SignIn = () => {
+  const [popup, setPopup] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailWarnMsg] = useState("");
@@ -82,9 +83,22 @@ const SignIn = () => {
 
   const handleKakaoClick = (e) => {
     e.preventDefault();
-    const url = "http://i8d212.p.ssafy.io:9000/accounts/login/kakao/"
-    // window.open(url, "_blank", "noopener, noreferrer");
-    window.open(url,'카카오 로그인','width=430, height=500, location=no, status=no, scrollbars=yes');
+    const url = "http://i8d212.p.ssafy.io:8000/accounts/login/kakao/"
+    const width = 430;
+    const height = 500;
+    const leftPos = Math.ceil(( window.screen.width - width )/2);
+    const topPos = Math.ceil(( window.screen.height - height )/2);
+    const popupWindow = window.open(url, '카카오 로그인', `width=${width}, height=${height}, left=${leftPos}, top=${topPos}, scrollbars=no`);
+    const timer = setInterval(() => {
+      if (!popupWindow?.closed) {
+        console.log("팝업창 열려있음...");
+      } else {
+        console.log("팝업창 닫힘");
+        clearInterval(timer);
+        setPopup(null);
+      }
+    }, 1000)
+    setPopup(popupWindow);
   }
 
   return (
