@@ -239,8 +239,11 @@ def get_kakao_token(request, code):
     }
     COOKIE = cookies.SimpleCookie()
     COOKIE['refresh_token'] = refresh_token
-    return Response(context, status=status)
+    # return Response(context, status=status)
     # return redirect('http://localhost:5017/')
+    return HttpResponse.set_cookie(key='refresh_token', value=refresh_token, max_age=None, expires=None, path='/', domain=None, secure=False, httponly=False, samesite=None)
+
+
 
 
 @api_view(['POST'])
