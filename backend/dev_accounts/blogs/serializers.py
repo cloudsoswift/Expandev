@@ -74,7 +74,34 @@ class ArticleSerializer(serializers.ModelSerializer):
 
         article.save()
         return article
+    
+    def update(self, instance, validated_data):
+        BASE_DIR = Path(__file__).resolve().parent.parent.parent
+        instance.thumbnail = "article_default.png"
+        if validated_data.get('thumbnail'):
+            if os.path.exists(f'{BASE_DIR}/article/{instance.thumbnail}'):
+                os.remove(f'{BASE_DIR}/article/{instance.thumbnail}')
+            instance.thumbnail = validated_data.get('thumbnail', instance.thumbnail)
+        instance.title = validated_data.get('title', instance.thumbnail)
+        instance.overview = validated_data.get('overview', instance.thumbnail)
 
+        images_path = []
+        contents = validated_data['content'].split()
+        for content in contents:
+            if content[0] == '!' and content[1] == '[' and content[-1] == ')' and ('media/temp_images' in content):
+                split_content = content.split('/')[-1]
+                image = split_content[:-1]
+                images_path.append(image)
+
+        for image in images_path:
+            image_path = f'temp_images/{image}'
+            _ = ArticleImage.objects.create(
+                article=instance,
+                image_path=image_path
+            )
+
+        instance.save()
+        return instance
 
 class AritcleTempImageSerializer(serializers.ModelSerializer):
 
