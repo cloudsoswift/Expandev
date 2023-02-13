@@ -244,7 +244,7 @@ def get_kakao_token(request, code):
     # return redirect('http://localhost:5017/')
     # return HttpResponse.set_cookie(key='refresh_token', value=refresh_token, max_age=None, expires=None, path='/', domain=None, secure=False, httponly=False, samesite=None)
     response = JsonResponse(context)
-    response.set_cookie('refresh_token', refresh_token, samesite=None)
+    response.set_cookie('refresh_token', refresh_token, max_age=None, expires=None, path='/', domain=None, secure=False, httponly=False, samesite=None)
     return response
 
 
