@@ -28,11 +28,8 @@ const Links = ({ reqData }) => {
         <div className=" flex justify-between ">
           <h2 className="text-xl my-3 text-white ">블로그</h2>
           <Link
-            to={{
-              pathname: `/blog/tag/${title?.replaceAll("?", "%3F")}`,
-              search: `?count=1`,
-            }}
-            className="rounded text-xs text-[rgb(71,79,88)] hover:text-white"
+            to={{ pathname: `/blog/tag/${encodeURIComponent(title)}`, search: `?count=1` }}
+            className="rounded text-xs  text-[rgb(71,79,88)] hover:text-white"
           >
             more..
           </Link>
