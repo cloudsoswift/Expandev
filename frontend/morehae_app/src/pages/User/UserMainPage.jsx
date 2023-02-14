@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import Tabs from "@/components/Tab/Tabs";
 import HttpWithURL from "@/utils/http";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
-import { useSelector } from "react-redux";
 
 
 const UserMainPage = () => {
@@ -12,7 +11,7 @@ const UserMainPage = () => {
   const [userBlog, setUserBlog] = useState();
 
   // URL에서 유저닉네임 받아옴
-  const someUser = useParams()
+  const someUser = useParams();
 
   const getProfile = () => {
     HttpWithURL(process.env.REACT_APP_USER_URL)
@@ -50,16 +49,15 @@ const UserMainPage = () => {
       .catch((err) => console.log(err));
   };
 
-
   useEffect(() => {
     getProfile();
     getRoadmapTab();
     getBlogTab();
   }, []);
 
-  console.log(userProfile,"profile");
-  console.log(userRoadmap, "roadmap")
-  console.log(userBlog, "blog")
+  console.log(userProfile, "profile");
+  console.log(userRoadmap, "roadmap");
+  console.log(userBlog, "blog");
 
   return (
     <div className="flex w-auto h-full justify-center bg-dark ">
@@ -68,26 +66,26 @@ const UserMainPage = () => {
           <div className="relative grid grid-cols-3 h-20 bg-[rgb(32,37,42)] justify-center">
             <div>
               <img
-                className=" mt-2 h-36 w-36 rounded-full m-auto "
-                src={`http://i8d212.p.ssafy.io:8000${userProfile?.profile_image}`}
-                // src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
+                className=" mt-2 h-36 w-36 rounded-full m-auto border-8 border-green-500 "
+                // src={`http://i8d212.p.ssafy.io:8000${userProfile?.profile_image}`}
+                src="https://ilovecharacter.com/news/data/20200717/p179567596843535_917_h.jpg?1625108055389"
                 alt="img"
               />
             </div>
             <div className="mt-9 m-2">
-              <span className="mx-4 text-lg">{userProfile?.nickname}</span>
+              <span className="mx-4 text-lg">{userProfile?.nickname}admin</span>
               <span className="mr-2 text-sm text-gray-400">
-                {userProfile?.position}
+                {userProfile?.position}프론트엔드
               </span>
             </div>
             <div className="mt-9 m-2 text-right">
-              <Link
+              {/* <Link
 
                 to='edit'
                 className="px-3 py-1 rounded-md shadow-md text-xs text-white bg-green-500 hover:bg-green-700 drop-shadow-md"
               >
                 회원정보수정
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>
@@ -95,27 +93,27 @@ const UserMainPage = () => {
           <div className="empty"></div>
           <div className="col-span-2 ">
             <div className=" bg-white m-2 p-2 rounded-md shadow-md max-h-48 text-black text-sm">
-              {userProfile?.introduce}           
+              {userProfile?.introduce} 안녕하세요!
             </div>
             <div className="grid grid-cols-2 text-black">
               <div className="flex justify-center text-center shadow-md bg-white m-2 p-2 rounded-md">
                 <div className="mx-1 w-full text-xs  ">
                   클리어한 노드
-                  <div>{userProfile?.clear_nodes_count}</div>
+                  <div>{userProfile?.clear_nodes_count}0</div>
                 </div>
                 <div className="mx-1 w-full text-xs">
                   로드맵 즐겨찾기
-                  <div>{userProfile?.favorite_roadmaps_count}</div>
+                  <div>{userProfile?.favorite_roadmaps_count}0</div>
                 </div>
               </div>
               <div className="flex justify-center text-center shadow-md bg-white m-2  p-2 rounded-md">
                 <div className="mx-1 w-full text-xs">
                   작성한 게시글
-                  <div>{userProfile?.post_reviews_count}</div>
+                  <div>{userProfile?.post_reviews_count}0</div>
                 </div>
                 <div className="mx-1 w-full text-xs">
                   좋아요한 게시글
-                  <div>{userProfile?.like_articles_count}</div>
+                  <div>{userProfile?.like_articles_count}0</div>
                 </div>
               </div>
             </div>
