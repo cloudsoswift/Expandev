@@ -264,10 +264,12 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 }
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASS': [
-        'rest_framework.authentication.TokenAuthentication',
-    ],
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.AllowAny',
+    ),
     'DEFAULT_AUTHENTICATION_CLASSES':(
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.BasicAuthentication',
@@ -294,5 +296,13 @@ SOCIALACCOUNT_PROVIDERS = {
             'secret': 861258, # 앱 ID
             'key': ''
         }
+    },
+    'naver': {
+        'APP': {
+            'client_id': 'OHU5Xy3txUeswuNYU_lB', # REST API 키
+            'secret': 861258, # 앱 ID
+            'key': ''
+        }
     }
+
 }
