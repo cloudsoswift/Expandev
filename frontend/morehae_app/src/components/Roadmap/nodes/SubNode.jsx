@@ -9,6 +9,8 @@ const SubNode = ({ data }) => {
   }`;
   return (
     <div
+      // 추가된것
+      id="subscursor"
       className={
         "px-2 py-2 shadow-md rounded-full border border-[rgb(71,79,88)] bg-cover w-20 h-20 text-center grid text-xs"
       }
