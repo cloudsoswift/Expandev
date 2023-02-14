@@ -36,8 +36,8 @@ const elkLayout = (
   edges,
   direction = "DOWN",
   algorithm = "mrtree",
-  width = NODE_SIZE,
-  height = NODE_SIZE
+  width = NODE_SIZE * 2,
+  height = NODE_SIZE * 2
 ) => {
   const nodesForElk = nodes.map((node) => {
     // console.log(node);
@@ -56,11 +56,13 @@ const elkLayout = (
       ...(algorithm === "box" && { "elk.contentAlignment": "V_CENTER" }),
       ...(algorithm === "random" && {
         "spacing.nodeNode": NODE_SIZE,
-        randomSeed: 2,
+        "randomSeed": 30,
+        "aspectRatio": 1,
       }),
       ...(algorithm === "radial" && {
         "radial.radius": -90,
         "radial.wedgeCriteria": "LEAF_NUMBER",
+        "radial.optimizationCriteria": "EDGE_LENGTH",
       }),
     },
     children: nodesForElk,
@@ -204,6 +206,7 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
               source: before_node.id.toString(),
               target: main_node.id.toString(),
               sourceHandle: "main",
+              hidden: true,
             });
           }
           // 현재 메인 노드를 이전 메인 노드로 기록

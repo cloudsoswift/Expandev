@@ -4,10 +4,11 @@ import { Panel } from "reactflow";
 import HttpWithURL from "@/utils/http";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { BsBookmarkStar, BsCaretDownSquare } from "react-icons/bs";
+import { BsBookmarkStar, BsCaretDownSquare, BsStars } from "react-icons/bs";
 import { GiMoonOrbit, GiStarSwirl } from "react-icons/gi";
+import { HiStar } from "react-icons/hi";
 import { FaAngleRight } from "react-icons/fa";
-import { IoPlanetOutline, IoPlanet } from "react-icons/io5";
+import { CgFileDocument } from "react-icons/cg";
 import { ImCross } from "react-icons/im";
 import { AiOutlineLoading } from "react-icons/ai";
 import { TbLayoutSidebarLeftExpand } from "react-icons/tb";
@@ -107,7 +108,7 @@ const RoadmapPanel = ({
     <Panel
       position="top-left"
       className={isShown ? "h-[calc(100%)] w-1/4 ml-0 mt-0" : ""}
-      style={{ minWidth: "280px" }}
+      style={{ minWidth: "280px"}}
     >
       {!isShown && (
         <div>
@@ -119,8 +120,17 @@ const RoadmapPanel = ({
           </button>
         </div>
       )}
-      {isShown && (
-        <div className="bg-black h-full w-full p-4 border border-double border-green-500 shadow-sm">
+      {(
+        <Transition
+          show={isShown}
+          enter="transition duration-500 ease-in-out"
+          enterFrom="transition -translate-x-full opacity-0"
+          enterTo="transition translate-x-0 opacity-100"
+          leave="transition duration-500 ease-in-out"
+          leaveFrom="transition translate-x-0 opacity-100"
+          leaveTo="transition -translate-x-full opacity-0"
+          className="bg-black/70 h-full w-full p-4 shadow-sm"
+        >
           <div className="flex justify-end mb-4">
             <button onClick={handleToggleOverlay}>
               <ImCross className="text-white" />
@@ -144,9 +154,7 @@ const RoadmapPanel = ({
                       <BsBookmarkStar className="pointer-events-none"/>
                     </button> */}
                     <Disclosure.Button
-                      className={`grid grid-cols-12 rounded-sm items-center space-x-1 p-2 border ${
-                        index === 0 ? "" : "border-t-0"
-                      } border-white bg-gray-900 text-green-500 w-full`}
+                      className={`grid grid-cols-12 rounded-sm items-center space-x-1 p-2  bg-gray-900 text-green-500 w-full`}
                       onClick={() => {
                         setTrack(t);
                       }}
@@ -167,7 +175,7 @@ const RoadmapPanel = ({
                       leaveFrom="transform scale-100 opacity-100"
                       leaveTo="transform scale-95 opacity-0"
                     >
-                      <Disclosure.Panel className="border border-t-0 border-white w-full">
+                      <Disclosure.Panel className="w-full">
                         {({ close }) =>
                           t.id === track.id ? (
                             isSituationLoading ? (
@@ -181,7 +189,7 @@ const RoadmapPanel = ({
                                   {({ open }) => (
                                     <>
                                       <Disclosure.Button
-                                        className="grid grid-cols-12 p-2 border items-center space-x-1 border-white bg-black text-green-500 w-full"
+                                        className="grid grid-cols-12 p-2 items-center space-x-1 text-green-500 w-full"
                                         id={s.id}
                                         onClick={() => {
                                           setSituation(s);
@@ -210,8 +218,9 @@ const RoadmapPanel = ({
                                               </div>
                                             ) : (
                                               subNodeList.map((sn) => (
-                                                <div className="grid grid-cols-12 border-t first:border-t-0">
-                                                  <div className="col-span-4"></div>
+                                                <div className="grid grid-cols-12 p-1 items-center">
+                                                  <div className="col-span-3"></div>
+                                                  <BsStars />
                                                   <button
                                                     className="text-white col-span-8 text-left text-sm"
                                                     id={sn.id}
@@ -243,7 +252,7 @@ const RoadmapPanel = ({
               </Disclosure>
             ))}
           </div>
-        </div>
+        </Transition>
       )}
     </Panel>
   );
