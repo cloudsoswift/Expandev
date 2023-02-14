@@ -36,15 +36,13 @@ const elkLayout = (
   edges,
   direction = "DOWN",
   algorithm = "mrtree",
-  width = NODE_SIZE * 2,
-  height = NODE_SIZE * 2
 ) => {
   const nodesForElk = nodes.map((node) => {
     // console.log(node);
     return {
       id: node.id,
-      width: width,
-      height: height,
+      width: node.type === "main" ? NODE_SIZE : "68",
+      height: node.type === "main" ? NODE_SIZE : "68",
     };
   });
   const graph = {
@@ -321,12 +319,10 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
                 subNodes,
                 subEdges,
                 "",
-                "radial",
-                68,
-                68
+                "radial"
               );
               // console.log("돌았다");
-              // console.log(subGraph);
+              console.log(subGraph);
               // 현재 메인 노드 및 서브노드에만 계산한 position 값 추가 반경, 이외에는 그냥 원래 노드값만.
               presentNodes = presentNodes.map((node) => {
                 const calcedNode = subGraph.children.find(
