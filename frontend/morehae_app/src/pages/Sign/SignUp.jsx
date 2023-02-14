@@ -1,7 +1,7 @@
 // validation 판단 핸들러는 useEffect를 사용하여 코드 개선이 가능하다
 // 마찬가지로 패스워드 일치여부 판단 핸들러 또한 useEffect를 사용하여 코드 개선이 가능하다
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import Dropdown from "@/components/Dropdown/Dropdown";
 import httpWithURL from "@/utils/http";
@@ -41,6 +41,13 @@ const SignUp = () => {
   const buttonStyle =
     "transition w-36 h-12 rounded-lg ml-2 bg-green-500 text-white hover:bg-green-400";
 
+  useEffect(()=>{
+    if(userInfo && !(userInfo.constructor === Object
+      && Object.keys(userInfo).length === 0)){
+        alert("로그인한 상태에서는 회원가입을 할 수 없습니다.");
+        navigate('/');
+      }
+  })
   // 이메일 입력 처리하는 핸들러
   const handleEmail = (e) => {};
 
