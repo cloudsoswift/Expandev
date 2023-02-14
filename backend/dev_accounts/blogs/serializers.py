@@ -27,7 +27,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = '__all__'
-        read_only_fields = ('username','user', 'like_users', 'tags', 'like_users_count', 'comments_count', 'profile_image')
+        read_only_fields = ('username','user', 'like_users', 'tags', 'like_users_count', 'comments_count', 'profile_image', 'thumbnail')
 
     def get_liked(self, obj):
         user = self.context['user']
@@ -99,7 +99,6 @@ class ArticleSerializer(serializers.ModelSerializer):
                 article=instance,
                 image_path=image_path
             )
-
         instance.save()
         return instance
 
