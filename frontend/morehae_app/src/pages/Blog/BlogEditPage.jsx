@@ -19,7 +19,6 @@ const BlogEditPage = () => {
   // useLocation의 state값은 있을 수도, 없을 수도(링크 직접 입력을 통한 비정상적인 접근) 있으므로
   // 렌더링시 에러 막기위해 옵셔널 체이닝으로 없는 경우 "" 또는 [] 할당하도록 설정함.
   const originalPost = locate.state;
-  console.log(originalPost);
   
   // 제목 관련 State
   const [title, setTitle] = useState(originalPost?.title ? originalPost?.title : "");
@@ -51,12 +50,10 @@ const BlogEditPage = () => {
     loadExistThumbnail();
   }, [locate, userInfo]);
   
-  console.log(originalPost);
   const handleSendEditPost = () => {
     if (!titleIsValid) {
       return;
     }
-    console.log(request.defaults);
     let body = new FormData();
     body.append("title", title.trim());
     body.append("content", editor.getMarkdown());
