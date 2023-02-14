@@ -17,7 +17,7 @@ const PostPreview = ({post}) => {
       {/* 카드 썸네일 */}
       <div className="p-2">
         <div role="thumbnail" className="w-full bg-slate-800 h-48 rounded-2xl">
-          {post.thumbnail && (<img src={`${process.env.REACT_APP_SERVER_URL}${post.thumbnail}`} />)}
+          {post.thumbnail && (<img src={`${process.env.REACT_APP_SERVER_URL}${post.thumbnail}`} className="w-full h-full rounded-2xl object-cover"/>)}
         </div>
       </div>
       
