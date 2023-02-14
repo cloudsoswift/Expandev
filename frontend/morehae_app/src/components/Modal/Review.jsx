@@ -109,7 +109,7 @@ const Review = ({ reqData, nodeId }) => {
   return (
     <div>
       <div>
-        <div className="px-6 text-xl mt-2 text-white">REVIEW</div>
+        <div className="px-6 text-xl mt-16 text-white">REVIEW</div>
         <ReviewList
           reviewList={data}
           onDelete={onDelete}
