@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useState } from "react";
 
 const InputThumbnail = ({onChange, value}) => {
@@ -5,8 +6,11 @@ const InputThumbnail = ({onChange, value}) => {
   const [thumbnailSrc, setThumbailSrc] = useState("");
   // thumbnail 이미지 관련 Handler
   const handleThumbnailChange = (e) => {
-    const reader = new FileReader();
     const file = e.target.files[0];
+    setThumbnailPreview(file);
+  };
+  const setThumbnailPreview = (file) => {
+    const reader = new FileReader();
     if (!file) {
       onChange(file);
       // setThumbnail(file);
@@ -19,7 +23,13 @@ const InputThumbnail = ({onChange, value}) => {
       setThumbailSrc(reader.result);
     };
     reader.readAsDataURL(file);
-  };
+  }
+  useEffect(()=>{
+    console.log(value);
+    if(value){
+      setThumbnailPreview(value);
+    }
+  })
 
   return (
     <div className="h-60 py-2">
