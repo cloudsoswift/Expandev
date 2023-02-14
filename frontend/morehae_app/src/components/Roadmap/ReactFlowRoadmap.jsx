@@ -22,6 +22,9 @@ import galaxyImage from "@/img/galaxy.jpg";
 import RoadmapPanel from "./RoadmapPanel";
 import { AiOutlineLoading } from "react-icons/ai";
 
+// 커스텀 커서
+import AnimatedCursor from "@/components/Roadmap/AnimatedCursor";
+
 const NODE_SIZE = 384;
 // Node Type 관련
 const nodeTypes = {
@@ -536,6 +539,7 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
       className="border border-[rgb(71,79,88)]"
       style={{ backgroundImage: `url(${galaxyImage})` }}
     >
+      <AnimatedCursor/>
       <RoadmapPanel
         onClickNodeButton={handleNodeClickButton}
         onSituationChange={onSituationChange}
