@@ -106,7 +106,7 @@ const RoadmapPanel = ({
   return (
     <Panel
       position="top-left"
-      className={isShown ? "h-[calc(100%-50px)] w-1/4 mt-10 ml-0" : ""}
+      className={isShown ? "h-[calc(100%)] w-1/4 ml-0 mt-0" : ""}
       style={{ minWidth: "280px" }}
     >
       {!isShown && (
