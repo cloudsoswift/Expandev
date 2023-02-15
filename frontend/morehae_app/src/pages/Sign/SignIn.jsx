@@ -1,10 +1,12 @@
 // 입력에 대한 validation 과정 아직 구현 안됨
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { userActions } from "../../utils/store/user-slice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import httpWithURL from "@/utils/http";
+import kakaoLogo from "@/img/kakao_logo.png"
+import naverLogo from "@/img/naver_logo.png"
 
 const SignIn = () => {
   const [popup, setPopup] = useState(null);
@@ -14,6 +16,16 @@ const SignIn = () => {
   const [passwordWarnMsg] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const userInfo = useSelector(state=>state.user.user);
+
+  useEffect(()=>{
+    if(userInfo && !(userInfo.constructor === Object
+      && Object.keys(userInfo).length === 0)){
+        alert("이미 로그인 한 상태입니다.");
+        navigate('/');
+      }
+  }, [])
+
   // 이메일 입력 처리하는 핸들러
   const handleEmail = (e) => {
     const newState = e.target?.value ?? "";
@@ -63,13 +75,14 @@ const SignIn = () => {
         // });
         // console.log(cookies);
         dispatch(userActions.setAccessToken(data.access_token));
+        dispatch(userActions.setRefreshToken(data.refresh_token));
         dispatch(
           userActions.setUser({
             ...data.user,
           })
         );
         // 로그인 후 로드맵 페이지로 이동
-        navigate(-1, { replace: true });
+        navigate("/roadmap", { replace: true });
       })
       .catch((e) => {
         alert("로그인에 실패했습니다. 다시 시도해주세요.");
@@ -146,17 +159,13 @@ const SignIn = () => {
           >
             로그인
           </button>
-          <button className="transition w-full h-12 rounded-lg bg-blue-700 text-white hover:bg-blue-500 mb-2">
-            구글로 시작
+          <button onClick={handleKakaoClick} className="transition w-full h-12 rounded-lg bg-[#fee500] hover:bg-yellow-400 text-black font-bold mb-2 flex justify-center items-center">
+            <span ><img className="h-6 mr-2" src={kakaoLogo} alt="asd" /></span>
+            <span>카카오로 시작</span>
           </button>
-          <button onClick={handleKakaoClick} className="transition w-full h-12 rounded-lg bg-yellow-500 text-white hover:bg-yellow-300 mb-2">
-            카카오로 시작
-          </button>
-          <button className="transition bg-green w-full h-12 rounded-lg bg-green-600 text-white hover:bg-green-500 mb-2">
-            네이버로 시작
-          </button>
-          <button className="transition w-full h-12 rounded-lg bg-black text-white hover:bg-gray-700">
-            애플로 시작
+          <button className="transition bg-green w-full h-12 rounded-lg bg-green-600 text-white hover:bg-green-500 mb-2 flex justify-center items-center">
+            <span><img className="h-8 mr-2" src={naverLogo} alt="asd" /></span>
+            <span>네이버로 시작</span>
           </button>
         </form>
       </div>

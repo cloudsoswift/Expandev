@@ -35,6 +35,7 @@ const MainNavBar = () => {
             // setAccessToken();
             dispatch(userActions.setUser({}));
             dispatch(userActions.setAccessToken(""));
+            dispatch(userActions.setRefreshToken(""));
             // 로그아웃 후 로드맵 페이지로 이동
             navigate("/roadmap");
           }
@@ -44,7 +45,8 @@ const MainNavBar = () => {
           // setAccessToken();
           dispatch(userActions.setUser({}));
           dispatch(userActions.setAccessToken(""));
-        // 로그아웃 후 로드맵 페이지로 이동
+          dispatch(userActions.setRefreshToken(""));
+          // 로그아웃 후 로드맵 페이지로 이동
         navigate("/roadmap");
       });
   };

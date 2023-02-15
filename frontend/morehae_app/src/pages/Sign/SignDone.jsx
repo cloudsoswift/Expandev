@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { userActions } from "../../utils/store/user-slice";
 
 const SignDone = (codeString) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isAllowed, setIsAllowed] = useState(false)
-
-  const closePopup = (token) => {
-    console.log("토큰값 수신함:", token);
-    setIsAllowed(true);
-  }
+  const dispatch = useDispatch();
   
   const getAccesToken = (codeString) => {
     // 토큰 주세요
@@ -18,7 +16,10 @@ const SignDone = (codeString) => {
     })
       .then(response => response.json())
       .then(data => {
-        closePopup(data);
+        dispatch(userActions.setAccessToken(data.access_token));
+        dispatch(userActions.setRefreshToken(data.refresh_token));
+        dispatch(userActions.setUser(data.user));
+        setIsAllowed(true);
         setIsLoading(false);
       })
       .catch(err => {

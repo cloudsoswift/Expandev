@@ -87,20 +87,20 @@ const BlogPostPage = () => {
 
   const getReplyData = () => {
     const postID = params.postId;
-    setReplies(() => dummyReplies);
-    // httpWithURL(process.env.REACT_APP_ARTICLE_URL) // GET 요청
-    //   .get(`${7}/comment`)
-    //   .then((Response) => {
-    //     console.log("댓글 상세정보:", Response.data);
-    //     setReplies((oldState) => {
-    //       if (Response?.data !== undefined) {
-    //         return Response.data;
-    //       }
-    //     });
-    //   })
-    //   .catch((Error) => {
-    //     console.log("댓글 정보 가져오기 실패", Error);
-    //   });
+    // setReplies(() => dummyReplies);
+    httpWithURL(process.env.REACT_APP_ARTICLE_URL) // GET 요청
+      .get(`${params.postId}/comment`)
+      .then((Response) => {
+        console.log("댓글 상세정보:", Response.data);
+        setReplies((oldState) => {
+          if (Response?.data !== undefined) {
+            return Response.data;
+          }
+        });
+      })
+      .catch((Error) => {
+        console.log("댓글 정보 가져오기 실패", Error);
+      });
   };
   useEffect(() => {
     getPostData();
@@ -126,7 +126,7 @@ const BlogPostPage = () => {
             return { ...prevPost, liked: false, like_users_count: prevPost.like_users_count - 1};
           });
         }
-      }).catch((e)=>{
+      }).catch((e) => {
         alert("서버와 통신중 에러가 발생했습니다. 다시 시도해주세요.");
       });
   };
@@ -195,10 +195,10 @@ const BlogPostPage = () => {
           }
         </div>
         {userInfo && (
-        <AddReply onHandleCancel={() => {}} />
+        <AddReply onHandleCancel={() => {}} id={post.id} getReplyData={getReplyData} replyType="main" />
         )}
         {replies.map((reply) => (
-          <MainReply key={reply.id} reply={reply} />
+          <MainReply key={reply.id} reply={reply} getReplyData={getReplyData}/>
         ))}
       </div>
     </div>
