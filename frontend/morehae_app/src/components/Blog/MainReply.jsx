@@ -34,7 +34,7 @@ const dummyReplies = [
   }
 ]
 
-const MainReply = ({reply}) => {
+const MainReply = ({reply, getReplyData}) => {
   const [isShowSubReply, setIsShowSubReply] = useState(false);
   const [isShowInputReply, setIsShowInputReply] = useState(false);
   const [subReplies, setSubReplies] = useState([]);
@@ -48,23 +48,20 @@ const MainReply = ({reply}) => {
 
   // 대댓글 리스트 요청
   const getSubReplyData = () => {
-    setSubReplies(() => dummyReplies)
-
-    // httpWithURL(process.env.REACT_APP_BLOG_URL) // GET 요청
-    //   .get(`recomment?parent_id=${reply.id}`)
-    //   .then((Response) => {
-    //     console.log("대댓글 상세정보:", Response.data?.recomments);
-    //     setSubReplies((oldState) => {
-    //       // return dummyReplies;
-    //       return Response.data?.recomments ?? oldState;
-    //     })
-    //   })
-    //   .catch((Error) => {
-    //     console.log(Error);
-    //   });
+    // setSubReplies(() => dummyReplies)
+    httpWithURL(process.env.REACT_APP_BLOG_URL) // GET 요청
+      .get(`recomment?parent_id=${reply.id}`)
+      .then((Response) => {
+        console.log("대댓글 상세정보:", Response.data?.recomments);
+        setSubReplies((oldState) => {
+          // return dummyReplies;
+          return Response.data?.recomments ?? oldState;
+        })
+      })
+      .catch((Error) => {
+        console.log(Error);
+      });
   };
-
-  
 
   const showSubReply = () => {
     if (isShowSubReply === false) {
@@ -76,14 +73,34 @@ const MainReply = ({reply}) => {
   const showInput = () => {
     setIsShowInputReply(!isShowInputReply);
   }
+  const deleteReply = () => {
+    const isDelete = window.confirm("정말 삭제하시겠습니까??");
+    if (isDelete) {
+      console.log("삭제할 거임:", reply.id);
+      httpWithURL("http://i8d212.p.ssafy.io:8000/blogs/comment/")
+        .delete(`${reply.id}`)
+        .then(response => {
+          getReplyData();
+        })
+        .catch(err => console.log(err))
+    }
+  }
+
+  useState(() => {
+    getSubReplyData();
+    // console.log(subReplies, reply.recomments_count);
+  }, [])
 
   return (
     <div className="mt-8">
       <div className="flex items-center mb-2">
         <img className="w-12 h-12"></img>
-        <div className="ml-3 text-sm">
-          <p className="font-bold">{reply.username}</p>
-          <p className="text-gray-400">{"2023년 02월 01일"}</p>
+        <div className="flex justify-between w-full">
+          <div className="ml-3 text-sm">
+            <p className="font-bold">{reply.username}</p>
+            <p className="text-gray-400">{"2023년 02월 01일"}</p>
+          </div>
+          <button onClick={deleteReply} className="text-slate-600 hover:text-red-500">삭제</button>
         </div>
       </div>
       <p className="mt-2">
@@ -96,11 +113,10 @@ const MainReply = ({reply}) => {
       </div>
       <div className='ml-2'>
         {isShowInputReply &&
-        // <AddReply onHandleCancel={() => setIsShowInputReply(false)} ref={replyInputRef}/>
-        <AddReply onHandleCancel={() => setIsShowInputReply(false)}/>
+        <AddReply onHandleCancel={() => setIsShowInputReply(false)} id={reply.id} getReplyData={getSubReplyData} replyType="sub"/>
         }
-        {reply.recomments_count !== 0 &&
-        <button onClick={showSubReply} className="transition-colors text-blue-500 hover:text-green-300">답글 보기({reply.recomments_count})</button>
+        {subReplies.length !== 0 &&
+        <button onClick={showSubReply} className="transition-colors text-blue-500 hover:text-green-300">답글 보기({subReplies.length})</button>
         }
         {isShowSubReply && 
         subReplies.map(subReply => <SubReply key={subReply.id} reply={subReply} />)
