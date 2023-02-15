@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import QuestionList from "@/components/Welcome/QuestionList";
 import vid from "@/img/sample.mp4"
 
+
 const WelcomePage = () => {
   return (
     <div>

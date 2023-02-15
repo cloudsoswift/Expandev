@@ -6,6 +6,7 @@ function useEventListener(eventName, handler, element = document) {
   const savedHandler = useRef();
 
   
+  
   // 최근 ref에 handler가 바뀔때마다 handler등록
   useEffect(() => {
     savedHandler.current = handler;
@@ -158,6 +159,8 @@ function AnimatedCursor({
       });
     });
 
+
+
     return () => {
       clickables.forEach((el) => {
         el.removeEventListener("mouseover", () => {
@@ -181,6 +184,10 @@ function AnimatedCursor({
     };
   }, [isActive]);
 
+  useEffect(()=> {
+
+  },[])
+
   const styles = {
     // cursor: {
     //   zIndex: 999,
@@ -196,7 +203,7 @@ function AnimatedCursor({
       position: "fixed",
       // borderRadius: "45%",
       width: 8,
-      height: 9,
+      height: 11,
       pointerEvents: "none",
       // border: "1px solid rgba(1,254, 59, .5)",
       // backgroundColor: `rgba(74, 222, 128, .3)`,
@@ -204,39 +211,25 @@ function AnimatedCursor({
       backgroundSize:"cover",
       transition: "transform 0.25s ease-in-out",
       // boxShadow: "0px 0px 1px 0.5px rgba(0, 200, 0, 0.30)",
-      // opacity 왜 안되는거지???
       opacity: 0,
+      zIndex: 10,
     },
     spaceship: {
       position: "fixed",
       // borderRadius: "45%",
       width: 8,
-      height: 9,
+      height:11,
       pointerEvents: "none",
       // border: "1px solid rgba(1,254, 59, .5)",
       // backgroundColor: `rgba(74, 222, 128, .3)`,
-      backgroundImage: `url(${tempImage})`,
+      backgroundImage: `url("https://i.pinimg.com/564x/6d/69/d7/6d69d794fa2a3ec8fa7999321e5e9336.jpg")`,
       backgroundSize:"cover",
       transition: "transform 0.25s ease-in-out",
       // boxShadow: "0px 0px 1px 0.5px rgba(0, 200, 0, 0.30)",
-      // opacity 왜 안되는거지???
+ 
       opacity: 0,
+      zIndex: 10,
     },
-    // crossCursor: {
-    //   backgroundColor: "rgba(255, 0, 0, 1)",
-    //   height: 100,
-    //   position: "relative",
-    //   width: 20,
-    //   '&::after': {
-    //     backgroundColor: "rgba(255, 0, 0, 1)",
-    //     content: "",
-    //     height: 20,
-    //     left: -40,
-    //     position: "absolute",
-    //     top: 40,
-    //     width: 100,
-    //   }
-    // },
     // cursorOuter: {
     //   position: "fixed",
     //   borderRadius: "50%",
