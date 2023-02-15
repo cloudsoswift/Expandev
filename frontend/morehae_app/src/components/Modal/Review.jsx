@@ -20,12 +20,6 @@ const Review = ({ reqData, nodeId }) => {
         const newItem = {
           ...res.data,
           user: userInfo.nickname,
-          // content: res.data.content,
-          // importance: res.data.importance,
-          // difficulty: res.data.difficulty,
-          // created_at: res.data.created_at,
-          // id: res.data.id,
-          // user_profile_image: res.data.user_profile_image,
         };
         console.log(data);
         alert("리뷰가 작성되었습니다");
@@ -109,7 +103,7 @@ const Review = ({ reqData, nodeId }) => {
   return (
     <div>
       <div>
-        <div className="px-6 text-xl mt-16 text-white">REVIEW</div>
+        
         <ReviewList
           reviewList={data}
           onDelete={onDelete}

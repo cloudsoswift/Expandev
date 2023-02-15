@@ -25,7 +25,6 @@ const InputThumbnail = ({onChange, value}) => {
     reader.readAsDataURL(file);
   }
   useEffect(()=>{
-    console.log(value);
     if(value){
       setThumbnailPreview(value);
     }

@@ -12,21 +12,36 @@ const SubNode = ({ data }) => {
       // 추가된것
       id="subscursor"
       className={
-        "px-2 py-2 shadow-md rounded-full border border-[rgb(71,79,88)] bg-cover w-20 h-20 text-center grid text-xs"
+        "px-2 py-2 shadow-md w-20 h-20 text-center flex flex-col text-xs"
       }
-      style={{
-        backgroundImage: `url('${
-          data.isEssential ? essentialImage : nonEssentialImage
-        }')`,
-        fontSize: "0.5rem",
-      }}
     >
       {/* <div className={isEssentialClass}>
         {data.isEssential ? "필수" : "선택"}
       </div> */}
-      <div className="text-gray-300 absolute top-0 left-1/2 -translate-x-1/2">{data.isComplete ? "이수" : "미이수"}</div>
+      <div
+        className={
+          `absolute top-0 left-1/2 -translate-x-1/2 font-bold ${data.isComplete
+            ? "text-green-500"
+            : "text-red-500"}`
+        }
+      >
+        {data.isComplete ? "이수" : "미이수"}
+      </div>
+      <div
+        className="bg-contain bg-center bg-no-repeat grow"
+        style={{
+          backgroundImage: `url('${
+            data.isEssential ? essentialImage : nonEssentialImage
+          }')`,
+        }}
+      />
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2">
-        <div className="font-bold">{data.label}</div>
+        <div
+          className="font-bold whitespace-nowrap overflow-x-clip"
+          style={{ fontSize: "0.5rem" }}
+        >
+          {data.label}
+        </div>
       </div>
 
       <Handle type="target" position={Position.Left} />

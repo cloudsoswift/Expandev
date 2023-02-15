@@ -6,6 +6,7 @@ export const userSlice = createSlice({
   name: "user",
   initialState: {
     access_token: "",
+    refresh_token: "",
     user: {},
   },
   reducers: {
@@ -14,6 +15,9 @@ export const userSlice = createSlice({
     },
     setAccessToken(state, action) {
       state.access_token = action.payload;
+    },
+    setRefreshToken(state, action) {
+      state.refresh_token = action.payload;
     }
   },
 });
