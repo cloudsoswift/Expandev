@@ -64,7 +64,7 @@ const QuestionList = () => {
 
   return (
     // <div className="grid grid-flow-row grid-cols-1 auto-rows-auto my-10 mx-5 gap-16">
-    <div className="px-96 mt-14">
+    <div className="px-48 mt-14">
       {DUMMY_DATA.map((data) => (
         <QuestionItem data={data} key={data.id} ref={(el) => addToTargets(el)} />
       ))}

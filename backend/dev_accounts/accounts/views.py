@@ -224,10 +224,8 @@ def get_kakao_token(request, code):
             username='user without password',
             nickname=nickname,
             email=email,
-            sns_service_id = 1,
-            login_type = 1
-            # sns_service_id=sns_service_id,
-            # login_type=login_type,
+            sns_service_id=sns_service_id,
+            login_type=login_type,
         )
         status = 201
     # JWT 발행

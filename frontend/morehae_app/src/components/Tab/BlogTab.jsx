@@ -77,7 +77,7 @@ const BlogTab = ({ userBlog }) => {
           {userBlog?.like_articles.map((post) => (
             <div
               key={post?.id}
-              onClick={()=> toPost(post.id)}
+              onClick={()=> toPost(post?.id)}
               className="basis-72 rounded-xl bg-[rgb(45,51,59)] mx-1 mt-1 mb-4 border border-[rgb(131,132,139)] drop-shadow-md  transition hover:-translate-y-2 hover:border-green-400 hover:shadow-sm hover:shadow-green-200/50"
             >
               <div className="pt-3 px-3">
@@ -132,17 +132,18 @@ const BlogTab = ({ userBlog }) => {
       </div>
 
       <div className="mb-12">
-        <div className="m-3">작성한 댓글, 댓글 생성해서 렌더링해야함</div>
+        <div className="m-3">작성한 댓글</div>
         <div className="h-80 bg-[rgb(48,54,61)] border rounded-l-lg drop-shadow-md p-4 overflow-y-auto customscrollbar ">
-          {userBlog?.post_articles.map((post) => (
+          {userBlog?.post_comments.map((post) => (
             <div
               key={post.id}
+              onClick={()=> toPost(post?.article)}
               className="h-70 basis-72 rounded-xl bg-[rgb(45,51,59)] mx-1 mt-1 mb-4 border border-[rgb(131,132,139)] drop-shadow-md  transition hover:-translate-y-2 hover:border-green-400 hover:shadow-sm hover:shadow-green-200/50"
             >
               <div className="flex justify-between h-10 p-3  border-[rgb(131,132,139)]">
                 <div className="flex">
                   <div className="text-xs font-normal text-ellipsis line-clamp-1">
-                    이름
+                    {post?.nickname}
                   </div>
                   <div className="ml-2 text-xs font-normal">⦁</div>
                   <div className="ml-2 text-xs font-normal">
@@ -164,7 +165,7 @@ const BlogTab = ({ userBlog }) => {
                 </div>
               </div>
               <div className="text-sm h-10 text-[rgb(191,192,194)] px-3 pb-2 text-ellipsis line-clamp-2  border-[rgb(131,132,139)]">
-                {post?.overview}
+                {post?.content}
               </div>
               <div className="h-2"></div>
             </div>
@@ -174,7 +175,7 @@ const BlogTab = ({ userBlog }) => {
       <div>
         <div className="m-3">좋아요한 댓글, 댓글 생성해서 렌더링해야함</div>
         <div className="h-80 bg-[rgb(48,54,61)] border rounded-l-lg drop-shadow-md p-4 overflow-y-auto customscrollbar ">
-          {userBlog?.post_articles.map((post) => (
+          {userBlog?.like_comments.map((post) => (
             <div
               key={post.id}
               className="h-70 basis-72 rounded-xl bg-[rgb(45,51,59)] mx-1 mt-1 mb-4 border border-[rgb(131,132,139)] drop-shadow-md  transition hover:-translate-y-2 hover:border-green-400 hover:shadow-sm hover:shadow-green-200/50"
@@ -182,7 +183,7 @@ const BlogTab = ({ userBlog }) => {
               <div className="flex justify-between h-10 p-3  border-[rgb(131,132,139)]">
                 <div className="flex">
                   <div className="text-xs font-normal text-ellipsis line-clamp-1">
-                    이름
+                    {post?.nickname}
                   </div>
                   <div className="ml-2 text-xs font-normal">⦁</div>
                   <div className="ml-2 text-xs font-normal">
@@ -204,7 +205,7 @@ const BlogTab = ({ userBlog }) => {
                 </div>
               </div>
               <div className="text-sm h-10 text-[rgb(191,192,194)] px-3 pb-2 text-ellipsis line-clamp-2  border-[rgb(131,132,139)]">
-                {post?.overview}
+                {post?.content}
               </div>
               <div className="h-2"></div>
             </div>

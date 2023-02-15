@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import Tabs from "@/components/Tab/Tabs";
 import HttpWithURL from "@/utils/http";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
-import { useSelector } from "react-redux";
+
 
 const UserMainPage = () => {
   const [userProfile, setUserProfile] = useState();
@@ -66,16 +66,15 @@ const UserMainPage = () => {
           <div className="relative grid grid-cols-3 h-20 bg-[rgb(32,37,42)] justify-center">
             <div>
               <img
-                className=" mt-2 h-36 w-36 rounded-full m-auto border-8 border-green-500 bg-auto "
-                // src={`http://i8d212.p.ssafy.io:8000${userProfile?.profile_image}`}
-                src="https://ilovecharacter.com/news/data/20200717/p179567596843535_917_h.jpg?1625108055389"
+                className=" mt-2 h-36 w-36 rounded-full m-auto border-4 border-green-500 "
+                src={`http://i8d212.p.ssafy.io:8000${userProfile?.profile_image}`}
                 alt="img"
               />
             </div>
             <div className="mt-9 m-2">
-              <span className="mx-4 text-lg">{userProfile?.nickname}admin</span>
+              <span className="mx-4 text-lg">{userProfile?.nickname}</span>
               <span className="mr-2 text-sm text-gray-400">
-                {userProfile?.position}프론트엔드
+                
               </span>
             </div>
             <div className="mt-9 m-2 text-right">
@@ -89,31 +88,31 @@ const UserMainPage = () => {
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-3  bg-green-500 shadow-md rounded-md h-auto p-3 shadow-green-500/50">
+        <div className="grid grid-cols-3  bg-green-500 shadow-md rounded-md h-auto p-3 ">
           <div className="empty"></div>
           <div className="col-span-2 ">
-            <div className=" bg-white m-2 p-2 rounded-md shadow-md max-h-48 text-black text-sm">
-              {userProfile?.introduce} 안녕하세요!
+            <div className=" bg-white m-2 py-2 px-3 rounded-md shadow-md max-h-48 text-black text-sm">
+              {userProfile?.introduce}
             </div>
             <div className="grid grid-cols-2 text-black">
               <div className="flex justify-center text-center shadow-md bg-white m-2 p-2 rounded-md">
                 <div className="mx-1 w-full text-xs  ">
                   클리어한 노드
-                  <div>{userProfile?.clear_nodes_count}0</div>
+                  <div>{userProfile?.clear_nodes_count}</div>
                 </div>
                 <div className="mx-1 w-full text-xs">
                   로드맵 즐겨찾기
-                  <div>{userProfile?.favorite_roadmaps_count}0</div>
+                  <div>{userProfile?.favorite_roadmaps_count}</div>
                 </div>
               </div>
               <div className="flex justify-center text-center shadow-md bg-white m-2  p-2 rounded-md">
                 <div className="mx-1 w-full text-xs">
                   작성한 게시글
-                  <div>{userProfile?.post_reviews_count}0</div>
+                  <div>{userProfile?.post_reviews_count}</div>
                 </div>
                 <div className="mx-1 w-full text-xs">
                   좋아요한 게시글
-                  <div>{userProfile?.like_articles_count}0</div>
+                  <div>{userProfile?.like_articles_count}</div>
                 </div>
               </div>
             </div>
