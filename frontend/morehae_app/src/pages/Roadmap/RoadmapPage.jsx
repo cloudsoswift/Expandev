@@ -92,7 +92,7 @@ const RoadmapPage = () => {
         >
           <div className="">
             <div className="rounded-lg ">
-              <div className="sticky top-0 z-30 h-[81px] w-[600px] drop-shadow-lg bg-[rgb(48,54,61)] px-4 py-[1.6rem] border-b">
+              <div className="sticky top-0 z-30 h-[81px] w-[600px] drop-shadow-lg bg-[rgb(48,54,61)] px-4 py-[1.6rem] border-b ">
                 <div className=" flex justify-between mx-1">
                   <div className="flex ">
                     <div className="flex text-xl font-semibold mr-3 text-white">
@@ -121,6 +121,8 @@ const RoadmapPage = () => {
                   )}
                 </div>
                 <div className="flex justify-end"></div>
+                {/* <div className="w-full h-[0.05rem] bg-gradient-to-r from-cyan-500 to-blue-500"></div> */}
+              
               </div>
               <Links reqData={reqData} />
               <WhatWhy reqData={reqData} nodeId={nodeId} />
