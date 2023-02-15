@@ -75,11 +75,11 @@ class OAuth():
 
 
     def is_signed(self, sns_service_id, recived_email):
-        user = get_user_model().objects.get(email=recived_email)
-        if user:
+        try:
+            user = get_user_model().objects.get(email=recived_email)
             if user.email == recived_email:
                 return True
-        else:
+        except:
             return True if get_user_model().objects.filter(sns_service_id=sns_service_id).exists() else False
 
 
