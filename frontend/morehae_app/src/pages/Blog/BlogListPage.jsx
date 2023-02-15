@@ -158,6 +158,18 @@ const BlogListPage = () => {
     if (e.key === 'Enter') {
       /* 검색 API 보내고 받아올 것 */
       console.log(e.target.value);
+      axios
+      .get(`${process.env.REACT_APP_BLOG_URL}tag-articles`, {
+        params: {
+          count: searchParams.get("count"),
+          search_title: e.target.value
+        },
+      }).then((Response) => {
+        console.log(Response.data);
+      })
+      .catch((Error) => {
+        console.log(Error);
+      });
     }
   }
 

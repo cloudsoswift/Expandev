@@ -2,7 +2,6 @@
 // 마찬가지로 패스워드 일치여부 판단 핸들러 또한 useEffect를 사용하여 코드 개선이 가능하다
 
 import { useState, useRef, useEffect } from "react";
-import axios from "axios";
 import Dropdown from "@/components/Dropdown/Dropdown";
 import httpWithURL from "@/utils/http";
 import { useDispatch, useSelector } from "react-redux";
