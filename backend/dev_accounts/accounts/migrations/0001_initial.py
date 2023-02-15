@@ -30,7 +30,6 @@ class Migration(migrations.Migration):
                 ('email', models.EmailField(max_length=254, unique=True, verbose_name='email address')),
                 ('profile_image', models.ImageField(default='media/default.png', upload_to='')),
                 ('introduce', models.TextField(blank=True, default='아직 자기소개가 없습니다.', null=True)),
-                ('profile_image', models.ImageField(default='media/default.png', upload_to='')),
                 ('login_type', models.CharField(max_length=10, null=True)),
                 ('stat', models.CharField(max_length=50, null=True)),
                 ('phone_number', models.CharField(max_length=13, null=True)),
