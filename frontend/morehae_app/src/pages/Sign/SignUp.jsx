@@ -167,8 +167,6 @@ const SignUp = () => {
         password2: passwordMatchRef.current,
         nickname: nicknameFixed,
         position: position.content,
-        login_type: "o",
-        sns_service_id: "o",
       }) // }, {withCredentials: true})
       .then((response)=>{
         if(response.status === 201){
