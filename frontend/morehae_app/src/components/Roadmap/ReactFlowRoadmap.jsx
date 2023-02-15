@@ -54,7 +54,8 @@ const elkLayout = (
       ...(algorithm === "box" && { "elk.contentAlignment": "V_CENTER" }),
       ...(algorithm === "random" && {
         "spacing.nodeNode": NODE_SIZE,
-        "randomSeed": 30,
+        // "randomSeed": 30,
+        "randomSeed": 35,
         "aspectRatio": 1,
       }),
       ...(algorithm === "radial" && {
@@ -205,6 +206,8 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
               target: main_node.id.toString(),
               sourceHandle: "main",
               hidden: true,
+              animated: true,
+              style: { stroke: 'rgba(243, 237, 225, 50)' }
             });
           }
           // 현재 메인 노드를 이전 메인 노드로 기록

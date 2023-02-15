@@ -5,6 +5,7 @@ import HttpWithURL from "@/utils/http";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { BsBookmarkStar, BsCaretDownSquare, BsStars } from "react-icons/bs";
+import { TbBookmarks, TbBookmarksOff } from "react-icons/tb";
 import { GiMoonOrbit, GiStarSwirl } from "react-icons/gi";
 import { HiStar } from "react-icons/hi";
 import { FaAngleRight } from "react-icons/fa";
@@ -33,7 +34,7 @@ const RoadmapPanel = ({
   const [isShown, setIsShown] = useState(true);
 
   const userInfo = useSelector((state) => state.user.user);
-
+  // console.log(userInfo);
   // const getSituationList = () => {
   //   for(let i = 1 ; i<=3; i+=1){
   //     HttpWithURL(process.env.REACT_APP_ROADMAP_URL)
@@ -65,14 +66,28 @@ const RoadmapPanel = ({
   const handleToggleOverlay = () => {
     setIsShown((prveState) => !prveState);
   };
-  // 로드맵 즐겨찾기 보류
-  // const handleTrackFavorite = (e) => {
-  //   HttpWithURL(process.env.REACT_APP_ROADMAP_URL)
-  //   .get(`track/${e.target.id}/favorite`)
-  //   .then((response)=>{
-
-  //   })
-  // };
+  // 로드맵 즐겨찾기
+  const handleTrackFavorite = (e) => {
+    if(!userInfo?.id){
+      alert("로그인이 필요한 기능입니다.");
+      return
+    }
+    HttpWithURL(process.env.REACT_APP_ROADMAP_URL)
+    .post(`track/${e.target.id}/favorite`, {}, {
+      withCredentials: true,
+    })
+    .then((response)=>{
+      if(response.status === 201){
+        console.log(trackList);
+        setTrackList(trackList.map((t)=>{
+          return {
+            ...t,
+            ...(t.id.toString() === e.target.id && {favorites: t.favorites.includes(userInfo.id) ? t.favorites.filter((f)=>f !== userInfo.id) : [ ...t.favorites, userInfo.id]})
+          }
+        }))
+      }
+    })
+  };
   useEffect(() => {
     // getSituationList();
     console.log(nodesDataList);
@@ -153,8 +168,10 @@ const RoadmapPanel = ({
                     >
                       <BsBookmarkStar className="pointer-events-none"/>
                     </button> */}
+                    <div className="grid grid-cols-12 bg-gray-900 p-2">
+
                     <Disclosure.Button
-                      className={`grid grid-cols-12 rounded-sm items-center space-x-1 p-2  bg-gray-900 text-green-500 w-full`}
+                      className={`grid grid-cols-12 col-span-11 rounded-sm items-center space-x-1 text-green-500 w-full`}
                       onClick={() => {
                         setTrack(t);
                       }}
@@ -167,8 +184,12 @@ const RoadmapPanel = ({
                       <GiStarSwirl className={open ? "" : "grayscale"} />
                       <span className="col-span-10 text-left">{t.title}</span>
                     </Disclosure.Button>
+                    <button id={t.id} onClick={handleTrackFavorite} className="text-center">
+                      {t.favorites.includes(userInfo.id) ? <TbBookmarksOff className="pointer-events-none w-full h-full"/> : <TbBookmarks className="pointer-events-none w-full h-full"/>}
+                    </button>
+                    </div>
                     <Transition
-                      enter="transition duration-100 ease-out"
+                      enter="transition duration-100 ease-out"s
                       enterFrom="transform scale-95 opacity-0"
                       enterTo="transform scale-100 opacity-100"
                       leave="transition duration-75 ease-out"
