@@ -24,7 +24,7 @@ const SignIn = () => {
         alert("이미 로그인 한 상태입니다.");
         navigate('/');
       }
-  })
+  }, [])
 
   // 이메일 입력 처리하는 핸들러
   const handleEmail = (e) => {
@@ -75,13 +75,14 @@ const SignIn = () => {
         // });
         // console.log(cookies);
         dispatch(userActions.setAccessToken(data.access_token));
+        dispatch(userActions.setRefreshToken(data.refresh_token));
         dispatch(
           userActions.setUser({
             ...data.user,
           })
         );
         // 로그인 후 로드맵 페이지로 이동
-        navigate(-1, { replace: true });
+        navigate("/roadmap", { replace: true });
       })
       .catch((e) => {
         alert("로그인에 실패했습니다. 다시 시도해주세요.");
