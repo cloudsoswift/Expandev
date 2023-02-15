@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Tabs from "@/components/Tab/Tabs";
 import HttpWithURL from "@/utils/http";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 
 
@@ -78,13 +78,13 @@ const UserMainPage = () => {
               </span>
             </div>
             <div className="mt-9 m-2 text-right">
-              {/* <Link
+              <Link
 
                 to='edit'
                 className="px-3 py-1 rounded-md shadow-md text-xs text-white bg-green-500 hover:bg-green-700 drop-shadow-md"
               >
                 회원정보수정
-              </Link> */}
+              </Link>
             </div>
           </div>
         </div>
