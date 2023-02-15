@@ -18,6 +18,7 @@ import HttpWithURL from "@/utils/http";
 import MainNode from "@/components/Roadmap/nodes/MainNode";
 import SubNode from "@/components/Roadmap/nodes/SubNode";
 import SectionNode from "@/components/Roadmap/nodes/SectionNode";
+import testImage from "@/img/testimage.png";
 import galaxyImage from "@/img/galaxy.jpg";
 import RoadmapPanel from "./RoadmapPanel";
 import { AiOutlineLoading } from "react-icons/ai";
@@ -110,7 +111,7 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
 
         console.log(id);
         console.log(nodesDataList[id]);
-        console.log("maxX, maxY ",maxX, maxY);
+        console.log("maxX, maxY ", maxX, maxY);
         let before_node = null;
         // 초기 메인 노드 순회 ============================================================
         nodesDataList[id].nodesData?.forEach((main_node) => {
@@ -198,7 +199,7 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
           // });
 
           // 이전 메인 노드 -> 현재 메인 노드로 향하는 엣지를 엣지 목록에 추가
-          if(before_node){
+          if (before_node) {
             presentEdges.push({
               id: `e${before_node.id}-${main_node.id}`,
               data: {
@@ -240,8 +241,14 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
                 console.log(node.id, calcedNode.x, calcedNode.y);
                 maxX = calcedNode.x > maxX ? calcedNode.x : maxX;
                 maxY = calcedNode.y > maxY ? calcedNode.y : maxY;
-                lowestX = (calcedNode.x - beforeMaxX) < lowestX ? (calcedNode.x - beforeMaxX) : lowestX;
-                lowestY = (calcedNode.y - beforeMaxY) < lowestY ? (calcedNode.y - beforeMaxY) : lowestY;
+                lowestX =
+                  calcedNode.x - beforeMaxX < lowestX
+                    ? calcedNode.x - beforeMaxX
+                    : lowestX;
+                lowestY =
+                  calcedNode.y - beforeMaxY < lowestY
+                    ? calcedNode.y - beforeMaxY
+                    : lowestY;
               }
               const newNode = {
                 ...node,
@@ -254,38 +261,38 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
                 //   },
                 // }),
                 // 일반 메인 노드인 경우. 우측으로 진행중이면 양의 diff값을, 왼쪽으로 진행중이면 음의 diff값을 x 값에 지정.
-                ...(calcedNode &&{
-                    position: {
-                      x: calcedNode.x,
-                      y: calcedNode.y,
-                    },
-                    data: {
-                      ...node.data,
-                      direction: "RIGHT",
-                    },
-                  }),
+                ...(calcedNode && {
+                  position: {
+                    x: calcedNode.x,
+                    y: calcedNode.y,
+                  },
+                  data: {
+                    ...node.data,
+                    direction: "RIGHT",
+                  },
+                }),
               };
               // console.log(count, diff);
               return newNode;
             });
             // lowestX, lowestY 만큼 위치 보정해주고, 60% 수준으로 범위 축소.
-            console.log('최소값들', id, lowestX, lowestY);
+            console.log("최소값들", id, lowestX, lowestY);
             lowestX = lowestX < 0 ? lowestX * -1 : lowestX;
             lowestY = lowestY < 0 ? lowestY * -1 : lowestY;
 
-            presentNodes = presentNodes.map((node)=>{
-              const newX = (node.position.x + lowestX);
-              const newY = (node.position.y + lowestY);
+            presentNodes = presentNodes.map((node) => {
+              const newX = node.position.x + lowestX;
+              const newY = node.position.y + lowestY;
               maxX = maxX > newX ? maxX : newX;
               maxY = maxY > newY ? maxY : newY;
               return {
                 ...node,
                 position: {
                   x: newX,
-                  y: newY
-                }
-              }
-            })
+                  y: newY,
+                },
+              };
+            });
             maxX += NODE_SIZE;
             maxY += NODE_SIZE;
             console.log("계산 끝난 노드 ", id, presentNodes);
@@ -313,8 +320,8 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
               console.log(subNodes);
               const subEdges = presentEdges.filter(
                 (edge) =>
-                edge.data?.parentNode === mainNode.id && edge.data.depth === 2
-                );
+                  edge.data?.parentNode === mainNode.id && edge.data.depth === 2
+              );
               console.log(subEdges);
               // console.log(`${mainNode.id}의 서브 노드, 서브 엣지`,subNodes, subEdges);
               const subGraph = await elkLayout(
@@ -431,7 +438,12 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
 
   const handleNodeMouseEnter = useCallback(
     (e, n) => {
-      if (n.data.depth === 2 || n.id === hoveredNode?.id || n.type === "section") return;
+      if (
+        n.data.depth === 2 ||
+        n.id === hoveredNode?.id ||
+        n.type === "section"
+      )
+        return;
       setHoveredNode(n);
     },
     [hoveredNode]
@@ -550,9 +562,12 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
       minZoom={0.1}
       maxZoom={3}
       className="border border-[rgb(71,79,88)]"
-      style={{ backgroundImage: `url(${galaxyImage})` }}
+      style={{
+        backgroundImage: `url(${galaxyImage})`,
+        // cursor: `url(${testImage}), url(${testImage}), auto`,
+      }}
     >
-      <AnimatedCursor/>
+      <AnimatedCursor />
       <RoadmapPanel
         onClickNodeButton={handleNodeClickButton}
         onSituationChange={onSituationChange}
