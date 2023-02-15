@@ -31,6 +31,7 @@ const Carousel = ({ reqData }) => {
     if (id) {
       let selectedData = reqData.interview.filter((item) => item.id === id);
       setModalData(selectedData);
+      console.log(selectedData)
     }
     setIsOpen(() => !isOpen);
     // useRef 라이프사이클 관리...
@@ -47,20 +48,20 @@ const Carousel = ({ reqData }) => {
         </div>
         <div
           id="slider"
-          className="w-full h-full overflow-x-scroll scrollbar-hide whitespace-nowrap scroll-smooth "
+          className="w-full h-[164px] overflow-x-scroll scrollbar-hide whitespace-nowrap scroll-smooth "
         >
           {reqData?.interview?.map((item, slideIdx) => (
             <div
               onClick={() => openModal(item?.id)}
               id="slide"
               key={slideIdx}
-              className="group w-[162px] h-[162px] rounded-lg inline-block whitespace-normal border p-2 mx-[0.25rem] cursor-pointer ease-in-out duration-300 border-[rgb(71,79,88)] hover:border-green-400 hover:text-white"
+              className="group w-[162px] h-[155px] rounded-lg inline-block whitespace-normal border p-2 mx-[0.25rem] cursor-pointer ease-in-out duration-300 bg-[rgb(36,41,47)] border-[rgb(71,79,88)] hover:border-green-400 hover:text-white drop-shadow-md"
             >
               <div>
                 <p className="pr-3 w-[150px] h-[97px] whitespace-normal text-[rgb(161,173,185)] duration-300  text-xs text-ellipsis line-clamp-6 border-[rgb(131,132,139)] hover:text-white">
                   {item.content}
                 </p>
-                <div className="h-[33px]"></div>
+                <div className="h-[26px]"></div>
                 <div className="h-[35px] flex justify-end">
                   <div className="text-xs text-[rgb(161,173,185)] hover:text-white">
                     {item.interviewee}
@@ -110,18 +111,17 @@ const Carousel = ({ reqData }) => {
                       as="h3"
                       className="h-[100px] text-lg font-medium leading-6 text-white bg-[rgb(48,54,61)] p-6"
                     >
-                      {modalData[0].interviewee}
+                      {modalData[0]?.interviewee}
                     </Dialog.Title>
                     <div className="mt-2">
                       <p className="pt-6 px-6 text-sm text-[rgb(161,173,185)]">
-                        {modalData[0].content}
+                        {modalData[0]?.content}
                       </p>
                     </div>
 
                     <div className="px-6 pb-6 mt-4 flex justify-end ">
                       {/* button을 div로 바꾸니 scrollfocus가 해결됨!? */}
                       <div
-                        type="button"
                         className="px-3 py-1 rounded-md bg-[rgb(42,42,50)] hover:bg-[rgb(50,50,50)] cursor-pointer text-[rgb(131,132,139)] text-xs hover:text-green-500 drop-shadow-md border-2 hover:border-green-500 border-[rgb(131,132,139)] ease-in-out duration-300"
                         onClick={closeModal}
                       >

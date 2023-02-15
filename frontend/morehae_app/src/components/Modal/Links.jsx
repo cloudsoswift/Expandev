@@ -22,9 +22,9 @@ const Links = ({ reqData }) => {
   };
 
   return (
-    <div className="m-6 ">
-      <div className="my-3 mb-5">
-        <h2 className="text-lg my-3">추천 컨텐츠</h2>
+    <div className="m-3 p-3 rounded-lg bg-[rgb(48,54,61)] border-mbc border-4 border-double">
+      <div className="mb-2 ">
+        <h2 className="text-md mt-3 ml-7">추천 컨텐츠</h2>
         {reqData?.recommend_content?.length > 0 ? (
           <>
             <div className="grid grid-cols-3 justify-items-center text-center text-[rgb(191,192,194)] p-3 mx-1 ">
@@ -36,7 +36,7 @@ const Links = ({ reqData }) => {
                       onClick={() => {
                         openLink(post?.url);
                       }}
-                      className="w-40 h-40 bg-[rgb(36,41,47)] border border-[rgb(71,79,88)] rounded-lg w-xs h-xs hover:text-white ease-in-out duration-300 hover:border-green-400"
+                      className="w-40 h-40 bg-[rgb(36,41,47)] border border-[rgb(71,79,88)] rounded-lg w-xs h-xs hover:text-white ease-in-out duration-300 hover:border-green-400 drop-shadow-md"
                     >
                       <div className="">
                         <div className="w-40 h-32 border-b border-[rgb(71,79,88)] ">
@@ -58,21 +58,23 @@ const Links = ({ reqData }) => {
             </div>
           </>
         ) : (
-          <div className="text-xs text-[rgb(191,192,194)]">
-            추천컨텐츠가 없습니다
+          <div className="grid grid-cols-3 text-center text-[rgb(191,192,194)] p-3 mx-1 ">
+            <div className="w-40 h-40 bg-[rgb(36,41,47)] border border-[rgb(71,79,88)] rounded-lg drop-shadow-md text-xs">
+              <div className="pt-[4.5rem]">추천 컨텐츠가 없습니다</div>
+            </div>
           </div>
         )}
       </div>
 
-      <div className="mb-5">
+      <div className="mb-3">
         <div className=" flex justify-between">
-          <h2 className="text-lg my-3 text-white">블로그</h2>
+          <h2 className="text-md text-white ml-7">블로그</h2>
           <Link
             to={{
               pathname: `/blog/tag/${title?.replaceAll("?", "%3F")}`,
               search: `?count=1`,
             }}
-            className="mt-6 mr-6 rounded text-xs text-[rgb(191,192,194)] ease-in-out duration-300  hover:text-green-400"
+            className="mt-1.5 mr-6 rounded text-xs text-[rgb(191,192,194)] ease-in-out duration-300  hover:text-green-400 "
           >
             more..
           </Link>
@@ -86,7 +88,7 @@ const Links = ({ reqData }) => {
                   .map((post) => (
                     <div
                       key={post?.id}
-                      className="group relative bg-[rgb(36,41,47)] rounded-lg border border-[rgb(71,79,88)] group-hover:border-green-400 group-hover:text-white w-40 h-40 text-[rgb(191,192,194)] group-hover:ease-in-out duration-200 "
+                      className="group relative bg-[rgb(36,41,47)] rounded-lg border border-[rgb(71,79,88)] group-hover:border-green-400 group-hover:text-white w-40 h-40 text-[rgb(191,192,194)] group-hover:ease-in-out duration-200 drop-shadow-md"
                     >
                       <div className="absolute h-40 z-10 opacity-0 group-hover:opacity-100  w-40 text-sm font-normal text-[rgb(191,192,194)] p-2 border rounded-lg ease-in-out duration-300 group-hover:border-green-400">
                         <div className="text-xs h-32 text-white">
@@ -142,21 +144,25 @@ const Links = ({ reqData }) => {
               </div>
             </>
           ) : (
-            <div className="text-xs text-[rgb(191,192,194)]">
-              작성된 글이 없습니다
+            <div className="grid grid-cols-3 text-center text-[rgb(191,192,194)] p-3 mx-1 ">
+              <div className="w-40 h-40 bg-[rgb(36,41,47)] border border-[rgb(71,79,88)] rounded-lg drop-shadow-md text-xs">
+                <div className="pt-[4.5rem]">작성된 글이 없습니다</div>
+              </div>
             </div>
           )}
         </div>
       </div>
 
       <div className="mb-5">
-        <h2 className="text-lg my-3 text-white">인터뷰</h2>
+        <h2 className="text-md mb-2 text-white ml-7">인터뷰</h2>
         {reqData?.interview?.length > 0 ? (
           <Carousel reqData={reqData} />
         ) : (
-          <div className="text-xs text-[rgb(191,192,194)]">
-            인터뷰가 없습니다
+          <div className="grid grid-cols-3 text-center text-[rgb(191,192,194)] p-3 mx-1 ">
+          <div className="w-40 h-40 bg-[rgb(36,41,47)] border border-[rgb(71,79,88)] rounded-lg drop-shadow-md text-xs">
+            <div className="pt-[4.5rem]">인터뷰가 없습니다</div>
           </div>
+        </div>
         )}
       </div>
     </div>
