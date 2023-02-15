@@ -11,7 +11,6 @@ const ReviewList = ({
   userInfo,
   onCreate,
 }) => {
-
   const getAvgImp = (list) => {
     if (list.length === 0) return 0;
     let sum = 0;
@@ -31,13 +30,16 @@ const ReviewList = ({
   };
 
   return (
-    <div className="px-3 pt-3 drop-shadow-lg">
-      <div className=" bg-[rgb(48,54,61)] p-3 rounded-t-lg">
+    <div className="px-3 pt-3 drop-shadow-lg ">
+      <div className="bg-[rgb(48,54,61)] p-3 rounded-t-lg border-mbc border-4 border-double">
+        <div className="text-md  pb-3 text-white">REVIEW</div>
         <div>
           <div className="mb-5">
             <ReviewEditor onCreate={onCreate} />
             <div className="border-b-2 border-[rgb(71,79,88)] p-3 ">
-              <div className="text-sm mb-2 text-[rgb(161,173,185)]">총 {reviewList?.length}개</div>
+              <div className="text-sm mb-2 text-[rgb(161,173,185)]">
+                총 {reviewList?.length}개
+              </div>
               <div className="flex">
                 <div className="mr-2 mb-2 text-sm flex ">
                   <span className="text-white mr-1 ">전체 중요도</span>

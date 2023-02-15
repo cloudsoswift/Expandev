@@ -1,7 +1,5 @@
 /* 웰컴 페이지는 정적으로 제작하였음 */
 
-import Card from "@/components/Welcome/Card";
-import { useRef } from "react";
 import { Link } from "react-router-dom";
 import QuestionList from "@/components/Welcome/QuestionList";
 import vid from "@/img/sample.mp4"
@@ -11,7 +9,7 @@ const WelcomePage = () => {
   return (
     <div>
       <div className="relative">
-        <video className="w-full h-[35rem] object-cover" src={vid} autoPlay muted loop></video>
+        <video className="w-full h-[40rem] object-cover" src={vid} autoPlay muted loop></video>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-max">
           <h1 className="text-[6rem] font-bold text-green-500 font-bold">개발자 로드맵</h1>
           <h1 className="text-[6rem] font-bold text-purple-500">멀리 가지 마세요</h1>

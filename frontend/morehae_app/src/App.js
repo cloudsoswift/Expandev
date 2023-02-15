@@ -11,7 +11,7 @@ import BlogPostPage from "@/pages/Blog/BlogPostPage";
 import BlogEditPage from "@/pages/Blog/BlogEditPage";
 import BlogWritePage from "@/pages/Blog/BlogWritePage";
 import UserMainPage from "@/pages/User/UserMainPage";
-// import UserInfoEditPage from "./pages/User/UserInfoEditPage";
+import UserInfoEditPage from "./pages/User/UserInfoEditPage";
 
 import "@/style/basic.css";
 import "@toast-ui/editor/dist/toastui-editor.css";
@@ -40,10 +40,9 @@ function App() {
           </Route>
           <Route path="write" element={<BlogWritePage />} />
         </Route>
-        {/* <Route path="user" element={<UserMainPage />} /> */}
         <Route path="user" element={<Outlet />}>
           <Route path=":nickname" element={<UserMainPage/>} />
-          {/* <Route path=":nickname/edit" element={<UserInfoEditPage/>}/> */}
+          <Route path=":nickname/edit" element={<UserInfoEditPage/>}/>
         </Route>
       </Routes>
     </Fragment>
