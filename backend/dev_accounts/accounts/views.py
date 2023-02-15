@@ -1,3 +1,4 @@
+from .OAuth import OAuth
 from .models import User
 from roadmaps.models import Review
 from .serializers import UserSerializer
@@ -24,6 +25,7 @@ import requests
 from http import cookies
 
 
+oauth = OAuth()
 
 KAKAO_OAUTH = 'https://kauth.kakao.com/oauth'
 KAKAO_API = 'https://kapi.kakao.com'
@@ -138,135 +140,61 @@ def get_user_roadmaps(request, nickname):
 @api_view(['GET'])
 def kakao_login(request):
     kakao_api = f'{KAKAO_OAUTH}/authorize?response_type=code'
-    # redirect_uri = f'{SERVER_DOMAIN}/accounts/login/kakao/callback/'
-    redirect_uri = 'http://i8d212.p.ssafy.io/done'
-    client_id = get_secret('client_id')
+    redirect_uri = oauth.REDIRECT_URI
+    client_id = get_secret('KAKAO_CLIENT_ID')
     return redirect(f'{kakao_api}&client_id={client_id}&redirect_uri={redirect_uri}')
 
 
-
-@api_view(['GET'])
-def kakao_call_back(request):
-    print('call back')
-    # 로그인 후 응답받은 code 를 통해 카카오 서버로 데이터 요청
-    data = {
-        'code': request.GET['code'],
-        'grant_type': 'authorization_code',
-        'client_id': get_secret('client_id'),
-        'client_secret': get_secret('client_secret'),
-        'redirect_uri': f'{SERVER_DOMAIN}/accounts/login/kakao/callback/',
-    }
-    context = {'code': request.GET['code']}
-    return Response(status=status.HTTP_302_FOUND)
-    # kakao_token_api = f'{KAKAO_OAUTH}/token'
-    # token_api_info = requests.post(kakao_token_api, data=data).json()
-    # id_token = token_api_info.get('id_token')
-    # # 회원정보 조회
-    # kakao_token_info_api = f'{KAKAO_OAUTH}/tokeninfo?id_token={id_token}'
-    # user_info = requests.post(kakao_token_info_api).json()
-    # nickname = user_info.get('nickname')
-    # email = user_info.get('email')
-    # sns_service_id = user_info.get('sub')
-    # login_type = 'kakao'
-    # # 회원가입 유무 조회
-    # if get_user_model().objects.filter(sns_service_id=sns_service_id).exists():
-    #     user = get_user_model().objects.get(sns_service_id=sns_service_id)
-    #     status = 200
-    # else:
-    #     user = get_user_model().objects.create(
-    #         username='user without password',
-    #         nickname=nickname,
-    #         email=email,
-    #         sns_service_id=sns_service_id,
-    #         login_type=login_type,
-    #     )
-    #     status = 201
-    # # JWT 발행
-    # JWT = get_tokens_for_user(user)
-    # access_token = JWT['access']
-    # refresh_token = JWT['refresh']
-    # context = {
-    #     'access_token': access_token,
-    #     'refresh_token': refresh_token,
-    # }
-    # # return Response(context, status=status)
-    # return redirect('http://localhost:5017/')
+@api_view(['POST', 'GET'])
+def naver_login(request):
+    naver_api = oauth.NAVER_API
+    response_type = 'code'
+    client_id = get_secret('NAVER_CLIENT_ID')
+    redirect_uri = oauth.REDIRECT_URI
+    state = oauth.STATE
+    return redirect(f'{naver_api}?response_type={response_type}&client_id={client_id}&redirect_uri={redirect_uri}&state={state}')
 
 
-@api_view(['GET'])
-def get_kakao_token(request, code):
-    data = {
-        'code': code,
-        'grant_type': 'authorization_code',
-        'client_id': get_secret('client_id'),
-        'client_secret': get_secret('client_secret'),
-        'redirect_uri': f'http://i8d212.p.ssafy.io/done',
-    }
-    kakao_token_api = f'{KAKAO_OAUTH}/token'
-    token_api_info = requests.post(kakao_token_api, data=data).json()
-    print('token!')
-    print(token_api_info)
-    id_token = token_api_info.get('id_token')
-    # 회원정보 조회
-    kakao_token_info_api = f'{KAKAO_OAUTH}/tokeninfo?id_token={id_token}'
-    user_info = requests.post(kakao_token_info_api).json()
-    print(user_info)
-    nickname = user_info.get('nickname')
-    email = user_info.get('email')
-    sns_service_id = user_info.get('sub')
-    login_type = 'kakao'
-    # 회원가입 유무 조회
-    if get_user_model().objects.filter(sns_service_id=sns_service_id).exists():
-        user = get_user_model().objects.get(sns_service_id=sns_service_id)
-        status = 200
-    else:
-        user = get_user_model().objects.create(
-            username='user without password',
-            nickname=nickname,
-            email=email,
-            sns_service_id=sns_service_id,
-            login_type=login_type,
-        )
-        status = 201
+@api_view(['POST', 'GET'])
+def validate_social_accounts(request, login_type, code):
+    # Token 및 회원 조회
+    try:
+        if login_type == 'kakao':
+            id_token = oauth.get_kakao_token(code=code)
+            user_info = oauth.get_kakao_user_info(id_token)
+        elif login_type == 'naver':
+            access_token = oauth.get_naver_token(code=code)
+            user_info = oauth.get_naver_user_info(access_token)
+        # 회원가입 유무조회
+        email = user_info[1]
+        sns_service_id = user_info[2]
+        if oauth.is_signed(sns_service_id, email):
+            user = get_user_model().objects.get(email=email)
+            http_status = 200
+        else:
+            user = oauth.sign_up(user_info)
+            http_status = 201
     # JWT 발행
-    JWT = get_tokens_for_user(user)
-    access_token = JWT['access']
-    refresh_token = JWT['refresh']
-    context = {
-        'access_token': access_token,
-        # 'refresh_token': refresh_token,
-    }
-    COOKIE = cookies.SimpleCookie()
-    COOKIE['refresh_token'] = refresh_token
-    # return Response(context, status=status)
-    # return redirect('http://localhost:5017/')
-    # return HttpResponse.set_cookie(key='refresh_token', value=refresh_token, max_age=None, expires=None, path='/', domain=None, secure=False, httponly=False, samesite=None)
-    response = JsonResponse(context)
-    response.set_cookie('refresh_token', refresh_token, max_age=None, expires=None, path='/', domain=None, secure=False, httponly=False, samesite=None)
-    return response
-
-
-@api_view(['POST'])
-def test(request, refresh_token):
-    url = f'http://localhost:8000/accounts/token/verify/'
-    data = {
-        'token': refresh_token
-    }
-    response = requests.post(url=url, data=data)
-    if response.status_code == 200:
-        status = 200
-    else:
-        status = 401
-    return Response(status=status)
+    finally:
+        JWT = get_tokens_for_user(user)
+        access_token = JWT['access']
+        refresh_token = JWT['refresh']
+        context = {
+            'access_token': access_token,
+        }
+        response = JsonResponse(context, status=http_status)
+        response.set_cookie('refresh_token', refresh_token, max_age=None, expires=None, path='/', domain=None, secure=False, httponly=False, samesite=None)
+        return response
 
 
 @api_view(['POST'])
 def verify_refresh_token_in_cookie(request):
+    access_token = request.headers.get('Authorization').split(' ')[1]
     cookies = request.META.get('HTTP_COOKIE').split()
     for cookie in cookies:
         if 'refresh_token' in cookie:
             refresh_token = cookie.split('=')[1][:-1]
-    return redirect(f'http://localhost:8000/accounts/test/{refresh_token}')
+    return redirect(f'http://127.0.0.1:8000/accounts/test/{access_token}/{refresh_token}')
 
 
 @api_view(['POST'])
