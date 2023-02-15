@@ -36,7 +36,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         return False
 
     def create(self, validated_data):
-        BASE_DIR = Path(__file__).resolve().parent.parent
+        BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
         ModelClass = self.Meta.model
         info = model_meta.get_field_info(ModelClass)
@@ -46,12 +46,11 @@ class ArticleSerializer(serializers.ModelSerializer):
                 many_to_many[field_name] = validated_data.pop(field_name)
 
         article = ModelClass._default_manager.create(**validated_data)
-
-        if os.path.exists(f'{BASE_DIR}/article/thumbnail/{article.thumbnail}'):
-            os.remove(f'{BASE_DIR}/article/thumbnail/{article.thumbnail}')
-
-        
-        article.thumbnail = validated_data.get('thumbnail', article.thumbnail)
+        article.thumbnail = "article_default.png"
+        if validated_data.get('thumbnail'):
+            if os.path.exists(f'{BASE_DIR}/article/{article.thumbnail}'):
+                os.remove(f'{BASE_DIR}/article/{article.thumbnail}')
+            article.thumbnail = validated_data.get('thumbnail', article.thumbnail)
 
         if many_to_many:
             for field_name, value in many_to_many.items():
@@ -73,8 +72,35 @@ class ArticleSerializer(serializers.ModelSerializer):
                 image_path=image_path
             )
 
+        article.save()
         return article
+    
+    def update(self, instance, validated_data):
+        BASE_DIR = Path(__file__).resolve().parent.parent.parent
+        instance.thumbnail = "article_default.png"
+        if validated_data.get('thumbnail'):
+            if os.path.exists(f'{BASE_DIR}/article/{instance.thumbnail}'):
+                os.remove(f'{BASE_DIR}/article/{instance.thumbnail}')
+            instance.thumbnail = validated_data.get('thumbnail', instance.thumbnail)
+        instance.title = validated_data.get('title', instance.thumbnail)
+        instance.overview = validated_data.get('overview', instance.thumbnail)
 
+        images_path = []
+        contents = validated_data['content'].split()
+        for content in contents:
+            if content[0] == '!' and content[1] == '[' and content[-1] == ')' and ('media/temp_images' in content):
+                split_content = content.split('/')[-1]
+                image = split_content[:-1]
+                images_path.append(image)
+
+        for image in images_path:
+            image_path = f'temp_images/{image}'
+            _ = ArticleImage.objects.create(
+                article=instance,
+                image_path=image_path
+            )
+        instance.save()
+        return instance
 
 class AritcleTempImageSerializer(serializers.ModelSerializer):
 

@@ -194,7 +194,7 @@ const BlogListPage = () => {
         </div>
         
         {/* 게시글 리스트 UI */}
-        <div className="flex flex-wrap w-[76rem] mt-4">
+        <div className="grid grid-cols-4">
           {activeTabIndex === 0 ?
             (postListTrend.length === 0 ? <div>트렌드 글 없음</div> : postListTrend.map(post => <Link key={post.id} to={`/blog/post/${post.id}`}><PostPreview post={post}/></Link>) ):
             (postListRecent.length === 0 ? <div>최신 글 없음</div> : postListRecent.map(post => <Link key={post.id} to={`/blog/post/${post.id}`}><PostPreview post={post}/></Link>) )

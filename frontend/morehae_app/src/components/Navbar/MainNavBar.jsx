@@ -26,7 +26,7 @@ const MainNavBar = () => {
    */
   const logoutHandler = () => {
     httpWithURL(process.env.REACT_APP_USER_URL)
-      .post(process.env.REACT_APP_USER_URL + "logout/")
+      .post(process.env.REACT_APP_USER_URL + "cookie/logout/")
       .then((response) => {
         switch (response.status) {
           case 200:
