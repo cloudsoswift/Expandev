@@ -72,8 +72,8 @@ const BlogListPage = () => {
         setPostListTrend((oldState) => {
           if (Response?.data?.articles) {
             // return [...oldState, ...Response.data.articles];
-            // return [...Response.data.articles];
-            return dummyTrend.articles;
+            return [...Response.data.articles];
+            // return dummyTrend.articles;
           } else {
             return oldState;
           }

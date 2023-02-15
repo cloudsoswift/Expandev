@@ -23,11 +23,11 @@ const SubReply = ({reply}) => {
       <div className="flex items-center">
         <button>🤍</button>
         <p className="mr-4">{reply.like_users_count}</p>
-        <button onClick={showInput} className="transition-color duration-500 hover:bg-purple-500 active:bg-purple-700 p-2 rounded-xl">답글 달기</button>
+        {/* <button onClick={showInput} className="transition-color duration-500 hover:bg-purple-500 active:bg-purple-700 p-2 rounded-xl">답글 달기</button> */}
       </div>
       <div className='ml-2'>
         {isShowInputReply &&
-        <AddReply onHandleCancel={() => setIsShowInputReply(false)}/>
+        <AddReply onHandleCancel={() => setIsShowInputReply(false)} id={reply.id} replyType="sub"/>
         }
       </div>
     </div>
