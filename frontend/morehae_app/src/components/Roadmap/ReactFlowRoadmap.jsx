@@ -40,15 +40,13 @@ const elkLayout = (
   edges,
   direction = "DOWN",
   algorithm = "mrtree",
-  width = NODE_SIZE,
-  height = NODE_SIZE
 ) => {
   const nodesForElk = nodes.map((node) => {
     // console.log(node);
     return {
       id: node.id,
-      width: width,
-      height: height,
+      width: node.type === "main" ? NODE_SIZE : "68",
+      height: node.type === "main" ? NODE_SIZE : "68",
     };
   });
   const graph = {
@@ -60,11 +58,14 @@ const elkLayout = (
       ...(algorithm === "box" && { "elk.contentAlignment": "V_CENTER" }),
       ...(algorithm === "random" && {
         "spacing.nodeNode": NODE_SIZE,
-        randomSeed: 2,
+        // "randomSeed": 30,
+        "randomSeed": 35,
+        "aspectRatio": 1,
       }),
       ...(algorithm === "radial" && {
         "radial.radius": -90,
         "radial.wedgeCriteria": "LEAF_NUMBER",
+        "radial.optimizationCriteria": "EDGE_LENGTH",
       }),
     },
     children: nodesForElk,
@@ -208,6 +209,9 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
               source: before_node.id.toString(),
               target: main_node.id.toString(),
               sourceHandle: "main",
+              hidden: true,
+              animated: true,
+              style: { stroke: 'rgba(243, 237, 225, 50)' }
             });
           }
           // 현재 메인 노드를 이전 메인 노드로 기록
@@ -328,12 +332,10 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
                 subNodes,
                 subEdges,
                 "",
-                "radial",
-                68,
-                68
+                "radial"
               );
               // console.log("돌았다");
-              // console.log(subGraph);
+              console.log(subGraph);
               // 현재 메인 노드 및 서브노드에만 계산한 position 값 추가 반경, 이외에는 그냥 원래 노드값만.
               presentNodes = presentNodes.map((node) => {
                 const calcedNode = subGraph.children.find(
@@ -523,6 +525,7 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
     } else {
       // 메인 노드 = 노드 중 id가 0 ( 최 상단) 이거나 depth 가 1
       const mainNodes = nodes.filter(
+        // (node) => node.id === "0" || node.data.depth === 1
         (node) => node.type === "main" || node.type === "section"
       );
       setNodes((prevNodes) =>
