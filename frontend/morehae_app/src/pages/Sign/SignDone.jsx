@@ -12,7 +12,7 @@ const SignDone = (codeString) => {
   const getAccesToken = (codeString) => {
     // 토큰 주세요
     console.log("토큰 주세요!!");
-    fetch(`http://i8d212.p.ssafy.io:8000/accounts/login/kakao/token/${codeString}`, {
+    fetch(`http://i8d212.p.ssafy.io:8000/accounts/login/kakao/validate/${codeString}`, {
       method: 'GET',
       credentials: 'include'
     })
