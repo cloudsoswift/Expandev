@@ -12,7 +12,6 @@ import HttpWithURL from "@/utils/http";
 
 import { GiRingedPlanet } from "react-icons/gi";
 
-
 const RoadmapPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   // 모달 관련 state
@@ -70,7 +69,9 @@ const RoadmapPage = () => {
   };
 
   useEffect(() => {
-    setCheckbox(reqData.isComplete);
+    // 리액트 인풋 관련 에러-Warning: A component is changing an uncontrolled input to be controlled.
+    // 해결은 삼항연산자로 값이 없을 경우 false로
+    setCheckbox(reqData?.isComplete ? true : false);
   }, [reqData.isComplete]);
 
   useEffect(() => {
