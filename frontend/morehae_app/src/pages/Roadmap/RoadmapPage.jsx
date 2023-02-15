@@ -69,7 +69,9 @@ const RoadmapPage = () => {
   };
 
   useEffect(() => {
-    setCheckbox(reqData.isComplete);
+    // 리액트 인풋 관련 에러-Warning: A component is changing an uncontrolled input to be controlled.
+    // 해결은 삼항연산자로 값이 없을 경우 false로
+    setCheckbox(reqData?.isComplete ? true : false);
   }, [reqData.isComplete]);
 
   useEffect(() => {
@@ -91,15 +93,15 @@ const RoadmapPage = () => {
           <div className="">
             <div className="rounded-lg ">
               <div className="sticky top-0 z-30 h-[81px] w-[600px] drop-shadow-lg bg-[rgb(48,54,61)] px-4 py-[1.6rem] border-b">
-                <div className=" flex justify-between">
-                  <div className=" flex">
+                <div className=" flex justify-between mx-1">
+                  <div className="flex ">
                     <div className="flex text-xl font-semibold mr-3 text-white">
                       <GiRingedPlanet className="mt-0.5 mr-1 text-2xl" />
                       {reqData.title}
                     </div>
                     <div
                       onClick={handleWritePost}
-                      className="bg-[rgb(42,42,50)] hover:bg-[rgb(50,50,50)] px-3 py-1 rounded-full text-xs font-bold text-[rgb(131,132,139)] hover:text-green-400 drop-shadow-md border-2 border-[rgb(131,132,139)] hover:border-green-400 ease-in-out duration-300"
+                      className="bg-[rgb(42,42,50)] hover:bg-[rgb(50,50,50)] px-3 py-1 rounded-full text-xs font-bold  text-green-400 drop-shadow-md border-2 border-green-400 ease-in-out duration-300"
                     >
                       POST
                     </div>
@@ -120,8 +122,8 @@ const RoadmapPage = () => {
                 </div>
                 <div className="flex justify-end"></div>
               </div>
-              <WhatWhy reqData={reqData} nodeId={nodeId} />
               <Links reqData={reqData} />
+              <WhatWhy reqData={reqData} nodeId={nodeId} />
               <Review reqData={reqData} nodeId={nodeId} />
             </div>
           </div>

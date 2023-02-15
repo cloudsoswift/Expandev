@@ -21,15 +21,58 @@ const Links = ({ reqData }) => {
     navigate(`/blog/post/${id}`);
   };
 
-
   return (
-    <div className="p-6 ">
-      <div className="">
-        <div className=" flex justify-between ">
-          <h2 className="text-xl my-3 text-white ">블로그</h2>
+    <div className="m-6 ">
+      <div className="my-3 mb-5">
+        <h2 className="text-lg my-3">추천 컨텐츠</h2>
+        {reqData?.recommend_content?.length > 0 ? (
+          <>
+            <div className="grid grid-cols-3 justify-items-center text-center text-[rgb(191,192,194)] p-3 mx-1 ">
+              {reqData?.recommend_content
+                ?.filter((item, index) => index <= 2)
+                .map((post) => (
+                  <div key={post?.id}>
+                    <div
+                      onClick={() => {
+                        openLink(post?.url);
+                      }}
+                      className="w-40 h-40 bg-[rgb(36,41,47)] border border-[rgb(71,79,88)] rounded-lg w-xs h-xs hover:text-white ease-in-out duration-300 hover:border-green-400"
+                    >
+                      <div className="">
+                        <div className="w-40 h-32 border-b border-[rgb(71,79,88)] ">
+                          <img
+                            src={post?.img_url}
+                            alt="img"
+                            className="rounded-t-lg object-cover w-[9.88rem] h-[7.94rem]"
+                          />
+                        </div>
+                      </div>
+                      <div className="flex">
+                        <p className="text-xs w-40 h-8 px-2 pt-2 truncate ">
+                          {post?.title}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </>
+        ) : (
+          <div className="text-xs text-[rgb(191,192,194)]">
+            추천컨텐츠가 없습니다
+          </div>
+        )}
+      </div>
+
+      <div className="mb-5">
+        <div className=" flex justify-between">
+          <h2 className="text-lg my-3 text-white">블로그</h2>
           <Link
-            to={{ pathname: `/blog/tag/${encodeURIComponent(title)}`, search: `?count=1` }}
-            className="rounded text-xs  text-[rgb(71,79,88)] hover:text-white"
+            to={{
+              pathname: `/blog/tag/${title?.replaceAll("?", "%3F")}`,
+              search: `?count=1`,
+            }}
+            className="mt-6 mr-6 rounded text-xs text-[rgb(191,192,194)] ease-in-out duration-300  hover:text-green-400"
           >
             more..
           </Link>
@@ -64,9 +107,10 @@ const Links = ({ reqData }) => {
                         </div>
                         <div className="w-40 h-24 border-b border-[rgb(71,79,88)]">
                           <img
-                            src={post?.thumbnail}
+                            src={`http://i8d212.p.ssafy.io:8000${post?.thumbnail}`}
+                            // src={post?.thumbnail}
                             alt="img"
-                            className="object-cover w-40 h-24 text-xs"
+                            className="object-cover w-[9.88rem] h-[5.88rem] text-xs"
                           />
                           <div className="w-40 h-4">
                             <div className="p-2 flex justify-end">
@@ -104,53 +148,14 @@ const Links = ({ reqData }) => {
           )}
         </div>
       </div>
+
       <div className="mb-5">
-        <h2 className="text-xl my-3 text-white">인터뷰</h2>
+        <h2 className="text-lg my-3 text-white">인터뷰</h2>
         {reqData?.interview?.length > 0 ? (
           <Carousel reqData={reqData} />
         ) : (
           <div className="text-xs text-[rgb(191,192,194)]">
             인터뷰가 없습니다
-          </div>
-        )}
-      </div>
-      <div className="my-3">
-        <h2 className="text-xl my-3">추천 컨텐츠</h2>
-        {reqData?.recommend_content?.length > 0 ? (
-          <>
-            <div className="grid grid-cols-3 justify-items-center text-center text-[rgb(191,192,194)] p-3 mx-1 ">
-              {reqData?.recommend_content
-                ?.filter((item, index) => index <= 2)
-                .map((post) => (
-                  <div key={post?.id}>
-                    <div
-                      onClick={() => {
-                        openLink(post?.url);
-                      }}
-                      className="w-40 h-40 bg-[rgb(36,41,47)] border border-[rgb(71,79,88)] rounded-lg w-xs h-xs hover:text-white ease-in-out duration-300 hover:border-green-400"
-                    >
-                      <div className="">
-                        <div className="w-40 h-32 border-b border-[rgb(71,79,88)] ">
-                          <img
-                            src={post?.img_url}
-                            alt="img"
-                            className="rounded-t-lg object-cover w-[9.88rem] h-32"
-                          />
-                        </div>
-                      </div>
-                      <div className="flex">
-                        <p className="text-xs w-40 h-8 px-2 pt-2 truncate ">
-                          {post?.title}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-            </div>
-          </>
-        ) : (
-          <div className="text-xs text-[rgb(191,192,194)]">
-            추천컨텐츠가 없습니다
           </div>
         )}
       </div>

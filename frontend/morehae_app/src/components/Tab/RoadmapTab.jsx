@@ -1,48 +1,38 @@
-
 import { FaStar, FaHeart } from "react-icons/fa";
+import { BsPeople } from "react-icons/bs";
 import { Link } from "react-router-dom";
+
 
 const RoadmapTab = ({ userRoadmap }) => {
   return (
     <>
       <div className="mt-8 mb-12">
-        {/* <div className="m-3">즐겨찾기한 로드맵</div>
+        <div className="m-3">즐겨찾기한 로드맵</div>
         <div className="h-60 bg-[rgb(48,54,61)] border rounded-l-lg drop-shadow-md flex flex-wrap gap-1 p-4 overflow-y-auto customscrollbar ">
-          <div className=" rounded-xl h-36 basis-72 bg-[rgb(45,51,59)] m-1 border border-[rgb(131,132,139)] drop-shadow-md transition hover:-translate-y-2 hover:border-green-400  hover:shadow-sm hover:shadow-green-200/50 ">
-            <div className="text-sm font-medium leading-5  pt-3 pl-3 ">
-              웹 공통 어쩌구
-            </div>
-            <div className="text-sm h-[3.25rem] text-[rgb(191,192,194)] p-3 text-ellipsis line-clamp-2 overflow-hidden  border-[rgb(131,132,139)]">
-              콘텐츠 설명 어쩌구저쩌구 콘텐츠 설명 어쩌구저쩌구콘텐츠 설명
-              어쩌구저쩌구콘텐츠 설명 어쩌구저쩌구콘텐츠 설명 어쩌구저쩌구콘텐츠
-              설명 어쩌구저쩌구콘텐츠 설명 어쩌구저쩌구콘텐츠 설명
-              어쩌구저쩌구콘텐츠 설명 어쩌구저쩌구
-            </div>
-            <div className="h-5"></div>
-            <div className="border-t p-3 border-[rgb(131,132,139)]">
-              <div className="flex justify-end ">
-                <BsPeople className="text-[rgb(191,192,194)]" />
-                <div className="text-xs mx-1  text-[rgb(191,192,194)]">
-                  6명이 진행중
-                </div>
-              </div>
-            </div>
-          </div>
-
           {userRoadmap?.favorite_roadmpas.map((post) => (
             <div
               key={post?.id}
-              className="rounded-xl h-[90px] w-[90px] bg-white p-3 m-2 border-2 "
+
+              className=" rounded-xl h-36 basis-72 bg-[rgb(45,51,59)] m-1 border border-[rgb(131,132,139)] drop-shadow-md transition hover:-translate-y-2 hover:border-green-400  hover:shadow-sm hover:shadow-green-200/50 "
             >
-              <div className="mt-1 flex space-x-1 text-xs font-normal leading-4 text-gray-500">
-                <img src="" alt="" />
-              </div>
-              <h3 className="text-xs font-medium text-center leading-5 text-black">
+              <div className="text-sm font-medium leading-5  pt-3 pl-3 ">
                 {post?.title}
-              </h3>
+              </div>
+              <div className="text-sm h-[3.25rem] text-[rgb(191,192,194)] p-3 text-ellipsis line-clamp-2 overflow-hidden  border-[rgb(131,132,139)]">
+                {post?.content}
+              </div>
+              <div className="h-5"></div>
+              <div className="border-t p-3 border-[rgb(131,132,139)]">
+                <div className="flex justify-end ">
+                  <BsPeople className="text-[rgb(191,192,194)]" />
+                  <div className="text-xs mx-1  text-[rgb(191,192,194)]">
+                    {post?.favorites_count}
+                  </div>
+                </div>
+              </div>
             </div>
           ))}
-        </div> */}
+        </div>
       </div>
 
       <div className="mb-12">
@@ -80,7 +70,7 @@ const RoadmapTab = ({ userRoadmap }) => {
             >
               <div className="pt-3 px-3">
                 <div className="relative">
-                  <div className="text-sm">{post?.nickname}닉네임</div>
+                  <div className="text-sm">{post?.nickname}</div>
 
                   <div className="absolute top-0 right-0 text-sm flex ">
                     <FaHeart
@@ -150,7 +140,7 @@ const RoadmapTab = ({ userRoadmap }) => {
             >
               <div className="pt-3 px-3">
                 <div className="relative">
-                  <div className="text-sm">{post?.nickname}닉네임</div>
+                  <div className="text-sm">{post?.nickname}</div>
 
                   <div className="absolute top-0 right-0 text-sm flex ">
                     <FaHeart
