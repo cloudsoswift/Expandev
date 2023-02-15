@@ -2,8 +2,11 @@ import React, { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 
 const Carousel = ({ reqData }) => {
+  // 캐러셀 관련
   let [isOpen, setIsOpen] = useState(false);
   const [modalData, setModalData] = useState(reqData?.interview);
+
+  const [imData, setImData] = useState(null);
 
   const slideLeft = () => {
     let slider = document.getElementById("slider");
@@ -18,19 +21,21 @@ const Carousel = ({ reqData }) => {
     slider.scrollLeft += slideWidth * 3;
   };
 
+  // 인터뷰 모달 관련
   function closeModal() {
     setIsOpen(false);
   }
 
   const openModal = (id) => {
-    console.log(id);
     // 해당 아이디만 오픈.....
     if (id) {
       let selectedData = reqData.interview.filter((item) => item.id === id);
       setModalData(selectedData);
     }
     setIsOpen(() => !isOpen);
+    // useRef 라이프사이클 관리...
   };
+
   return (
     <>
       <div className="relative flex items-center">
@@ -114,13 +119,14 @@ const Carousel = ({ reqData }) => {
                     </div>
 
                     <div className="px-6 pb-6 mt-4 flex justify-end ">
-                      <button
+                      {/* button을 div로 바꾸니 scrollfocus가 해결됨!? */}
+                      <div
                         type="button"
                         className="px-3 py-1 rounded-md bg-[rgb(42,42,50)] hover:bg-[rgb(50,50,50)] cursor-pointer text-[rgb(131,132,139)] text-xs hover:text-green-500 drop-shadow-md border-2 hover:border-green-500 border-[rgb(131,132,139)] ease-in-out duration-300"
                         onClick={closeModal}
                       >
                         확인
-                      </button>
+                      </div>
                     </div>
                   </Dialog.Panel>
                 </Transition.Child>
