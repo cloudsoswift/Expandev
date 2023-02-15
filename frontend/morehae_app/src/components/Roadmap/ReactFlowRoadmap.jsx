@@ -21,7 +21,6 @@ import SectionNode from "@/components/Roadmap/nodes/SectionNode";
 import testImage from "@/img/testimage.png";
 import galaxyImage from "@/img/galaxy.jpg";
 import RoadmapPanel from "./RoadmapPanel";
-import { AiOutlineLoading } from "react-icons/ai";
 
 // 커스텀 커서
 import AnimatedCursor from "@/components/Roadmap/AnimatedCursor";
@@ -581,42 +580,13 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
   );
 };
 
-const ReactFlowRoadmap = ({ loadNodeDetail }) => {
-  const [nodesDataList, setNodesDataList] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  // 상황 선택될 때마다 로드맵 데이터를 가져온다
-  useEffect(() => {
-    let roadmapList = [];
-    const getWholeRoadMap = async () => {
-      const getRoadMap = async (id) => {
-        setIsLoading(true);
-        const response = await HttpWithURL(
-          process.env.REACT_APP_ROADMAP_URL
-        ).get(`track/${id}`);
-        console.log(response.data);
-        // setNodesDataList(prevData => [...prevData, response.data]);
-        roadmapList = [...roadmapList, response.data];
-      };
-      for (let i = 1; i <= 3; i++) {
-        await getRoadMap(i);
-        // console.log(roadmapList);
-      }
-      setNodesDataList(roadmapList);
-      setIsLoading(false);
-    };
-    getWholeRoadMap();
-  }, []);
+const ReactFlowRoadmap = ({ nodesDataList, loadNodeDetail }) => {
+  // const [trackDataList, setTrackDataList] = useState(nodesDataList);
+  // useEffect(()=>{
+  //   setTrackDataList(nodesDataList);
+  // }, [nodesDataList])
   return (
     <div className="w-full h-[calc(100vh-80px)] relative">
-      {isLoading && (
-        <div className="absolute top-1/2 left-1/2 text-center text-3xl -translate-x-1/2 -translate-y-1/2">
-          <span className="inline">
-            로딩중...
-            <AiOutlineLoading className="animate-spin inline" />
-          </span>
-        </div>
-      )}
-      {!isLoading && (
         <ReactFlowProvider>
           <ReactFlowRoadmapComponent
             nodesDataList={nodesDataList}
@@ -624,7 +594,6 @@ const ReactFlowRoadmap = ({ loadNodeDetail }) => {
           />
           <MiniMap position="bottom-right" />
         </ReactFlowProvider>
-      )}
     </div>
   );
 };
