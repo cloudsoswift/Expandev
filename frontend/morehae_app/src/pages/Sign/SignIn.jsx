@@ -1,8 +1,8 @@
 // 입력에 대한 validation 과정 아직 구현 안됨
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { userActions } from "../../utils/store/user-slice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import httpWithURL from "@/utils/http";
 
@@ -14,6 +14,16 @@ const SignIn = () => {
   const [passwordWarnMsg] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const userInfo = useSelector(state=>state.user.user);
+
+  useEffect(()=>{
+    if(userInfo && !(userInfo.constructor === Object
+      && Object.keys(userInfo).length === 0)){
+        alert("이미 로그인 한 상태입니다.");
+        navigate('/');
+      }
+  })
+
   // 이메일 입력 처리하는 핸들러
   const handleEmail = (e) => {
     const newState = e.target?.value ?? "";
