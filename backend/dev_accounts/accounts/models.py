@@ -12,8 +12,8 @@ class User(AbstractUser):
     username = models.CharField(max_length=150)
     last_name = None
     first_name = None
-    login_type = models.CharField(max_length=10)
-    sns_service_id = models.CharField(max_length=100)
+    login_type = models.CharField(max_length=10, default='expandev')
+    sns_service_id = models.CharField(max_length=100, blank=True, null=True)
     nickname = models.CharField(max_length=10)
     email = models.EmailField(_('email address'), unique=True)
     profile_image = models.ImageField(default='media/profile_default.png', upload_to='profile/')
