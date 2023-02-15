@@ -82,7 +82,7 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
   const [isShown, setIsShown] = useState(false);
 
   /* 로드맵 관련 state들 */
-  const { setViewport, getNode, getNodes, setCenter, getZoom } = useReactFlow();
+  const { setViewport, getNode, setCenter, fitBounds } = useReactFlow();
 
   // nodesDataList 변경시 작동하는 useEffect ============================================================================================
   useEffect(() => {
@@ -109,9 +109,9 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
         lowestX = 0;
         lowestY = 0;
 
-        console.log(id);
-        console.log(nodesDataList[id]);
-        console.log("maxX, maxY ", maxX, maxY);
+        // console.log(id);
+        // console.log(nodesDataList[id]);
+        // console.log("maxX, maxY ", maxX, maxY);
         let before_node = null;
         // 초기 메인 노드 순회 ============================================================
         nodesDataList[id].nodesData?.forEach((main_node) => {
@@ -155,48 +155,71 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
             });
             // console.log(`${sub_node.id} 번째 서브 노드`,sub_node, initialNodes.at(-1));
             // 이전 서브 노드 -> 방금 추가한 서브 노드로 향하는 엣지를 엣지 목록에 추가.
-            // if (before_sub_node == null) {
-            //   // 이전 서브 노드가 없는 경우 (즉 현재 메인 노드의 첫 번째 서브 노드를 막 추가한 상태)면
-            //   // 현재 메인 노드 -> 방금 추가한 서브 노드로 향하는 엣지를 엣지 목록에 추가.
-            //   presentEdges.push({
-            //     id: `e${main_node.id}-${sub_node.id}`,
-            //     data: {
-            //       depth: sub_node.depth,
-            //       parentNode: main_node.id.toString(),
-            //     },
-            //     source: main_node.id.toString(),
-            //     target: sub_node.id.toString(),
-            //     hidden: true,
-            //     sourceHandle: "sub",
-            //   });
-            //   before_sub_node = presentNodes.at(-1);
-            //   return;
-            // }
-            // presentEdges.push({
-            //   id: `e${before_sub_node.id}-${sub_node.id}`,
-            //   data: {
-            //     depth: sub_node.depth,
-            //     parentNode: main_node.id.toString(),
-            //   },
-            //   source: before_sub_node.id.toString(),
-            //   target: sub_node.id.toString(),
-            //   hidden: true,
-            //   sourceHandle: "sub",
-            // });
+            if (before_sub_node === null) {
+              // 이전 서브 노드가 없는 경우 (즉 현재 메인 노드의 첫 번째 서브 노드를 막 추가한 상태)면
+              // 현재 메인 노드 -> 방금 추가한 서브 노드로 향하는 엣지를 엣지 목록에 추가.
+              presentEdges.push({
+                id: `e${main_node.id}-${sub_node.id}`,
+                data: {
+                  depth: sub_node.depth,
+                  parentNode: main_node.id.toString(),
+                  forCalculate: true,
+                },
+                source: main_node.id.toString(),
+                target: sub_node.id.toString(),
+                hidden: true,
+                sourceHandle: "sub",
+              });
+              before_sub_node = presentNodes.at(-1);
+              return;
+            }
+            // 원 궤도 보여주기 위한 이전 서브 노드 -> 현재 서브 노드로 향하는 엣지 추가.
             presentEdges.push({
-              id: `e${main_node.id}-${sub_node.id}`,
+              id: `e${before_sub_node.id}-${sub_node.id}`,
               data: {
                 depth: sub_node.depth,
                 parentNode: main_node.id.toString(),
+                forCalculate: false,
               },
-              source: main_node.id.toString(),
+              source: before_sub_node.id.toString(),
               target: sub_node.id.toString(),
               hidden: true,
               sourceHandle: "sub",
               type: "straight",
             });
+            // radial 그래프 레이아웃 계산을 위한 메인 노드 -> 현재 서브 노드로 향하는 엣지 추가. ( 실제로 보여주는 엣지 아님. )
+            presentEdges.push({
+              id: `e${main_node.id}-${sub_node.id}`,
+              data: {
+                depth: sub_node.depth,
+                parentNode: main_node.id.toString(),
+                forCalculate: true,
+              },
+              source: main_node.id.toString(),
+              target: sub_node.id.toString(),
+              hidden: true,
+              sourceHandle: "sub",
+            });
             before_sub_node = presentNodes.at(-1);
           });
+          if(main_node.childs?.length >= 2){
+            // 원 궤도 보여주기 위한 마지막 서브 노드 -> 첫 서브 노드로 향하는 엣지 추가.
+            const firstNode = main_node.childs.at(0);
+            // console.log(before_sub_node, firstNode);
+            presentEdges.push({
+              id: `e${before_sub_node.id}-${firstNode.id}`,
+              data: {
+                depth: before_sub_node.data.depth,
+                parentNode: main_node.id.toString(),
+                forCalculate: false,
+              },
+              source: before_sub_node.id.toString(),
+              target: firstNode.id.toString(),
+              hidden: true,
+              sourceHandle: "sub",
+              type: "straight",
+            });
+          }
           // console.log(main_node, before_sub_node);
           // 마지막 서브 노드 -> 현재 메인 노드로 향하는 엣지를 엣지 목록에 추가.
           // presentEdges.push({
@@ -248,14 +271,14 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
         const outerFunction = async () => {
           const tempFunction = async () => {
             const graph = await elkLayout(mainNodes, mainEdges, "", "random");
-            console.log("1. 그래프 계산");
-            console.log(graph);
+            // console.log("1. 그래프 계산");
+            // console.log(graph);
             // Main Node에만 계산한 position 값 추가 반경, 이외에는 그냥 원래 노드값만.
             presentNodes = presentNodes.map((node) => {
               const calcedNode = graph.children.find((n) => n.id === node.id);
               // 계산한 값이 있고(= 메인 노드임), 부모 노드가 있는 노드(=루트 노드가 아님)
               if (calcedNode) {
-                console.log(node.id, calcedNode.x, calcedNode.y);
+                // console.log(node.id, calcedNode.x, calcedNode.y);
                 maxX = calcedNode.x > maxX ? calcedNode.x : maxX;
                 maxY = calcedNode.y > maxY ? calcedNode.y : maxY;
                 lowestX =
@@ -293,7 +316,7 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
               return newNode;
             });
             // lowestX, lowestY 만큼 위치 보정해주고, 60% 수준으로 범위 축소.
-            console.log("최소값들", id, lowestX, lowestY);
+            // console.log("최소값들", id, lowestX, lowestY);
             lowestX = lowestX < 0 ? lowestX * -1 : lowestX;
             lowestY = lowestY < 0 ? lowestY * -1 : lowestY;
 
@@ -312,7 +335,7 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
             });
             maxX += NODE_SIZE;
             maxY += NODE_SIZE;
-            console.log("계산 끝난 노드 ", id, presentNodes);
+            // console.log("계산 끝난 노드 ", id, presentNodes);
             // Main Edge에만 계산한 위치값(selection) 추가 반경, 이외에는 그냥 원래 노드값만.
             presentEdges = presentEdges.map((edge) => {
               const calcedEdge = graph.edges.map((e) => e.id === edge.id);
@@ -334,12 +357,12 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
                   node.id === mainNode.id ||
                   (node.parentNode === mainNode.id && node.data.depth === 2)
               );
-              console.log(subNodes);
+              // console.log(subNodes);
               const subEdges = presentEdges.filter(
                 (edge) =>
-                  edge.data?.parentNode === mainNode.id && edge.data.depth === 2
+                  edge.data?.parentNode === mainNode.id && edge.data.depth === 2 && edge.data.forCalculate
               );
-              console.log(subEdges);
+              // console.log(subEdges);
               // console.log(`${mainNode.id}의 서브 노드, 서브 엣지`,subNodes, subEdges);
               const subGraph = await elkLayout(
                 subNodes,
@@ -347,8 +370,7 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
                 "",
                 "radial"
               );
-              // console.log("돌았다");
-              console.log(subGraph);
+              // console.log(subGraph);
               // 현재 메인 노드 및 서브노드에만 계산한 position 값 추가 반경, 이외에는 그냥 원래 노드값만.
               presentNodes = presentNodes.map((node) => {
                 const calcedNode = subGraph.children.find(
@@ -399,7 +421,7 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
           maxY += Math.random() * 1000;
         };
         await outerFunction();
-        console.log(lowestX, lowestY);
+        // console.log(lowestX, lowestY);
         initialNodes = [...initialNodes, ...presentNodes];
         initialEdges = [...initialEdges, ...presentEdges];
       };
@@ -411,8 +433,8 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
       }
       setNodes(initialNodes);
       setEdges(initialEdges);
-      console.log(initialNodes);
-      console.log(initialEdges);
+      // console.log(initialNodes);
+      // console.log(initialEdges);
     };
     calcWholeRoadMap();
   }, [nodesDataList]);
@@ -468,7 +490,7 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
     if (clickedNode === null) {
       return;
     }
-    console.log(clickedNode);
+    // console.log(clickedNode);
     setCenter(
       clickedNode.positionAbsolute.x + clickedNode.width / 2,
       clickedNode.positionAbsolute.y + clickedNode.height / 2,
@@ -486,8 +508,11 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
   const onSituationChange = (situation) => {
     setClickedNode(getNode(situation.id.toString()));
   };
+
   const onTrackChange = (trackTitle) => {
-    setClickedNode(getNode(trackTitle));
+    // console.log(trackTitle);
+    const section = getNode(trackTitle);
+    fitBounds({x: section.positionAbsolute.x, y: section.positionAbsolute.y, width: section.width, height:section.height}, {duration:1200})
   };
 
   // Zoom 값 또는 현재 hover된 노드 값이 바뀔 떄 마다 하위 노드를 보여주는 상태인지 아닌지를 Update
@@ -527,7 +552,7 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
           return {
             ...edge,
             hidden:
-              edge.data?.parentNode === hoveredNode.id && edge.data.depth === 2
+              edge.data?.parentNode === hoveredNode.id && edge.data.depth === 2 && !edge.data.forCalculate
                 ? !edge.hidden
                 : edge.data.depth === 2
                 ? true
