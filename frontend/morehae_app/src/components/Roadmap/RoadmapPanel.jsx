@@ -91,6 +91,9 @@ const RoadmapPanel = ({
   useEffect(() => {
     // getSituationList();
     console.log(nodesDataList);
+    if(!nodesDataList){
+      return;
+    }
     setTrackList(
       nodesDataList.map((track, index) => {
         return { ...track, id: index + 1 };

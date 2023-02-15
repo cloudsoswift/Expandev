@@ -14,6 +14,14 @@ const loadAccessToken = () => {
   }
   return accessToken;
 };
+const loadRefreshToken = () => {
+  const state = store.getState();
+  const refreshToken = state.user.refresh_token;
+  return refreshToken;
+};
+const changeAccessToken = (accessToken) => {
+  store.dispatch(userActions.setAccessToken(accessToken));
+};
 
 const httpWithURL = (URL) => {
   const http = axios.create({
@@ -21,8 +29,8 @@ const httpWithURL = (URL) => {
     headers: {
       "Content-Type": "application/json;charset=utf-8",
     },
-    xsrfCookieName:'csrftoken',
-    xsrfHeaderName:"X-CSRFTOKEN"
+    xsrfCookieName: "csrftoken",
+    xsrfHeaderName: "X-CSRFTOKEN",
   });
   http.interceptors.request.use(
     (config) => {
@@ -46,20 +54,30 @@ const httpWithURL = (URL) => {
         case 401:
         case 403:
           //Forbbiden
+          const refreshToken = loadRefreshToken();
           axios
             .post(
-              `${process.env.REACT_APP_USER_URL}verify/token/refresh/cookie`,
-              {},
+              `${process.env.REACT_APP_USER_URL}token/refresh/`,
+              { refresh: refreshToken },
               {
                 withCredentials: true,
-                xsrfCookieName:"csrftoken",
-                xsrfHeaderName:"X-CSRFTOKEN"
+                xsrfCookieName: "csrftoken",
+                xsrfHeaderName: "X-CSRFTOKEN",
               }
             )
             .then((response) => {
-              console.log(response);
+              switch (response.status) {
+                case 200:
+                  changeAccessToken(response.data.access);
+                  window.location.reload();
+                  break;
+                default:
+                  changeAccessToken("");
+              }
+            })
+            .catch((e) => {
+              changeAccessToken("");
             });
-          console.log("토큰이 만료되었읍니다.");
           break;
         default:
           break;
