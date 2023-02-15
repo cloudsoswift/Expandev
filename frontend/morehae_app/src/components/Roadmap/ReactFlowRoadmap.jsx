@@ -62,9 +62,9 @@ const elkLayout = (
         "aspectRatio": 1,
       }),
       ...(algorithm === "radial" && {
-        "radial.radius": -90,
+        "radial.radius": 180,
         "radial.wedgeCriteria": "LEAF_NUMBER",
-        "radial.optimizationCriteria": "EDGE_LENGTH",
+        // "radial.optimizationCriteria": "EDGE_LENGTH",
       }),
     },
     children: nodesForElk,
@@ -144,6 +144,7 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
                 isComplete: sub_node.isComplete,
                 isEssential: sub_node.isEssential,
                 depth: sub_node.depth,
+                completion_count: sub_node.completion_count,
               },
               parentNode: main_node.id.toString(),
               position: {
@@ -154,33 +155,45 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
             });
             // console.log(`${sub_node.id} 번째 서브 노드`,sub_node, initialNodes.at(-1));
             // 이전 서브 노드 -> 방금 추가한 서브 노드로 향하는 엣지를 엣지 목록에 추가.
-            if (before_sub_node == null) {
-              // 이전 서브 노드가 없는 경우 (즉 현재 메인 노드의 첫 번째 서브 노드를 막 추가한 상태)면
-              // 현재 메인 노드 -> 방금 추가한 서브 노드로 향하는 엣지를 엣지 목록에 추가.
-              presentEdges.push({
-                id: `e${main_node.id}-${sub_node.id}`,
-                data: {
-                  depth: sub_node.depth,
-                  parentNode: main_node.id.toString(),
-                },
-                source: main_node.id.toString(),
-                target: sub_node.id.toString(),
-                hidden: true,
-                sourceHandle: "sub",
-              });
-              before_sub_node = presentNodes.at(-1);
-              return;
-            }
+            // if (before_sub_node == null) {
+            //   // 이전 서브 노드가 없는 경우 (즉 현재 메인 노드의 첫 번째 서브 노드를 막 추가한 상태)면
+            //   // 현재 메인 노드 -> 방금 추가한 서브 노드로 향하는 엣지를 엣지 목록에 추가.
+            //   presentEdges.push({
+            //     id: `e${main_node.id}-${sub_node.id}`,
+            //     data: {
+            //       depth: sub_node.depth,
+            //       parentNode: main_node.id.toString(),
+            //     },
+            //     source: main_node.id.toString(),
+            //     target: sub_node.id.toString(),
+            //     hidden: true,
+            //     sourceHandle: "sub",
+            //   });
+            //   before_sub_node = presentNodes.at(-1);
+            //   return;
+            // }
+            // presentEdges.push({
+            //   id: `e${before_sub_node.id}-${sub_node.id}`,
+            //   data: {
+            //     depth: sub_node.depth,
+            //     parentNode: main_node.id.toString(),
+            //   },
+            //   source: before_sub_node.id.toString(),
+            //   target: sub_node.id.toString(),
+            //   hidden: true,
+            //   sourceHandle: "sub",
+            // });
             presentEdges.push({
-              id: `e${before_sub_node.id}-${sub_node.id}`,
+              id: `e${main_node.id}-${sub_node.id}`,
               data: {
                 depth: sub_node.depth,
                 parentNode: main_node.id.toString(),
               },
-              source: before_sub_node.id.toString(),
+              source: main_node.id.toString(),
               target: sub_node.id.toString(),
               hidden: true,
               sourceHandle: "sub",
+              type: "straight",
             });
             before_sub_node = presentNodes.at(-1);
           });
@@ -210,6 +223,7 @@ const ReactFlowRoadmapComponent = ({ nodesDataList, loadNodeDetail }) => {
               sourceHandle: "main",
               hidden: true,
               animated: true,
+              type: "straight",
               style: { stroke: 'rgba(243, 237, 225, 50)' }
             });
           }
