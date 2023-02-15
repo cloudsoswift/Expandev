@@ -57,7 +57,7 @@ const PostEditor = ({ content, onMount }) => {
     }
     for(const sI in document.styleSheets) {
       for(const cR in document.styleSheets[sI].cssRules){
-        if(document.styleSheets[sI].cssRules[cR].selectorText === `button, [type="button"], [type="reset"], [type="submit"]`){
+        if(document.styleSheets[sI].cssRules[cR].selectorText?.includes('button')){
           document.styleSheets[sI].cssRules[cR].style.backgroundImage = "";
         }
       }
