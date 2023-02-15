@@ -13,10 +13,9 @@ urlpatterns = [
     path('user/<str:nickname>/blogs', views.get_user_blogs),
     path('user/<str:nickname>/roadmaps', views.get_user_roadmaps),
     path('login/kakao/', views.kakao_login),
-    path('login/kakao/callback/', views.kakao_call_back),
-    path('login/kakao/token/<str:code>', views.get_kakao_token),
+    path('login/naver/', views.naver_login),
+    path('login/<login_type>/validate/<code>', views.validate_social_accounts),
     path('verify/token/refresh/cookie', views.verify_refresh_token_in_cookie),
     path('cookie/login', views.include_refresh_token_in_cookie),
     path('cookie/logout/', views.logout),
-    path('test/<refresh_token>', views.test),
 ]
