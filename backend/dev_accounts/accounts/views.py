@@ -181,6 +181,7 @@ def validate_social_accounts(request, login_type, code):
         refresh_token = JWT['refresh']
         context = {
             'access_token': access_token,
+            'refresh_token': refresh_token,
         }
         response = JsonResponse(context, status=http_status)
         response.set_cookie('refresh_token', refresh_token, max_age=None, expires=None, path='/', domain=None, secure=False, httponly=False, samesite=None)
