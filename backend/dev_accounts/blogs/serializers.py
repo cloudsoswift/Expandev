@@ -21,13 +21,13 @@ class ArticleSerializer(serializers.ModelSerializer):
     comments_count = serializers.IntegerField(source = 'comments.count', read_only=True)
     liked = serializers.SerializerMethodField(read_only=True)
     tags = TagSerializer(many=True, read_only=True)
-    profile_image = serializers.CharField(source = 'user.profile_image', read_only=True)
+    user_profile_image = serializers.CharField(source = 'user.profile_image', read_only=True)
 
 
     class Meta:
         model = Article
         fields = '__all__'
-        read_only_fields = ('username','user', 'like_users', 'tags', 'like_users_count', 'comments_count', 'profile_image')
+        read_only_fields = ('username','user', 'like_users', 'tags', 'like_users_count', 'comments_count', 'user_profile_image')
 
     def get_liked(self, obj):
         user = self.context['user']
@@ -113,13 +113,13 @@ class CommentSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.nickname', read_only=True)
     like_users_count = serializers.IntegerField(source = 'like_users.count', read_only=True)
     liked = serializers.SerializerMethodField(read_only=True)
-    profile_image = serializers.CharField(source = 'user.profile_image', read_only=True)
+    user_profile_image = serializers.CharField(source = 'user.profile_image', read_only=True)
     recomments_count = serializers.IntegerField(source = 'recomments.count', read_only=True)
 
     class Meta:
         model = Comment
         fields = '__all__'
-        read_only_fields = ('user', 'article','parent_comment','like_users', 'like_users_count', 'profile_image', 'recomments_count')
+        read_only_fields = ('user', 'article','parent_comment','like_users', 'like_users_count', 'user_profile_image', 'recomments_count')
 
     def get_liked(self, obj):
         user = self.context['user']
@@ -134,11 +134,13 @@ class ArticleSimpleSerializer(serializers.ModelSerializer):
     comments_count = serializers.IntegerField(source = 'comments.count', read_only=True)
     liked = serializers.SerializerMethodField(read_only=True)
     tags = TagSerializer(many=True, read_only=True)
+    user_profile_image = serializers.CharField(source='user.profile_image', read_only=True)
+
 
     class Meta:
         model = Article
-        fields = ('id','title', 'overview', 'nickname','tags', 'like_users_count', 'comments_count', 'liked', 'created_at', 'thumbnail','profile_image')
-        read_only_fields = ('nickname','user', 'like_users', 'tags', 'like_users_count', 'comments_count', 'profile_image')
+        fields = ('id','title', 'overview', 'nickname','tags', 'like_users_count', 'comments_count', 'liked', 'created_at', 'thumbnail','user_profile_image')
+        read_only_fields = ('nickname','user', 'like_users', 'tags', 'like_users_count', 'comments_count', 'user_profile_image')
     
     def get_liked(self, obj):
         user = self.context['user']
