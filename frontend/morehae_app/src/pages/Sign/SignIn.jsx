@@ -116,7 +116,11 @@ const SignIn = () => {
   }
   useEffect(() => {
     const printLog = (e) => {
-      console.log("수신됨:", e.data);
+      // console.log("수신됨:", e.data);
+      dispatch(userActions.setAccessToken(e.data.access_token));
+      dispatch(userActions.setRefreshToken(e.data.refresh_token));
+      dispatch(userActions.setUser(e.data.user));
+      navigate("/roadmap", { replace: true });
     }
     if (!popup) {
       return;
