@@ -22,6 +22,11 @@ const loadRefreshToken = () => {
 const changeAccessToken = (accessToken) => {
   store.dispatch(userActions.setAccessToken(accessToken));
 };
+const deleteAllUserData = () => {
+  store.dispatch(userActions.setAccessToken(""));
+  store.dispatch(userActions.setRefreshToken(""));
+  store.dispatch(userActions.setUser({}));
+};
 
 const httpWithURL = (URL) => {
   const http = axios.create({
@@ -69,14 +74,15 @@ const httpWithURL = (URL) => {
               switch (response.status) {
                 case 200:
                   changeAccessToken(response.data.access);
-                  window.location.reload();
                   break;
                 default:
-                  changeAccessToken("");
+                  deleteAllUserData();
               }
+              window.location.reload();
             })
             .catch((e) => {
-              changeAccessToken("");
+              deleteAllUserData();
+              window.location.reload();
             });
           break;
         default:
