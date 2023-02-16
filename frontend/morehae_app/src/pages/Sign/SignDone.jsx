@@ -19,9 +19,10 @@ const SignDone = (codeString) => {
     })
       .then(response => response.json())
       .then(data => {
-        dispatch(userActions.setAccessToken(data.access_token));
-        dispatch(userActions.setRefreshToken(data.refresh_token));
-        dispatch(userActions.setUser(data.user));
+        // dispatch(userActions.setAccessToken(data.access_token));
+        // dispatch(userActions.setRefreshToken(data.refresh_token));
+        // dispatch(userActions.setUser(data.user));
+        window.opener.postMessage(data, "http://i8d212.p.ssafy.io");  // 토큰값 부모 윈도우에 전달
         setIsAllowed(true);
         setIsLoading(false);
       })
