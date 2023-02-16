@@ -2,7 +2,7 @@ import { useState } from "react";
 import httpWithURL from "@/utils/http";
 import TagCombobox from "@/components/Blog/TagCombobox";
 import TagList from "../../components/Blog/TagList";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import PostEditor from "../../components/Blog/PostEditor";
 import InputThumbnail from "../../components/Blog/InputThumbnail";
 import InputTitle from "../../components/Blog/InputTitle";
@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 
 const BlogWritePage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   // 제목 관련 State
   const [title, setTitle] = useState("");
   const [titleIsValid, setTitleIsValid] = useState(false);
@@ -30,7 +31,14 @@ const BlogWritePage = () => {
   const handleSendPost = () => {
     console.log("ddd");
     // 제목이나 요약글이 Valid 하지 않으면 진행하지 않음.
-    if (!titleIsValid || !overviewIsValid) {
+    if (!titleIsValid) {
+      alert("제목이 올바르지 않습니다.");
+      return;
+    } else if (!overviewIsValid) {
+      alert("요약글이 올바르지 않습니다.");
+      return;
+    } else if (editor.getMarkdown().trim().length === 0){
+      alert("글 내용은 공란일 수 없습니다.");
       return;
     }
     let body = new FormData();
@@ -71,6 +79,12 @@ const BlogWritePage = () => {
       navigate("/login");
     }
   }, [userInfo]);
+  useEffect(()=>{
+    // 전달 받은 태그가 있으면 태그 목록에 설정.
+    if(location?.state?.tag){
+      setTags(prevTags=>prevTags.find((pt)=>pt.tag === location?.state?.tag.tag) === undefined ?  [...prevTags, location?.state?.tag] : prevTags);
+    }
+  }, [location])
   return (
     <div className="flex justify-center">
       <div className="h-full w-1/2">

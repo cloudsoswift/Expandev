@@ -1,19 +1,11 @@
 import { useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { useEffect } from "react";
-
-const tags = [
-  "인터넷은 어떻게 동작해?",
-  "HTTP & HTTPS",
-  "도메인",
-  "인터넷",
-  "CSS",
-  "Javascript (기초)",
-  "웹페이지를 만들어볼까",
-];
+import HttpWithURL from "@/utils/http"
 
 const TagCombobox = ({onAddTag, tagList}) => {
   const [selectedTag, setSelectedTag] = useState("");
+  const [tags, setTags] = useState([]);
   const [query, setQuery] = useState("");
 
   const filteredTag =
@@ -49,6 +41,26 @@ const TagCombobox = ({onAddTag, tagList}) => {
     }
   };
 
+  // 서버에서 노드 이름들 불러와서 태그 목록에 할당하는 작업.
+  useEffect(()=>{
+    const getWholeTagList = async () => {
+      let preparedTags = [];
+      const getTagList = async (id) => {
+        const response = await HttpWithURL(
+          process.env.REACT_APP_ROADMAP_URL
+        ).get(`track/${id}`);
+        response.data.nodesData.map((n)=>{
+          preparedTags.push(...n.childs.map((c)=>c.title));
+        })
+      };
+      for (let i = 1; i <= 3; i++) {
+        await getTagList(i);
+      }
+      setTags([...new Set(preparedTags)]);
+    };
+    getWholeTagList();
+  }, [])
+
   return (
     <Combobox value={selectedTag} onChange={setSelectedTag}>
       <Combobox.Input
@@ -68,7 +80,7 @@ const TagCombobox = ({onAddTag, tagList}) => {
           "absolute bg-white rounded-md text-sm border shadow-sm p-2 z-10"
         }
       >
-        <Combobox.Options className={""}>
+        <Combobox.Options className={"max-h-24 overflow-y-scroll"}>
           {query.length > 0 && !tags.includes(query) && (
             <Combobox.Option key={query} value={query} className={({active})=>`${active ? "text-white bg-blue-500" : ""}`}>
               "{query}" 추가하기

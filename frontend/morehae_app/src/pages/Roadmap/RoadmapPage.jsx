@@ -51,8 +51,7 @@ const RoadmapPage = () => {
         const response = await HttpWithURL(
           process.env.REACT_APP_ROADMAP_URL
         ).get(`track/${id}`);
-        console.log(response.data);
-        // setNodesDataList(prevData => [...prevData, response.data]);
+        // console.log(response.data);
         roadmapList = [...roadmapList, response.data];
       };
       for (let i = 1; i <= 3; i++) {
@@ -84,7 +83,9 @@ const RoadmapPage = () => {
                   childs: n.childs.map((c) => {
                     return {
                       ...c,
-                      ...(c.id.toString() === nodeId.toString() && { isComplete: !c.isComplete }),
+                      ...(c.id.toString() === nodeId.toString() && {
+                        isComplete: !c.isComplete,
+                      }),
                     };
                   }),
                 };
@@ -92,9 +93,13 @@ const RoadmapPage = () => {
             };
           });
         });
-        setReqData((prevReqData)=>{return {...prevReqData, isComplete: !prevReqData.isComplete}})
+        setReqData((prevReqData) => {
+          return { ...prevReqData, isComplete: !prevReqData.isComplete };
+        });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        // console.log(err);
+      });
   };
 
   const handleWritePost = () => {
@@ -102,7 +107,8 @@ const RoadmapPage = () => {
       alert("로그인이 필요합니다.");
       navigate("/login");
     } else {
-      navigate("/blog/write");
+      // 해당 노드 이름을 태그로 기본적으로 설정한 채로 이동.
+      navigate("/blog/write", {state: {tag: {tag: reqData.title, articles_count: reqData.articles.length}}});
     }
   };
 

@@ -133,7 +133,7 @@ function AnimatedCursor({
     const clickables = document.querySelectorAll(
       // 'a, input[type="submit"], input[type="image"], label[for], select, button, .link'
       //  서브노드에 id 이름 따로 지정해둠
-      "#subscursor"
+      "#subcursor"
     );
     
     clickables.forEach((el) => {

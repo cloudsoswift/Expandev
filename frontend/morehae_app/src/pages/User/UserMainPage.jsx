@@ -17,7 +17,7 @@ const UserMainPage = () => {
       .get(`user/${someUser?.nickname}/profile`)
       .then((res) =>
         setUserProfile(() => {
-          console.log(res.data, "data");
+          // console.log(res.data, "data");
           return res.data;
         })
       )

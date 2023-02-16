@@ -39,7 +39,7 @@ const UserInfoEditPage = () => {
   const handleChangeProfile = (e) => {
     // img 파일을 보내기 위해서는 FormData에 담아서 보내야 함
     let formData = new FormData();
-    console.log(profileImg, introduce, "datas");
+    // console.log(profileImg, introduce, "datas");
     formData.append("profile_image", profileImg);
     formData.append("introduce", introduce);
 
@@ -52,11 +52,13 @@ const UserInfoEditPage = () => {
         },
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         alert("프로필을 수정하였습니다");
         navigate(-1);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        // console.log(err);
+      });
   };
 
   useEffect(()=>{

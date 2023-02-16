@@ -17,7 +17,7 @@ const QuestionItem = ({data}, ref) => {
       ref={ref}
     >
       <Link
-        className={`p-8 rounded-3xl ${data.id % 2 === 0 ? "rounded-bl-none" : "rounded-br-none"} shadow-md bg-purple-700`}
+        className={`p-8 rounded-3xl ${data.id % 2 === 0 ? "rounded-bl-none" : "rounded-br-none"} shadow-md bg-blue-800 `}
         to={data.link}
       >
         {data.question}
