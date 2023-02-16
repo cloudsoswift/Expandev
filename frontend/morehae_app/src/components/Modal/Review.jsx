@@ -1,10 +1,9 @@
-import React, { useState,  useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import ReviewList from "@/components/Modal/ReviewList";
 import httpWithURL from "../../utils/http";
 
 const Review = ({ reqData, nodeId }) => {
-
   const [data, setData] = useState(reqData.review);
   const userInfo = useSelector((state) => state.user.user);
 
@@ -16,17 +15,16 @@ const Review = ({ reqData, nodeId }) => {
         { withCredentials: true }
       )
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         const newItem = {
           ...res.data,
           user: userInfo.nickname,
         };
-        console.log(data);
         alert("리뷰가 작성되었습니다");
         setData((prevData) => [...prevData, newItem]);
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         alert("서버와 통신중 에러가 발생했습니다.");
       });
   };
@@ -42,7 +40,9 @@ const Review = ({ reqData, nodeId }) => {
           const afterDeleteList = data.filter((item) => item.id !== targetId);
           setData(afterDeleteList);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          // console.log(err);
+        });
     }
   };
 
@@ -62,20 +62,20 @@ const Review = ({ reqData, nodeId }) => {
           )
         );
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        // console.log(err);
+      });
   };
 
   useEffect(() => {
-    setData(reqData.review)
-  }, [reqData.review])
-  
+    setData(reqData.review);
+  }, [reqData.review]);
 
   const reviewLike = (targetId) => {
-    console.log(targetId);
     httpWithURL(process.env.REACT_APP_ROADMAP_URL)
       .post(`review/${targetId}/like`, { withCredentials: true })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setData((prevData) => {
           // 좋아요를 누른 리뷰를 찾아서
           const originalReview = prevData.find((r) => r.id === targetId);
@@ -86,7 +86,6 @@ const Review = ({ reqData, nodeId }) => {
                 (like_user) => like_user !== userInfo.id
               )
             : [...originalReview.like_users, userInfo.id];
-          console.log(originalReview);
 
           return prevData.map((review) =>
             review.id === targetId
@@ -95,15 +94,14 @@ const Review = ({ reqData, nodeId }) => {
           );
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        // console.log(err);
+      });
   };
-  // console.log(likedUser, "likedUser in review")
-  console.log(data, "total data");
 
   return (
     <div>
       <div>
-        
         <ReviewList
           reviewList={data}
           onDelete={onDelete}

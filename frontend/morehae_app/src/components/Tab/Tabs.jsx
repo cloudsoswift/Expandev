@@ -24,11 +24,11 @@ export default function Tabs({ userRoadmap, userBlog }) {
               key={category}
               className={({ selected }) =>
                 classNames(
-                  "w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-green-700",
-                  "ring-white ring-opacity-60 ring-offset-2 ring-offset-green-400 focus:outline-none focus:ring-2",
+                  "w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-white",
+                  "ring-white ring-opacity-60 focus:outline-none ",
                   selected
-                    ? "bg-white shadow"
-                    : "text-blue-100 hover:bg-white/[0.12] hover:text-white"
+                    ? "bg-green-500 shadow"
+                    : "text-green-100 hover:bg-white/[0.12] hover:text-white"
                 )
               }
             >
