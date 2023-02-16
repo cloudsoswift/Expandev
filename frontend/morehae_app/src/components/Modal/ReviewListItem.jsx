@@ -21,6 +21,7 @@ const ReviewListItem = ({
   importance,
   difficulty,
 }) => {
+
   // <<수정 및 삭제>>
   // 수정 상태 on/off 값 저장
   const [isEdit, setIsEdit] = useState(false);
@@ -107,7 +108,7 @@ const ReviewListItem = ({
               <div className="col-span-1">
                 <img
                   onClick={toUserProfile}
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmOXESdHIQO3wJZ2Ct7hu56W7k2s_Li3SYXyqYvNJ0SOSxRAL7xKVswcUCAOJXTJWsMTI&usqp=CAU"
+                  src={`http://i8d212.p.ssafy.io:8000/media/${user_profile_image}`}
                   alt="img"
                   className="w-12 h-12 rounded-full mt-2.5 ml-3 border-2 border-[rgb(71,79,88)]"
                 />
@@ -196,9 +197,17 @@ const ReviewListItem = ({
                 ></textarea>
               </>
             ) : (
-              <div className="text-xs p-3  bg-[rgb(32,37,42)] text-white break-words">
-                {content}
-              </div>
+              <>
+               
+                <div className="text-xs p-3  bg-[rgb(32,37,42)] text-white break-words">
+                  {content}
+                </div>
+                <div className=" flex justify-end bg-[rgb(32,37,42)] rounded-b-lg">
+                  <div className="text-[3px] px-2 pb-2  text-[rgb(161,173,185)]">
+                    {new Date(created_at)?.toLocaleString()}
+                  </div>
+                </div>
+              </>
             )}
 
             {isEdit ? (
@@ -217,11 +226,6 @@ const ReviewListItem = ({
                 </span>
               </div>
             ) : null}
-            <div className=" flex justify-end bg-[rgb(32,37,42)] rounded-b-lg">
-              <div className="text-[3px] px-2 pb-2  text-[rgb(161,173,185)]">
-                {new Date(created_at)?.toLocaleString()}
-              </div>
-            </div>
           </div>
         </div>
       </div>

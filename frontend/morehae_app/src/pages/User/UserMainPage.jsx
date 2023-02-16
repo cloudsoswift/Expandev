@@ -3,8 +3,6 @@ import Tabs from "@/components/Tab/Tabs";
 import HttpWithURL from "@/utils/http";
 import { useParams, Link } from "react-router-dom";
 
-
-
 const UserMainPage = () => {
   const [userProfile, setUserProfile] = useState();
   const [userRoadmap, setUserRoadmap] = useState();
@@ -18,7 +16,7 @@ const UserMainPage = () => {
       .get(`user/${someUser?.nickname}/profile`)
       .then((res) =>
         setUserProfile(() => {
-          console.log(res.data, "data");
+          // console.log(res.data, "data");
           return res.data;
         })
       )
@@ -55,10 +53,6 @@ const UserMainPage = () => {
     getBlogTab();
   }, []);
 
-  console.log(userProfile, "profile");
-  console.log(userRoadmap, "roadmap");
-  console.log(userBlog, "blog");
-
   return (
     <div className="flex w-auto h-full justify-center bg-dark ">
       <div className="m-8 w-2/3 h-auto p-4 shadow-lg rounded-lg bg-[rgb(32,37,42)] border border-[rgb(71,79,88)] drop-shadow-sm">
@@ -66,21 +60,18 @@ const UserMainPage = () => {
           <div className="relative grid grid-cols-3 h-20 bg-[rgb(32,37,42)] justify-center">
             <div>
               <img
-                className=" mt-2 h-36 w-36 rounded-full m-auto border-4 border-green-500 "
+                className=" mt-2 h-36 w-36 rounded-full m-auto border-4 border-green-500 bg-[rgb(32,37,42)] "
                 src={`http://i8d212.p.ssafy.io:8000${userProfile?.profile_image}`}
                 alt="img"
               />
             </div>
             <div className="mt-9 m-2">
               <span className="mx-4 text-lg">{userProfile?.nickname}</span>
-              <span className="mr-2 text-sm text-gray-400">
-                
-              </span>
+              <span className="mr-2 text-sm text-gray-400"></span>
             </div>
             <div className="mt-9 m-2 text-right">
               <Link
-
-                to='edit'
+                to="edit"
                 className="px-3 py-1 rounded-md shadow-md text-xs text-white bg-green-500 hover:bg-green-700 drop-shadow-md"
               >
                 회원정보수정
