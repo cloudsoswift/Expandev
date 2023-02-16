@@ -6,6 +6,8 @@ import { AiOutlineEye } from "react-icons/ai";
 import { FaHeart } from "react-icons/fa";
 import { BsArrowRightSquare } from "react-icons/bs";
 
+import { MdOutlineFeaturedPlayList } from "react-icons/md";
+
 const Links = ({ reqData }) => {
   const openLink = (link) => {
     if (window.confirm("해당 컨텐츠로 이동하시겠습니까?")) {
@@ -23,11 +25,15 @@ const Links = ({ reqData }) => {
 
   return (
     <div className="m-3 p-3 rounded-lg bg-[rgb(48,54,61)] border-mbc border-4 border-double">
+      <div className="flex">
+        <MdOutlineFeaturedPlayList className="mt-1 mr-2 text-lg" />
+        <div>Contents</div>
+      </div>
       <div className="mb-2 ">
-        <h2 className="text-md mt-3 ml-7">추천 컨텐츠</h2>
+        <h2 className="text-sm mt-3 ml-7">추천 컨텐츠</h2>
         {reqData?.recommend_content?.length > 0 ? (
           <>
-            <div className="grid grid-cols-3 justify-items-center text-center text-[rgb(191,192,194)] p-3 mx-1 ">
+            <div className="grid grid-cols-3 justify-items-center text-center text-[rgb(191,192,194)] px-3 py-2 mx-1 ">
               {reqData?.recommend_content
                 ?.filter((item, index) => index <= 2)
                 .map((post) => (
@@ -66,9 +72,9 @@ const Links = ({ reqData }) => {
         )}
       </div>
 
-      <div className="mb-3">
+      <div className="mb-2">
         <div className=" flex justify-between">
-          <h2 className="text-md text-white ml-7">블로그</h2>
+          <h2 className="text-sm text-white ml-7">블로그</h2>
           <Link
             to={{
               pathname: `/blog/tag/${title?.replaceAll("?", "%3F")}`,
@@ -82,7 +88,7 @@ const Links = ({ reqData }) => {
         <div>
           {reqData?.articles?.length > 0 ? (
             <>
-              <div className="grid grid-cols-3 justify-items-center align-middle p-3 mx-1.5 ">
+              <div className="grid grid-cols-3 justify-items-center align-middle px-3 py-2 mx-1.5 ">
                 {reqData.articles
                   ?.filter((item, index) => index <= 2)
                   .map((post) => (
@@ -153,16 +159,16 @@ const Links = ({ reqData }) => {
         </div>
       </div>
 
-      <div className="mb-5">
-        <h2 className="text-md mb-2 text-white ml-7">인터뷰</h2>
+      <div className="">
+        <h2 className="text-sm mb-2 text-white ml-7">인터뷰</h2>
         {reqData?.interview?.length > 0 ? (
           <Carousel reqData={reqData} />
         ) : (
           <div className="grid grid-cols-3 text-center text-[rgb(191,192,194)] p-3 mx-1 ">
-          <div className="w-40 h-40 bg-[rgb(36,41,47)] border border-[rgb(71,79,88)] rounded-lg drop-shadow-md text-xs">
-            <div className="pt-[4.5rem]">인터뷰가 없습니다</div>
+            <div className="w-40 h-40 bg-[rgb(36,41,47)] border border-[rgb(71,79,88)] rounded-lg drop-shadow-md text-xs">
+              <div className="pt-[4.5rem]">인터뷰가 없습니다</div>
+            </div>
           </div>
-        </div>
         )}
       </div>
     </div>

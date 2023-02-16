@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import Tabs from "@/components/Tab/Tabs";
 import HttpWithURL from "@/utils/http";
 import { useParams, Link } from "react-router-dom";
+<<<<<<< HEAD
+=======
 import { AiOutlineLoading } from "react-icons/ai";
+>>>>>>> 27c1d8e74dd56e47288151fc3cb257ff07cf3b55
 
 const UserMainPage = () => {
   const [userProfile, setUserProfile] = useState();
@@ -17,7 +20,7 @@ const UserMainPage = () => {
       .get(`user/${someUser?.nickname}/profile`)
       .then((res) =>
         setUserProfile(() => {
-          console.log(res.data, "data");
+          // console.log(res.data, "data");
           return res.data;
         })
       )

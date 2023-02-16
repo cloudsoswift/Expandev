@@ -19,6 +19,9 @@ const UserInfoEditPage = () => {
   const handleProfileImgChange = (e) => {
     const imgFile = e.target.files[0];
     setProfileImg(imgFile);
+<<<<<<< HEAD
+    // console.log(imgFile);
+=======
     console.log(imgFile);
     setProfileImagePreview(imgFile);
   };
@@ -34,12 +37,13 @@ const UserInfoEditPage = () => {
       setProfileImgPreview(reader.result);
     };
     reader.readAsDataURL(file);
+>>>>>>> 27c1d8e74dd56e47288151fc3cb257ff07cf3b55
   };
 
   const handleChangeProfile = (e) => {
     // img 파일을 보내기 위해서는 FormData에 담아서 보내야 함
     let formData = new FormData();
-    console.log(profileImg, introduce, "datas");
+    // console.log(profileImg, introduce, "datas");
     formData.append("profile_image", profileImg);
     formData.append("introduce", introduce);
 
@@ -52,11 +56,13 @@ const UserInfoEditPage = () => {
         },
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         alert("프로필을 수정하였습니다");
         navigate(-1);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        // console.log(err);
+      });
   };
 
   useEffect(()=>{

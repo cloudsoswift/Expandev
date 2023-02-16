@@ -1,7 +1,10 @@
 import React from "react";
 import ReviewListItem from "@/components/Modal/ReviewListItem";
-import { FaStar } from "react-icons/fa";
 import ReviewEditor from "@/components/Modal/ReviewEditor";
+
+import { FaStar } from "react-icons/fa";
+import { GoCommentDiscussion } from "react-icons/go";
+
 
 const ReviewList = ({
   reviewList,
@@ -29,10 +32,14 @@ const ReviewList = ({
     return Math.round(sum / list.length);
   };
 
+
   return (
     <div className="px-3 pt-3 drop-shadow-lg ">
       <div className="bg-[rgb(48,54,61)] p-3 rounded-t-lg border-mbc border-4 border-double">
-        <div className="text-md  pb-3 text-white">REVIEW</div>
+        <div className="flex">
+          <GoCommentDiscussion className="mt-1 mr-2 text-lg" />
+          <div className="text-md  pb-3 text-white">REVIEW</div>
+        </div>
         <div>
           <div className="mb-5">
             <ReviewEditor onCreate={onCreate} />

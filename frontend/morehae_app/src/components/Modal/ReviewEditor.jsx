@@ -92,15 +92,12 @@ const ReviewEditor = ({ onCreate }) => {
 
   const sendDifficulty = () => {
     let difficultyScore = diClicked.filter(Boolean).length;
-    // console.log(difficultyScore, "difficulty" );
     setState({ ...state, difficulty: difficultyScore });
   };
 
   return (
     <div>
       <div className=" bg-[rgb(36,41,47)] rounded-lg p-2 mb-5 drop-shadow-lg">
-        {/* <h2 className="mb-2 text-white">리뷰 작성</h2> */}
-
         <div className="flex mb-1">
           <div className="flex mb-1 mr-3">
             <span className="mr-2 mt-0.5 text-white text-xs">중요도</span>
@@ -134,16 +131,6 @@ const ReviewEditor = ({ onCreate }) => {
               );
             })}
           </div>
-        </div>
-
-        <div>
-          {/* <input
-          name="user"
-          placeholder="이름"
-          value={state.user}
-          onChange={handleChangeState}
-          className=" rounded-md p-1 mb-3 w-[100px] text-sm"
-        /> */}
         </div>
         <div>
           <textarea

@@ -51,8 +51,7 @@ const RoadmapPage = () => {
         const response = await HttpWithURL(
           process.env.REACT_APP_ROADMAP_URL
         ).get(`track/${id}`);
-        console.log(response.data);
-        // setNodesDataList(prevData => [...prevData, response.data]);
+        // console.log(response.data);
         roadmapList = [...roadmapList, response.data];
       };
       for (let i = 1; i <= 3; i++) {
@@ -84,7 +83,9 @@ const RoadmapPage = () => {
                   childs: n.childs.map((c) => {
                     return {
                       ...c,
-                      ...(c.id.toString() === nodeId.toString() && { isComplete: !c.isComplete }),
+                      ...(c.id.toString() === nodeId.toString() && {
+                        isComplete: !c.isComplete,
+                      }),
                     };
                   }),
                 };
@@ -92,9 +93,13 @@ const RoadmapPage = () => {
             };
           });
         });
-        setReqData((prevReqData)=>{return {...prevReqData, isComplete: !prevReqData.isComplete}})
+        setReqData((prevReqData) => {
+          return { ...prevReqData, isComplete: !prevReqData.isComplete };
+        });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        // console.log(err);
+      });
   };
 
   const handleWritePost = () => {

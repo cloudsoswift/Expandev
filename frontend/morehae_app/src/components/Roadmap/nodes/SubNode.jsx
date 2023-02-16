@@ -11,7 +11,7 @@ const SubNode = ({ data }) => {
   return (
     <div
       // 추가된것
-      id="subscursor"
+      id="subcursor"
       className={
         "px-2 py-2 w-20 h-20 text-center flex flex-col text-xs"
       }

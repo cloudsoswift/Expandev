@@ -30,7 +30,14 @@ const BlogWritePage = () => {
   const handleSendPost = () => {
     console.log("ddd");
     // 제목이나 요약글이 Valid 하지 않으면 진행하지 않음.
-    if (!titleIsValid || !overviewIsValid) {
+    if (!titleIsValid) {
+      alert("제목이 올바르지 않습니다.");
+      return;
+    } else if (!overviewIsValid) {
+      alert("요약글이 올바르지 않습니다.");
+      return;
+    } else if (editor.getMarkdown().trim().length === 0){
+      alert("글 내용은 공란일 수 없습니다.");
       return;
     }
     let body = new FormData();
