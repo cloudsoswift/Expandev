@@ -119,7 +119,7 @@ const SignIn = () => {
       }
     }, 1000);
     setPopup(popupWindow);
-  };
+  }
 
   const handleNaverClick = (e) => {
     e.preventDefault();
@@ -220,13 +220,8 @@ const SignIn = () => {
             </span>
             <span>카카오로 시작</span>
           </button>
-          <button
-            onClick={handleNaverClick}
-            className="transition bg-green w-full h-12 rounded-lg bg-green-600 text-white hover:bg-green-500 mb-2 flex justify-center items-center"
-          >
-            <span>
-              <img className="h-8 mr-2" src={naverLogo} alt="asd" />
-            </span>
+          <button onClick={handleNaverClick} className="transition bg-green w-full h-12 rounded-lg bg-green-600 text-white hover:bg-green-500 mb-2 flex justify-center items-center">
+            <span><img className="h-8 mr-2" src={naverLogo} alt="asd" /></span>
             <span>네이버로 시작</span>
           </button>
         </form>
