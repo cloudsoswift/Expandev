@@ -92,7 +92,7 @@ const MainReply = ({ reply, getReplyData }) => {
   return (
     <div className="mt-8">
       <div className="flex items-center mb-2">
-        <img src={reply.profile_image} className="w-12 h-12"></img>
+        <img src={`http://i8d212.p.ssafy.io:8000/` + reply.user_profile_image}className="w-12 h-12 rounded-full"></img>
         <div className="flex justify-between w-full">
           <div className="ml-3 text-sm">
             <p className="font-bold">{reply.username}</p>

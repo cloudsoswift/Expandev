@@ -5,8 +5,8 @@ import { userActions } from "../../utils/store/user-slice";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import httpWithURL from "@/utils/http";
-import kakaoLogo from "@/img/kakao_logo.png"
-import naverLogo from "@/img/naver_logo.png"
+import kakaoLogo from "@/img/kakao_logo.png";
+import naverLogo from "@/img/naver_logo.png";
 
 const SignIn = () => {
   const [popup, setPopup] = useState(null);
@@ -16,15 +16,17 @@ const SignIn = () => {
   const [passwordWarnMsg] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const userInfo = useSelector(state=>state.user.user);
+  const userInfo = useSelector((state) => state.user.user);
 
-  useEffect(()=>{
-    if(userInfo && !(userInfo.constructor === Object
-      && Object.keys(userInfo).length === 0)){
-        alert("이미 로그인 한 상태입니다.");
-        navigate('/');
-      }
-  }, [])
+  useEffect(() => {
+    if (
+      userInfo &&
+      !(userInfo.constructor === Object && Object.keys(userInfo).length === 0)
+    ) {
+      alert("이미 로그인 한 상태입니다.");
+      navigate("/");
+    }
+  }, []);
 
   // 이메일 입력 처리하는 핸들러
   const handleEmail = (e) => {
@@ -96,12 +98,17 @@ const SignIn = () => {
 
   const handleKakaoClick = (e) => {
     e.preventDefault();
-    const url = "http://i8d212.p.ssafy.io:8000/accounts/login/kakao/"
+    const url = "http://i8d212.p.ssafy.io:8000/accounts/login/kakao/";
+    // const url = "http://localhost:3000/done"
     const width = 430;
     const height = 500;
-    const leftPos = Math.ceil(( window.screen.width - width )/2);
-    const topPos = Math.ceil(( window.screen.height - height )/2);
-    const popupWindow = window.open(url, '카카오 로그인', `width=${width}, height=${height}, left=${leftPos}, top=${topPos}, scrollbars=no`);
+    const leftPos = Math.ceil((window.screen.width - width) / 2);
+    const topPos = Math.ceil((window.screen.height - height) / 2);
+    const popupWindow = window.open(
+      url,
+      "카카오 로그인",
+      `width=${width}, height=${height}, left=${leftPos}, top=${topPos}, scrollbars=no`
+    );
     const timer = setInterval(() => {
       if (!popupWindow?.closed) {
         console.log("팝업창 열려있음...");
@@ -110,9 +117,54 @@ const SignIn = () => {
         clearInterval(timer);
         setPopup(null);
       }
-    }, 1000)
+    }, 1000);
     setPopup(popupWindow);
   }
+
+  const handleNaverClick = (e) => {
+    e.preventDefault();
+    const url = "http://i8d212.p.ssafy.io:8000/accounts/login/naver/";
+    // const url = "http://localhost:3000/done"
+    const width = 430;
+    const height = 500;
+    const leftPos = Math.ceil((window.screen.width - width) / 2);
+    const topPos = Math.ceil((window.screen.height - height) / 2);
+    const popupWindow = window.open(
+      url,
+      "네이버 로그인",
+      `width=${width}, height=${height}, left=${leftPos}, top=${topPos}, scrollbars=no`
+    );
+    const timer = setInterval(() => {
+      if (!popupWindow?.closed) {
+        console.log("팝업창 열려있음...");
+      } else {
+        console.log("팝업창 닫힘");
+        clearInterval(timer);
+        setPopup(null);
+      }
+    }, 1000);
+    setPopup(popupWindow);
+  };
+
+  useEffect(() => {
+    const printLog = (e) => {
+      // console.log("수신됨:", e.data);
+      dispatch(userActions.setAccessToken(e.data.access_token));
+      dispatch(userActions.setRefreshToken(e.data.refresh_token));
+      dispatch(userActions.setUser(e.data.user));
+      navigate("/roadmap", { replace: true });
+    };
+    if (!popup) {
+      return;
+    }
+    window.addEventListener("message", printLog);
+    console.log("이벤트 리스너 등록됨");
+
+    return () => {
+      window.removeEventListener("message", printLog);
+      console.log("이벤트 리스너 제거됨");
+    };
+  }, [popup]);
 
   return (
     <div className="flex justify-center mt-20">
@@ -159,11 +211,16 @@ const SignIn = () => {
           >
             로그인
           </button>
-          <button onClick={handleKakaoClick} className="transition w-full h-12 rounded-lg bg-[#fee500] hover:bg-yellow-400 text-black font-bold mb-2 flex justify-center items-center">
-            <span ><img className="h-6 mr-2" src={kakaoLogo} alt="asd" /></span>
+          <button
+            onClick={handleKakaoClick}
+            className="transition w-full h-12 rounded-lg bg-[#fee500] hover:bg-yellow-400 text-black font-bold mb-2 flex justify-center items-center"
+          >
+            <span>
+              <img className="h-6 mr-2" src={kakaoLogo} alt="asd" />
+            </span>
             <span>카카오로 시작</span>
           </button>
-          <button className="transition bg-green w-full h-12 rounded-lg bg-green-600 text-white hover:bg-green-500 mb-2 flex justify-center items-center">
+          <button onClick={handleNaverClick} className="transition bg-green w-full h-12 rounded-lg bg-green-600 text-white hover:bg-green-500 mb-2 flex justify-center items-center">
             <span><img className="h-8 mr-2" src={naverLogo} alt="asd" /></span>
             <span>네이버로 시작</span>
           </button>

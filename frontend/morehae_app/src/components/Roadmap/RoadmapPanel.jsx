@@ -102,9 +102,6 @@ const RoadmapPanel = ({
   }, [nodesDataList]);
 
   useEffect(() => {
-    console.log(subNodeList, "subNodeList");
-    console.log(situationList, "situationList");
-    console.log(situation, "situation");
   }, [subNodeList]);
 
   useEffect(() => {
@@ -119,7 +116,8 @@ const RoadmapPanel = ({
     if (track === null) {
       return;
     }
-    // onTrackChange(track);
+    // console.log(track);
+    onTrackChange(`section-${track.id-1}`);
     getSituationList();
   }, [track]);
   return (
@@ -192,7 +190,7 @@ const RoadmapPanel = ({
                     </button>
                     </div>
                     <Transition
-                      enter="transition duration-100 ease-out"s
+                      enter="transition duration-100 ease-out"
                       enterFrom="transform scale-95 opacity-0"
                       enterTo="transform scale-100 opacity-100"
                       leave="transition duration-75 ease-out"
