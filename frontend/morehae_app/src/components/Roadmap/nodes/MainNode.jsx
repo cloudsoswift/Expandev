@@ -8,7 +8,7 @@ const MainNode = ({ data }) => {
   const zoom = useStore(zoomSelector);
 
   return (
-    <div className="px-4 py-2 shadow-md rounded-full w-96 h-96 text-center bg-cover border border-[rgb(71,79,88)]" style={{backgroundImage:`${ zoom >= 1.5 ? "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5))," : ""} url(${galaxyImage})`}}>
+    <div className="px-4 py-2 shadow-md rounded-full w-96 h-96 text-center bg-cover" style={{backgroundImage:`${ zoom >= 1.5 ? "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5))," : ""} url(${galaxyImage})`}}>
       <div className={isEssentialClass}>{data.isEssential ? "필수" : "선택"}</div>
       <div className="text-center">
         <div className="ml-2">
