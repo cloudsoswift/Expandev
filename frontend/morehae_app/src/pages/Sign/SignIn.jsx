@@ -97,6 +97,7 @@ const SignIn = () => {
   const handleKakaoClick = (e) => {
     e.preventDefault();
     const url = "http://i8d212.p.ssafy.io:8000/accounts/login/kakao/"
+    // const url = "http://localhost:3000/done"
     const width = 430;
     const height = 500;
     const leftPos = Math.ceil(( window.screen.width - width )/2);
@@ -113,6 +114,18 @@ const SignIn = () => {
     }, 1000)
     setPopup(popupWindow);
   }
+  useEffect(() => {
+    const printLog = (e) => {
+      console.log("수신됨:", e.data);
+    }
+    if (!popup) {
+      return;
+    }
+    window.addEventListener("message", printLog);
+    console.log("이벤트 리스너 등록됨");
+
+    return () => {window.removeEventListener("message", printLog); console.log("이벤트 리스너 제거됨");}
+  }, [popup])
 
   return (
     <div className="flex justify-center mt-20">
