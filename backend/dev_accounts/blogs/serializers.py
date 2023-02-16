@@ -113,7 +113,7 @@ class CommentSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.nickname', read_only=True)
     like_users_count = serializers.IntegerField(source = 'like_users.count', read_only=True)
     liked = serializers.SerializerMethodField(read_only=True)
-    profile_image = serializers.CharField(source = 'user.profile.profile_image.url', read_only=True)
+    profile_image = serializers.CharField(source = 'user.profile_image', read_only=True)
     recomments_count = serializers.IntegerField(source = 'recomments.count', read_only=True)
 
     class Meta:
@@ -137,7 +137,7 @@ class ArticleSimpleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Article
-        fields = ('id','title', 'overview', 'nickname','tags', 'like_users_count', 'comments_count', 'liked', 'created_at', 'thumbnail')
+        fields = ('id','title', 'overview', 'nickname','tags', 'like_users_count', 'comments_count', 'liked', 'created_at', 'thumbnail','profile_image')
         read_only_fields = ('nickname','user', 'like_users', 'tags', 'like_users_count', 'comments_count', 'profile_image')
     
     def get_liked(self, obj):
