@@ -6,8 +6,6 @@ const Carousel = ({ reqData }) => {
   let [isOpen, setIsOpen] = useState(false);
   const [modalData, setModalData] = useState(reqData?.interview);
 
-  const [imData, setImData] = useState(null);
-
   const slideLeft = () => {
     let slider = document.getElementById("slider");
     let slide = document.getElementById("slide");
@@ -27,14 +25,12 @@ const Carousel = ({ reqData }) => {
   }
 
   const openModal = (id) => {
-    // 해당 아이디만 오픈.....
+    // 해당 아이디만 오픈
     if (id) {
       let selectedData = reqData.interview.filter((item) => item.id === id);
       setModalData(selectedData);
-      console.log(selectedData)
     }
     setIsOpen(() => !isOpen);
-    // useRef 라이프사이클 관리...
   };
 
   return (
@@ -42,7 +38,7 @@ const Carousel = ({ reqData }) => {
       <div className="relative flex items-center">
         <div
           onClick={slideLeft}
-          className="text-xl cursor-pointer p-0.5 text-[rgb(161,173,185)] hover:text-green-400 "
+          className="text-xl cursor-pointer py-0.5 px-[0.18rem] text-[rgb(161,173,185)] hover:text-green-400 "
         >
           {"<"}
         </div>
@@ -55,7 +51,7 @@ const Carousel = ({ reqData }) => {
               onClick={() => openModal(item?.id)}
               id="slide"
               key={slideIdx}
-              className="group w-[162px] h-[155px] rounded-lg inline-block whitespace-normal border p-2 mx-[0.25rem] cursor-pointer ease-in-out duration-300 bg-[rgb(36,41,47)] border-[rgb(71,79,88)] hover:border-green-400 hover:text-white drop-shadow-md"
+              className="group w-[160px] h-[155px] rounded-lg inline-block whitespace-normal border p-2 mx-[0.2rem] cursor-pointer ease-in-out duration-300 bg-[rgb(36,41,47)] border-[rgb(71,79,88)] hover:border-green-400 hover:text-white drop-shadow-md"
             >
               <div>
                 <p className="pr-3 w-[150px] h-[97px] whitespace-normal text-[rgb(161,173,185)] duration-300  text-xs text-ellipsis line-clamp-6 border-[rgb(131,132,139)] hover:text-white">
@@ -120,7 +116,7 @@ const Carousel = ({ reqData }) => {
                     </div>
 
                     <div className="px-6 pb-6 mt-4 flex justify-end ">
-                      {/* button을 div로 바꾸니 scrollfocus가 해결됨!? */}
+                      {/* button을 div로 바꾸니 scrollfocus가 해결 */}
                       <div
                         className="px-3 py-1 rounded-md bg-[rgb(42,42,50)] hover:bg-[rgb(50,50,50)] cursor-pointer text-[rgb(131,132,139)] text-xs hover:text-green-500 drop-shadow-md border-2 hover:border-green-500 border-[rgb(131,132,139)] ease-in-out duration-300"
                         onClick={closeModal}

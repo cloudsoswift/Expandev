@@ -3,7 +3,6 @@ import { createPortal } from "react-dom";
 
 // modal 형식만 나타내는 component
 const Modal = ({ showModal, setShowModal, children }) => {
-  // 얘 때문에 문제가 생기는데, router를 사용하면서 스크롤 상태가 그대로 저장되는 듯함?
   document.body.style.overflow = "hidden";
   const handleClose = (e) => {
     if (e.target.id === "wrapper") {
@@ -11,7 +10,6 @@ const Modal = ({ showModal, setShowModal, children }) => {
       document.body.style.overflow = "auto";
     }
   };
-
 
   return createPortal(
     // modal blur

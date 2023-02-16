@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import MainNavBar from "@/components/Navbar/MainNavBar";
 // import IndexPage from "@/pages/Index/IndexPage";
 import WelcomePage from "@/pages/Welcome/WelcomePage"
@@ -17,9 +17,15 @@ import "@/style/basic.css";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
 import SignDone from "./pages/Sign/SignDone";
+import { GlobalDebug } from "./utils/remove-consoles";
 
 
 function App() {
+  useEffect(() => {
+    (process.env.NODE_ENV === "production" ||
+     process.env.REACT_APP_ENV === "STAGING") &&
+      GlobalDebug(false);
+  }, []);
   return (
     <Fragment>
       <MainNavBar />

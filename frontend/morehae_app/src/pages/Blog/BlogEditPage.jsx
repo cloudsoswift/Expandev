@@ -52,6 +52,13 @@ const BlogEditPage = () => {
   
   const handleSendEditPost = () => {
     if (!titleIsValid) {
+      alert("제목이 올바르지 않습니다.");
+      return;
+    } else if (!overviewIsValid) {
+      alert("요약글이 올바르지 않습니다.");
+      return;
+    } else if (editor.getMarkdown().trim().length === 0){
+      alert("글 내용은 공란일 수 없습니다.");
       return;
     }
     let body = new FormData();
