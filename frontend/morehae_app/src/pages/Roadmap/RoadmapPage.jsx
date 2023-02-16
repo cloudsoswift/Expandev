@@ -102,7 +102,8 @@ const RoadmapPage = () => {
       alert("로그인이 필요합니다.");
       navigate("/login");
     } else {
-      navigate("/blog/write");
+      // 해당 노드 이름을 태그로 기본적으로 설정한 채로 이동.
+      navigate("/blog/write", {state: {tag: {tag: reqData.title, articles_count: reqData.articles.length}}});
     }
   };
 
