@@ -7,6 +7,7 @@ import httpWithURL from "@/utils/http";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { userActions } from "../../utils/store/user-slice";
+import useInput from "./useInput";
 
 const dummyItems = [
   { id: 0, content: "None" },
@@ -16,13 +17,24 @@ const dummyItems = [
   { id: 4, content: "Embedded" },
 ];
 
+const checkEmailValidation = (value) => {
+  // 주소 글자수 체크하여 에러 메시지 리턴
+  console.log("여기서:", value);
+  if (value.length < 10) {
+    return "10자이상 입력해주세요"
+  }
+  // 이메일 형식 지키지 않으면 에러 메시지 리턴
+}
+
 const SignUp = () => {
+  // const [emailRefA, emailOnBlurHandler, emailChangeHandler] = useInput(null, checkEmailValidation);
+
   const emailRef = useRef("");
   const [emailWarnMsg, setEmailWarnMsg] = useState("");
   const [emailFixed, setEmailFixed] = useState("");
   const passwordRef = useRef("");
   const [passwordWarnMsg, setPasswordWarnMsg] = useState("");
-  const passwordMatchRef = useRef("");
+  const passwordMatchRef = useRef(""); 
   const [matchWarnMsg, setMatchWarnMsg] = useState("");
   const nicknameRef = useRef("");
   const [nicknameWarnMsg, setNicknameWarnMsg] = useState("");
@@ -151,14 +163,6 @@ const SignUp = () => {
     /*
       모든 validation을 점검해야한다...
     */
-    console.log("제출!!");
-    console.log(
-      emailFixed,
-      passwordRef.current,
-      passwordMatchRef.current,
-      nicknameFixed,
-      position.content
-    );
     httpWithURL(process.env.REACT_APP_USER_URL)
       .post("registration", {
         email: emailFixed,
@@ -188,6 +192,25 @@ const SignUp = () => {
       <div className="flex-column bg-[#171b21] w-[36rem] p-4 rounded-lg border border-slate-700">
         <h1 className="text-2xl flex justify-center mb-8">회원 가입</h1>
         <form>
+          {/* <div>
+            <div className="flex justify-between">
+              <div className={textStyle}>아이디*</div>
+              <div className={textWarningStyle}>{emailWarnMsgA}</div>
+            </div>
+            <div className="flex items-center mb-4">
+              <input
+                type="text"
+                onBlur={emailOnBlurHandler}
+                onChange={emailChangeHandler}
+                ref={emailRefA}
+                className={inputStyle}
+              />
+              <button onClick={checkEmailDulication} className={buttonStyle}>
+                {!emailFixed ? "중복 확인" : "취소"}
+              </button>
+            </div>
+          </div> */}
+
           {/* 아이디 입력 박스 */}
           <div>
             <div className="flex justify-between">

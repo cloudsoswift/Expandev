@@ -19,6 +19,7 @@ const SignDone = (codeString) => {
         dispatch(userActions.setAccessToken(data.access_token));
         dispatch(userActions.setRefreshToken(data.refresh_token));
         dispatch(userActions.setUser(data.user));
+        window.opener.postMessage(data, "http://i8d212.p.ssafy.io");  // 토큰값 부모 윈도우에 전달
         setIsAllowed(true);
         setIsLoading(false);
       })
@@ -29,11 +30,11 @@ const SignDone = (codeString) => {
   }
   useEffect(() => {
     let codeString = new URL(window.location.href).searchParams.get('code')
-    console.log("codeString값:", codeString);
+    console.log("codeString값!:", codeString);
     if (codeString) {
       getAccesToken(codeString);
     }
-    // window.opener.postMessage(codeString, "http://localhost:5173");
+    // window.opener.postMessage("데이터 받으세요...", "http://localhost:3000");
   }, []);
 
   const clickClose = (e) => {
