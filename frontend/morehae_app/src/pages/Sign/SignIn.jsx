@@ -117,6 +117,7 @@ const SignIn = () => {
   useEffect(() => {
     const printLog = (e) => {
       console.log("수신됨:", e.data);
+      // 로직...
     }
     if (!popup) {
       return;
