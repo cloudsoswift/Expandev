@@ -1,40 +1,38 @@
-import { useEffect, useRef, useState } from 'react'
-import SubReply from './SubReply';
+import { useEffect, useRef, useState } from "react";
+import SubReply from "./SubReply";
 import httpWithURL from "@/utils/http";
-import AddReply from './AddReply';
+import AddReply from "./AddReply";
 
 const dummyReplies = [
   {
-      "id": 12,
-      "like_users_count": 0,
-      "liked": false,
-      "content": "대댓글1",
-      "created_at": "2023-01-19T07:39:44.848376Z",
-      "updated_at": "2023-01-19T07:39:44.848415Z",
-      "is_secret": false,
-      "article": 2,
-      "user": 3,
-      "parent_comment": null,
-      "like_users": []
+    id: 12,
+    like_users_count: 0,
+    liked: false,
+    content: "대댓글1",
+    created_at: "2023-01-19T07:39:44.848376Z",
+    updated_at: "2023-01-19T07:39:44.848415Z",
+    is_secret: false,
+    article: 2,
+    user: 3,
+    parent_comment: null,
+    like_users: [],
   },
   {
-      "id": 2,
-      "like_users_count": 1,
-      "liked": true,
-      "content": "대댓글2",
-      "created_at": "2023-01-19T05:43:00.625257Z",
-      "updated_at": "2023-01-19T05:43:00.625288Z",
-      "is_secret": false,
-      "article": 2,
-      "user": 3,
-      "parent_comment": null,
-      "like_users": [
-          3
-      ]
-  }
-]
+    id: 2,
+    like_users_count: 1,
+    liked: true,
+    content: "대댓글2",
+    created_at: "2023-01-19T05:43:00.625257Z",
+    updated_at: "2023-01-19T05:43:00.625288Z",
+    is_secret: false,
+    article: 2,
+    user: 3,
+    parent_comment: null,
+    like_users: [3],
+  },
+];
 
-const MainReply = ({reply, getReplyData}) => {
+const MainReply = ({ reply, getReplyData }) => {
   const [isShowSubReply, setIsShowSubReply] = useState(false);
   const [isShowInputReply, setIsShowInputReply] = useState(false);
   const [subReplies, setSubReplies] = useState([]);
@@ -56,7 +54,7 @@ const MainReply = ({reply, getReplyData}) => {
         setSubReplies((oldState) => {
           // return dummyReplies;
           return Response.data?.recomments ?? oldState;
-        })
+        });
       })
       .catch((Error) => {
         console.log(Error);
@@ -68,28 +66,28 @@ const MainReply = ({reply, getReplyData}) => {
       getSubReplyData();
     }
     setIsShowSubReply(!isShowSubReply);
-  }
+  };
 
   const showInput = () => {
     setIsShowInputReply(!isShowInputReply);
-  }
+  };
   const deleteReply = () => {
     const isDelete = window.confirm("정말 삭제하시겠습니까??");
     if (isDelete) {
       console.log("삭제할 거임:", reply.id);
       httpWithURL("http://i8d212.p.ssafy.io:8000/blogs/comment/")
         .delete(`${reply.id}`)
-        .then(response => {
+        .then((response) => {
           getReplyData();
         })
-        .catch(err => console.log(err))
+        .catch((err) => console.log(err));
     }
-  }
+  };
 
   useState(() => {
     getSubReplyData();
     // console.log(subReplies, reply.recomments_count);
-  }, [])
+  }, []);
 
   return (
     <div className="mt-8">
@@ -100,31 +98,50 @@ const MainReply = ({reply, getReplyData}) => {
             <p className="font-bold">{reply.username}</p>
             <p className="text-gray-400">{"2023년 02월 01일"}</p>
           </div>
-          <button onClick={deleteReply} className="text-slate-600 hover:text-red-500">삭제</button>
+          <button
+            onClick={deleteReply}
+            className="text-slate-600 hover:text-red-500"
+          >
+            삭제
+          </button>
         </div>
       </div>
-      <p className="mt-2">
-        {reply.content}
-      </p>
+      <p className="mt-2">{reply.content}</p>
       <div className="flex items-center">
         <button>{reply.liked ? "🧡" : "🤍"}</button>
         <p className="mr-4">{reply.like_users_count}</p>
-        <button onClick={showInput} className="transition-color duration-500 hover:bg-purple-500 active:bg-purple-700 p-2 rounded-xl">답글 달기</button>
+        <button
+          onClick={showInput}
+          className="transition-color duration-500 hover:bg-purple-500 active:bg-purple-700 p-2 rounded-xl"
+        >
+          답글 달기
+        </button>
       </div>
-      <div className='ml-2'>
-        {isShowInputReply &&
-        <AddReply onHandleCancel={() => setIsShowInputReply(false)} id={reply.id} getReplyData={getSubReplyData} replyType="sub"/>
-        }
-        {subReplies.length !== 0 &&
-        <button onClick={showSubReply} className="transition-colors text-blue-500 hover:text-green-300">답글 보기({subReplies.length})</button>
-        }
-        {isShowSubReply && 
-        subReplies.map(subReply => <SubReply key={subReply.id} reply={subReply} />)
-        }
+      <div className="ml-2">
+        {isShowInputReply && (
+          <AddReply
+            onHandleCancel={() => setIsShowInputReply(false)}
+            id={reply.id}
+            getReplyData={getSubReplyData}
+            replyType="sub"
+          />
+        )}
+        {subReplies.length !== 0 && (
+          <button
+            onClick={showSubReply}
+            className="transition-colors text-blue-500 hover:text-green-300"
+          >
+            답글 보기({subReplies.length})
+          </button>
+        )}
+        {isShowSubReply &&
+          subReplies.map((subReply) => (
+            <SubReply key={subReply.id} reply={subReply} />
+          ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default MainReply;
 

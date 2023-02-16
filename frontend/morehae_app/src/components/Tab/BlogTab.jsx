@@ -173,7 +173,7 @@ const BlogTab = ({ userBlog }) => {
         </div>
       </div>
       <div>
-        <div className="m-3">좋아요한 댓글, 댓글 생성해서 렌더링해야함</div>
+        <div className="m-3">좋아요한 댓글</div>
         <div className="h-80 bg-[rgb(48,54,61)] border rounded-l-lg drop-shadow-md p-4 overflow-y-auto customscrollbar ">
           {userBlog?.like_comments.map((post) => (
             <div
