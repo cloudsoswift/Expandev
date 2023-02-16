@@ -147,7 +147,7 @@ def kakao_login(request):
 
 @api_view(['POST', 'GET'])
 def naver_login(request):
-    naver_api = oauth.NAVER_API
+    naver_api = 'https://nid.naver.com/oauth2.0/authorize'
     response_type = 'code'
     client_id = get_secret('NAVER_CLIENT_ID')
     redirect_uri = oauth.REDIRECT_URI
