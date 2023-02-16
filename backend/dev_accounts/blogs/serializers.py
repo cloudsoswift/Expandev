@@ -21,7 +21,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     comments_count = serializers.IntegerField(source = 'comments.count', read_only=True)
     liked = serializers.SerializerMethodField(read_only=True)
     tags = TagSerializer(many=True, read_only=True)
-    profile_image = serializers.CharField(source = 'user.profile.profile_image.url', read_only=True)
+    profile_image = serializers.CharField(source = 'user.profile_image', read_only=True)
 
 
     class Meta:
