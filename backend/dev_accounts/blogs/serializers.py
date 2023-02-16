@@ -153,11 +153,13 @@ class CommentSimpleSerializer(serializers.ModelSerializer):
     like_users_count = serializers.IntegerField(source = 'like_users.count', read_only=True)
     liked = serializers.SerializerMethodField(read_only=True)
     recomments_count = serializers.IntegerField(source = 'recomments.count', read_only=True)
+    user_profile_image = serializers.CharField(source = 'user.profile_image', read_only=True)
+
 
     class Meta:
         model = Comment
-        fields = ('id', 'article','like_users_count', 'content','is_secret','liked','nickname', 'recomments_count',  'created_at')
-        read_only_fields = ('user', 'article','parent_comment', 'like_users_count')
+        fields = ('id', 'article','like_users_count', 'content','is_secret','liked','nickname', 'recomments_count',  'created_at','user_profile_image')
+        read_only_fields = ('user', 'article','parent_comment', 'like_users_count','user_profile_image')
 
     def get_liked(self, obj):
         user = self.context['user']
