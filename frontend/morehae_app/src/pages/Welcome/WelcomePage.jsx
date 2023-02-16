@@ -12,7 +12,7 @@ const WelcomePage = () => {
         <video className="w-full h-[40rem] object-cover" src={vid} autoPlay muted loop></video>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-max">
           <h1 className="text-[6rem] font-bold text-green-500 font-bold">개발자 로드맵</h1>
-          <h1 className="text-[6rem] font-bold text-purple-500">멀리 가지 마세요</h1>
+          <h1 className="text-[6rem] font-bold text-yellow-500">멀리 가지 마세요</h1>
           <h1 className="text-[6rem] font-bold">여기서부터 시작합니다</h1>
         </div>
       </div>
