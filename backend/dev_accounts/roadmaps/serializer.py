@@ -30,7 +30,7 @@ class InterviewSerializer(serializers.ModelSerializer):
 
 class ReviewSerializer(serializers.ModelSerializer):
     user = serializers.CharField(source='user.nickname', read_only=True)
-    user_profile_image = serializers.CharField(source='user.profile.profile_image.url', read_only=True)
+    user_profile_image = serializers.CharField(source='user.profile_image', read_only=True)
     liked = serializers.SerializerMethodField()
 
     class Meta:
