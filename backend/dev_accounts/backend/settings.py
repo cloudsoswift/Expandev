@@ -287,22 +287,3 @@ SPECTACULAR_SETTINGS = {
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-
-SOCIALACCOUNT_PROVIDERS = {
-    'kakao': {
-        'APP': {
-            'client_id': '9dc0cc4073c88973eefa99bb2f1f9bcc', # REST API 키
-            'secret': 861258, # 앱 ID
-            'key': ''
-        }
-    },
-    'naver': {
-        'APP': {
-            'client_id': 'OHU5Xy3txUeswuNYU_lB', # REST API 키
-            'secret': 861258, # 앱 ID
-            'key': ''
-        }
-    }
-
-}
