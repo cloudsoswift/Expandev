@@ -1,6 +1,6 @@
 <p align="center">
   <a href="" rel="noopener">
- <img width=200px height=200px src="./deploy_2.png" alt="Project logo"></a>
+ <img width=400px height=50px src="https://raw.githubusercontent.com/cloudsoswift/Expandev/main/README_IMG/expandev-logo-green.png" alt="Project logo"></a>
 </p>
 
 <h3 align="center">Expandev</h3>
